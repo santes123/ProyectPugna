@@ -22,6 +22,7 @@ public class InputConfig : MonoBehaviour
         return new Vector3(action.ReadValue<Vector2>().x, 0, action.ReadValue<Vector2>().y);
     }
 
+
     public bool GetBoolean()
     {
         return action.ReadValue<bool>();

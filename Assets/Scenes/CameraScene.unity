@@ -418,7 +418,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   move: {fileID: 1524085367}
-  jump: {fileID: 1524085367}
+  look: {fileID: 1524085368}
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -688,6 +688,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2548810919378985064, guid: f859abc4e60cc8e41bf0e095b14ad904,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548810919378985064, guid: f859abc4e60cc8e41bf0e095b14ad904,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.data[0].m_Id
+      value: 9cde8163-665c-46cd-a641-1d880be40b22
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548810919378985064, guid: f859abc4e60cc8e41bf0e095b14ad904,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.data[1].m_Id
+      value: 029ff7f1-e460-4cf4-ae4d-b19c8905e38b
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548810919378985064, guid: f859abc4e60cc8e41bf0e095b14ad904,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.data[0].m_Path
+      value: <Mouse>/position
+      objectReference: {fileID: 0}
+    - target: {fileID: 2548810919378985064, guid: f859abc4e60cc8e41bf0e095b14ad904,
+        type: 3}
+      propertyPath: action.m_SingletonActionBindings.Array.data[1].m_Action
+      value: Action
+      objectReference: {fileID: 0}
     - target: {fileID: 4324710160480396157, guid: f859abc4e60cc8e41bf0e095b14ad904,
         type: 3}
       propertyPath: m_RootOrder
@@ -753,6 +778,18 @@ PrefabInstance:
 --- !u!114 &1524085367 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3290262485073553195, guid: f859abc4e60cc8e41bf0e095b14ad904,
+    type: 3}
+  m_PrefabInstance: {fileID: 1515599738}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d4819eb6c90b149a6f26bc61db71a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1524085368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2548810919378985064, guid: f859abc4e60cc8e41bf0e095b14ad904,
     type: 3}
   m_PrefabInstance: {fileID: 1515599738}
   m_PrefabAsset: {fileID: 0}
