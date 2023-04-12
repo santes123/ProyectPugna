@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractionExample : MonoBehaviour, IInteractable
+public class InteractionReceiverExample : MonoBehaviour, IInteractable
 {
     //Codigo ejemplo:
     //Este codigo se puede usar en un objeto con el que se esta interactuando.

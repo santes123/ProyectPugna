@@ -21,7 +21,7 @@ public class DamageDealerExample : MonoBehaviour, IDamager
 
     public List<IDamageable> GetTargets() {
         AreaOfEffect aoe = GetComponent<AreaOfEffect>();
-        return aoe.getTargets<IDamageable>();
+        return aoe.GetTargets<IDamageable>();
     }
 
     public void DoDamage(IDamageable target, Damage damage) {

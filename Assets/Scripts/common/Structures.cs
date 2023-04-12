@@ -10,7 +10,7 @@ public enum TargetType
 {
     Single, Area
 }
-
+[System.Serializable]
 public struct Interaction
 {
     public UnitType source;
