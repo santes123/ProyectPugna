@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4324710160480396157}
+  - component: {fileID: 2066596827057419294}
   - component: {fileID: 3290262485073553195}
   - component: {fileID: 2548810919378985064}
   m_Layer: 0
@@ -33,6 +34,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2066596827057419294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5041208377660145858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb3a301c63c21a742bf8bd42b729ccd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keybinds:
+  - name: move
+    inputKeybind: {fileID: 3290262485073553195}
+  - name: jump
+    inputKeybind: {fileID: 2548810919378985064}
 --- !u!114 &3290262485073553195
 MonoBehaviour:
   m_ObjectHideFlags: 0

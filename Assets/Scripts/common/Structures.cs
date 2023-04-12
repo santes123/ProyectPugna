@@ -1,8 +1,9 @@
+[System.Serializable]
 public struct Damage
 {
-    UnitType source;
-    int amount;
-    TargetType target;
+    public UnitType source;
+    public int amount;
+    public TargetType targetType;
 }
 
 public enum TargetType
@@ -12,7 +13,7 @@ public enum TargetType
 
 public struct Interaction
 {
-    UnitType source;
+    public UnitType source;
 }
 public enum UnitType
 {
