@@ -2,17 +2,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 
+[RequireComponent(typeof(GunController))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
     Camera viewCamera;
     CharacterController player;
+    GunController gunController;
     public InputConfig move;
     public InputConfig look;
 
     void Awake() 
     {
         player = GetComponent<CharacterController>();
+        gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }
 
@@ -20,6 +23,11 @@ public class PlayerController : MonoBehaviour
     {
         Move(move.GetVector3());
         Point(look.GetVector2());
+
+        if (Input.GetMouseButton(0))
+        {
+            gunController.Shoot();
+        }
     }
 
     void Move(Vector3 movement)
@@ -45,4 +53,5 @@ public class PlayerController : MonoBehaviour
         Vector3 heightCorrectedPoint = new Vector3(lookPoint.x, transform.position.y, lookPoint.z);
         transform.LookAt(heightCorrectedPoint);
     }
+
 }
