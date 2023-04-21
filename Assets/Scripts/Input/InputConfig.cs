@@ -27,4 +27,9 @@ public class InputConfig : MonoBehaviour
     {
         return action.ReadValue<bool>();
     }
+
+    public float GetFloat()
+    {
+        return action.ReadValue<float>();
+    }
 }

@@ -9,8 +9,11 @@ public class PlayerController : MonoBehaviour
     Camera viewCamera;
     CharacterController player;
     GunController gunController;
-    public InputConfig move;
-    public InputConfig look;
+    private InputConfig move;
+    private InputConfig look;
+    private InputConfig fire;
+    private InputConfig switchGun;
+    private InputConfig switchGun2;
 
     void Awake() 
     {
@@ -19,12 +22,37 @@ public class PlayerController : MonoBehaviour
         viewCamera = Camera.main;
     }
 
+    private void Start()
+    {
+        move = FindObjectOfType<InputManager>().GetKeyBind("move");
+        look = FindObjectOfType<InputManager>().GetKeyBind("look");
+        fire = FindObjectOfType<InputManager>().GetKeyBind("fire");
+        switchGun = FindObjectOfType<InputManager>().GetKeyBind("switchGun");
+        switchGun2 = FindObjectOfType<InputManager>().GetKeyBind("switchGun2");
+    }
+
     void Update()
     {
         Move(move.GetVector3());
         Point(look.GetVector2());
+        Shoot(fire.GetFloat());
+        GunSwitcher(switchGun.GetFloat(), switchGun2.GetFloat());
+    }
 
-        if (Input.GetMouseButton(0))
+    void GunSwitcher(float switchGun, float switchGun2)
+    {
+        if (switchGun == 1)
+        {
+            gunController.SwitchGun(0);
+        }else if (switchGun2 == 1)
+        {
+            gunController.SwitchGun(1);
+        }
+    }
+
+    void Shoot(float fire)
+    {
+        if (fire == 1)
         {
             gunController.Shoot();
         }
