@@ -8,7 +8,7 @@ public class GunController : MonoBehaviour
     public Gun startingGun;
     Gun equippedGun;
 
-    void Start()
+    void Awake()
     {
         if (startingGun != null)
         {
@@ -22,8 +22,10 @@ public class GunController : MonoBehaviour
         {
             Destroy(equippedGun.gameObject);
         }
-        equippedGun = Instantiate(gunToEquip, weaponHold.position, weaponHold.rotation) as Gun;
-        equippedGun.transform.parent = weaponHold;
+        equippedGun = Instantiate(gunToEquip, weaponHold) as Gun;
+        equippedGun.transform.forward = weaponHold.forward;
+        //equippedGun.transform.rotation = Quaternion.Euler(0,0,0);
+        
     }
 
     public void SwitchGun(int position)
