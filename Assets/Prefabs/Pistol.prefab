@@ -294,7 +294,7 @@ GameObject:
   - component: {fileID: 1374929038420112442}
   - component: {fileID: -1808990355760509555}
   m_Layer: 0
-  m_Name: Gun
+  m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -329,6 +329,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56857d0753bff8b41b8e1cd36a345fb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireMode: 0
+  typeOfGun: 0
   muzzle: {fileID: 6694408340848120099}
   projectile: {fileID: 2420988392744674491, guid: 8bb44b03c7783c84185496a168f43344,
     type: 3}

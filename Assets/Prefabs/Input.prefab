@@ -12,6 +12,9 @@ GameObject:
   - component: {fileID: 2066596827057419294}
   - component: {fileID: 3290262485073553195}
   - component: {fileID: 2548810919378985064}
+  - component: {fileID: 7998108958393947702}
+  - component: {fileID: 5541668176408298021}
+  - component: {fileID: 3637685542346867512}
   m_Layer: 0
   m_Name: Input
   m_TagString: Untagged
@@ -49,8 +52,14 @@ MonoBehaviour:
   keybinds:
   - name: move
     inputKeybind: {fileID: 3290262485073553195}
-  - name: jump
+  - name: look
     inputKeybind: {fileID: 2548810919378985064}
+  - name: fire
+    inputKeybind: {fileID: 7998108958393947702}
+  - name: switchGun
+    inputKeybind: {fileID: 5541668176408298021}
+  - name: switchGun2
+    inputKeybind: {fileID: 3637685542346867512}
 --- !u!114 &3290262485073553195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +144,93 @@ MonoBehaviour:
     - m_Name: 
       m_Id: ec83d2e2-827d-411f-8445-ac6df199119c
       m_Path: <Keyboard>/space
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &7998108958393947702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5041208377660145858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d4819eb6c90b149a6f26bc61db71a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: d28160f9-db98-4a7f-a854-6f9fd60549b2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 32d17357-efed-4347-82bc-2a18dc3e5c69
+      m_Path: <Mouse>/leftButton
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &5541668176408298021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5041208377660145858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d4819eb6c90b149a6f26bc61db71a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 60e56699-3614-4961-8439-5481989e86a3
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 9e079ee3-4622-4a9c-a533-67472eb83467
+      m_Path: <Keyboard>/1
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Action
+      m_Flags: 0
+    m_Flags: 0
+--- !u!114 &3637685542346867512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5041208377660145858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d4819eb6c90b149a6f26bc61db71a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  action:
+    m_Name: Action
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f959319b-5473-4198-83ed-bdf380ca2bc2
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: afb5b976-36e1-4a6c-888c-d3a52bbe8cb3
+      m_Path: <Keyboard>/2
       m_Interactions: 
       m_Processors: 
       m_Groups: 
