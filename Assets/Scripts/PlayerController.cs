@@ -2,23 +2,26 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.XR;
 
-[RequireComponent(typeof(GunController))]
+//[RequireComponent(typeof(GunController))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speed = 5f;
     Camera viewCamera;
     CharacterController player;
-    GunController gunController;
+    //GunController gunController;
     private InputConfig move;
     private InputConfig look;
     private InputConfig fire;
     private InputConfig switchGun;
     private InputConfig switchGun2;
 
+
+    public Crosshairs crosshairs;
+    public BoomerangController boomerangController;
     void Awake() 
     {
         player = GetComponent<CharacterController>();
-        gunController = GetComponent<GunController>();
+        //gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }
 
@@ -37,16 +40,32 @@ public class PlayerController : MonoBehaviour
         Point(look.GetVector2());
         Shoot(fire.GetFloat());
         GunSwitcher(switchGun.GetFloat(), switchGun2.GetFloat());
+
+        //move the pointer
+        Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
+        //Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        Plane groundPlane = new Plane(Vector3.up, Vector3.up * boomerangController.BoomerangHeight());
+        float rayDistance;
+
+        if (groundPlane.Raycast(ray, out rayDistance))
+        {
+            Vector3 point = ray.GetPoint(rayDistance);
+            //Debug.DrawLine(ray.origin,point,Color.red);
+            //controller.LookAt(point);
+            crosshairs.transform.position = point;
+            crosshairs.DetectTargets(ray);
+        }
+
     }
 
     void GunSwitcher(float switchGun, float switchGun2)
     {
         if (switchGun == 1)
         {
-            gunController.SwitchGun(0);
+            //gunController.SwitchGun(0);
         }else if (switchGun2 == 1)
         {
-            gunController.SwitchGun(1);
+            //gunController.SwitchGun(1);
         }
     }
 
@@ -54,7 +73,7 @@ public class PlayerController : MonoBehaviour
     {
         if (fire == 1)
         {
-            gunController.Shoot();
+            //gunController.Shoot();
         }
     }
 
