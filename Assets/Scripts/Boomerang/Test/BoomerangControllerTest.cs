@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoomerangController : MonoBehaviour
+public class BoomerangControllerTest : MonoBehaviour
 {
     // Variables públicas
     public float followSpeed;
@@ -16,7 +16,7 @@ public class BoomerangController : MonoBehaviour
     private Vector3 initialPosition;
     private Vector3 targetPosition;
     private Vector3 returnPosition;
-    private bool isFlying = false;
+    public bool isFlying = false;
     private bool isReturning = false;
     private Rigidbody rb;
     private LineRenderer lr;
@@ -54,6 +54,7 @@ public class BoomerangController : MonoBehaviour
             Vector3 mousePosition = GetMouseWorldPosition();
             Vector3 targetPosition = transform.position;
 
+
             lr.SetPosition(0, mousePosition);
             lr.SetPosition(1, targetPosition);
         }
@@ -73,12 +74,13 @@ public class BoomerangController : MonoBehaviour
         {
             if (targetPosition != Vector3.zero)
             {
+                //targetPosition = targetPosition + Vector3.up;
                 transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * followSpeed);
             }
         }
 
         // Comprobar la distancia del Boomerang
-        if (Vector3.Distance(transform.position, initialPosition) > maxDistance && !isReturning && !specialThrow ||
+        if (Vector3.Distance(transform.position, initialPosition) > maxDistance && !isReturning && !specialThrow || 
             Vector3.Distance(transform.position, targetPosition) < minDistance && !specialThrow)
         {
             Debug.Log("returning");
@@ -143,7 +145,7 @@ public class BoomerangController : MonoBehaviour
     void FixedUpdate()
     {
         //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
-        if (Vector3.Distance(transform.position, handPlace.position) <= minDistance && !isFlying && !specialThrow ||
+        if (Vector3.Distance(transform.position, handPlace.position) <= minDistance && !isFlying && !specialThrow || 
             Vector3.Distance(transform.position, handPlace.position) <= minDistance && isFlying && isReturning && !specialThrow)
         {
             Debug.Log("Player1.1");
@@ -155,7 +157,7 @@ public class BoomerangController : MonoBehaviour
         {
             //asi vuelve siempre al jugador
             returnPosition = handPlace.position;
-            transform.position = Vector3.Lerp(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
+            transform.position = Vector3.Lerp(transform.position, returnPosition,followSpeed * Time.fixedDeltaTime);
             //transform.position = Vector3.MoveTowards(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
             //VUELVE A LA MANO DEL JUGADOR
             //print(Vector3.Distance(transform.position, returnPosition));
@@ -194,7 +196,9 @@ public class BoomerangController : MonoBehaviour
         if (onHand)
         {
             rotation = false;
+            rb.isKinematic = true;
             transform.position = handPlace.position;
+            //transform.rotation = Quaternion.identity;
             //targetPosition = Vector3.zero;
         }
     }
@@ -213,7 +217,7 @@ public class BoomerangController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") && !onHand)
+        if (other.CompareTag("Enemy") && !onHand && isFlying)
         {
             if (Time.time - lastHitTime > coldownHit)
             {
@@ -230,7 +234,7 @@ public class BoomerangController : MonoBehaviour
 
                 }
                 //Debug.Log("enemy");
-
+                
             }
 
         }
@@ -244,21 +248,34 @@ public class BoomerangController : MonoBehaviour
             }
             Debug.Log("Obstacle");
             isFlying = false;
-            rb.velocity = Vector3.zero;
+            //rb.velocity = Vector3.zero;
             rb.useGravity = true;
             rotation = false;
             GetComponent<Collider>().isTrigger = false;
+
+            //REBOTE EN V
+            //USAR UN BOOLEANDO "REBOANDO" Y HACER UN LERP COMO CON EL LANZAMIENTO Y HACER QUE "REBOTE" LA LINEA DE PREDICCION Y SE HAGA UN "PREDICT"
+            rb.isKinematic = false;
+            // Calcular la dirección del rebote
+            Vector3 direccionRebote = Vector3.Reflect(transform.forward, (other.transform.position - transform.position).normalized);
+
+            // Calcular la dirección en forma de "V" (hacia arriba)
+            Vector3 direccionFinal = Quaternion.AngleAxis(45f, Vector3.up) * direccionRebote;
+
+            // Aplicar la fuerza al objeto A en la dirección del rebote
+            rb.AddForce(direccionFinal * 5f, ForceMode.Impulse);
         }
     }
     void MakeDamageToEnemyAndPush(Collider other, float damage)
     {
+        Debug.Log("dhsajdas");
         //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
         IDamageable damageableObject = other.GetComponent<IDamageable>();
         if (damageableObject != null)
         {
             print("collision con el enemigo");
             Damage damageObj = new Damage();
-            damageObj.amount = (int)damage;
+            damageObj.amount = (int) damage;
             damageObj.source = UnitType.Player;
             damageObj.targetType = TargetType.Single;
             damageableObject.ReceiveDamage(damageObj);

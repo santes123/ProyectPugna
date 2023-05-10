@@ -209,7 +209,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1359465095}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: PlayGame
+        m_MethodName: LoadGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1114,7 +1114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45cceb68dd5f68d40a2c46bff65e2c93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chargeButton: {fileID: 0}
+  loadButton: {fileID: 41945585}
 --- !u!1 &1499203987
 GameObject:
   m_ObjectHideFlags: 0

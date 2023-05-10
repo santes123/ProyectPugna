@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoomerangController : MonoBehaviour
+public class BoomerangControllerCopyFuncional : MonoBehaviour
 {
     // Variables públicas
     public float followSpeed;
@@ -78,7 +78,7 @@ public class BoomerangController : MonoBehaviour
         }
 
         // Comprobar la distancia del Boomerang
-        if (Vector3.Distance(transform.position, initialPosition) > maxDistance && !isReturning && !specialThrow ||
+        if (Vector3.Distance(transform.position, initialPosition) > maxDistance && !isReturning && !specialThrow || 
             Vector3.Distance(transform.position, targetPosition) < minDistance && !specialThrow)
         {
             Debug.Log("returning");
@@ -143,7 +143,7 @@ public class BoomerangController : MonoBehaviour
     void FixedUpdate()
     {
         //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
-        if (Vector3.Distance(transform.position, handPlace.position) <= minDistance && !isFlying && !specialThrow ||
+        if (Vector3.Distance(transform.position, handPlace.position) <= minDistance && !isFlying && !specialThrow || 
             Vector3.Distance(transform.position, handPlace.position) <= minDistance && isFlying && isReturning && !specialThrow)
         {
             Debug.Log("Player1.1");
@@ -155,7 +155,7 @@ public class BoomerangController : MonoBehaviour
         {
             //asi vuelve siempre al jugador
             returnPosition = handPlace.position;
-            transform.position = Vector3.Lerp(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
+            transform.position = Vector3.Lerp(transform.position, returnPosition,followSpeed * Time.fixedDeltaTime);
             //transform.position = Vector3.MoveTowards(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
             //VUELVE A LA MANO DEL JUGADOR
             //print(Vector3.Distance(transform.position, returnPosition));
@@ -230,7 +230,7 @@ public class BoomerangController : MonoBehaviour
 
                 }
                 //Debug.Log("enemy");
-
+                
             }
 
         }
@@ -258,7 +258,7 @@ public class BoomerangController : MonoBehaviour
         {
             print("collision con el enemigo");
             Damage damageObj = new Damage();
-            damageObj.amount = (int)damage;
+            damageObj.amount = (int) damage;
             damageObj.source = UnitType.Player;
             damageObj.targetType = TargetType.Single;
             damageableObject.ReceiveDamage(damageObj);

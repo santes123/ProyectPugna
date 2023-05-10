@@ -92,4 +92,9 @@ public class FollowLine : MonoBehaviour
         }
         currentIndex = 0;
     }
+    public void ClearWayPoints()
+    {
+        waypoints.Clear();
+        currentIndex = 0;
+    }
 }

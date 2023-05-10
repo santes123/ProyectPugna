@@ -1,32 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public GameObject chargeButton;
+    public GameObject loadButton;
+    GameState saveInfo;
+
     private void Start()
     {
-        /*if (PlayerPrefs.HasKey("SavePointX"))
+        if (File.Exists("savegame.bin"))
         {
-            chargeButton.gameObject.SetActive(true);
-        }*/
+            loadButton.gameObject.SetActive(true);
+        }
     }
 
     public void PlayGame()
     {
+        if (File.Exists("savegame.bin"))
+        {
+            File.Delete("savegame.bin");
+            Debug.Log("Archivo eliminado correctamente");
+        }
+        else
+        {
+            Debug.Log("No se encontró el archivo a eliminar");
+        }
         SceneManager.LoadScene("CameraScene");
     }
     public void Settings()
     {
 
     }
+    public void LoadGame()
+    {
+        SceneManager.LoadScene("CameraScene");
+    }
 
     public void CloseGame()
     {
         Application.Quit();
     }
+
+    //CARGADO DE DATOS
+
 
 }
 //rezise de los componentes de UI cuando se modifica el tamaño de la ventana

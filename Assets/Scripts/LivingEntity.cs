@@ -5,8 +5,11 @@ using UnityEngine;
 public class LivingEntity : MonoBehaviour, IDamageable
 {
     public float startingHealth;
+    public float startingMana;
     public float currentHealth;
+    public float currentMana;
     protected float health;
+    protected float mana;
     protected bool dead;
     GameManager gameManager;
 
@@ -14,12 +17,27 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
-        health = startingHealth;
-        currentHealth = health;
+        if (currentHealth == 0 && currentMana == 0)
+        {
+            Debug.Log("actualizando stats...");
+            health = startingHealth;
+            currentHealth = health;
+
+            //mana = startingMana;
+            //currentMana = mana;
+        }
+        else
+        {
+            health = currentHealth;
+            mana = currentMana;
+
+        }
+
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         if (this.gameObject.GetComponent<PlayerController>())
         {
             gameManager.hpText.text = currentHealth.ToString();
+            //gameManager.manaText.text = currentMana.ToString();
         }
         
     }
@@ -50,8 +68,26 @@ public class LivingEntity : MonoBehaviour, IDamageable
         {
             OnDeath();
         }
+        //verificamos si es un enemigo
+        if (gameObject.GetComponent<Enemy>())
+        {
+            gameManager.enemiesKilled.Add(gameObject.name);
+            
+        }
         GameObject.Destroy(gameObject);
     }
 
-
+    public void UseSkill(float manaCost)
+    {
+        mana -= manaCost;
+        currentMana = mana;
+        if (this.gameObject.GetComponent<PlayerController>())
+        {
+            gameManager.manaText.text = currentMana.ToString();
+        }
+        if (mana <= 0)
+        {
+            Debug.Log("NO TIENES SUFICIENTE MANA");
+        }
+    }
 }

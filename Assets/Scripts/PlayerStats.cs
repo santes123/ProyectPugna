@@ -9,6 +9,12 @@ public class PlayerStats : LivingEntity
     {
         controller = GetComponent<PlayerController>();
         base.Start();
+
+        //inicializamos el mana
+        mana = startingMana;
+        currentMana = mana;
+        GameManager gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.manaText.text = currentMana.ToString();
     }
 
     void Update()

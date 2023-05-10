@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoomerangController : MonoBehaviour
+public class BoomerangController1 : MonoBehaviour
 {
     // Variables públicas
     public float followSpeed;
@@ -28,6 +28,16 @@ public class BoomerangController : MonoBehaviour
 
     public bool specialThrow = false;
 
+
+    //NEW VARIABLES
+    public Transform target; // Transform del objetivo
+    public float minForce = 5f; // Fuerza mínima de lanzamiento
+    public float maxForce = 20f; // Fuerza máxima de lanzamiento
+    public float forceIncreaseRate = 5f; // Tasa de aumento de la fuerza por segundo
+
+    private float currentForce; // Fuerza actual acumulada
+    private bool isCharging; // Indica si se está acumulando fuerza
+
     // Inicialización
     void Start()
     {
@@ -47,6 +57,13 @@ public class BoomerangController : MonoBehaviour
     // Actualización por fotograma
     void Update()
     {
+        // Detectar el click izquierdo
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("pulsamos el boton");
+            isCharging = true;
+            currentForce = minForce;
+        }
         if (Input.GetMouseButton(0) && !isFlying && onHand)
         {
             lr.positionCount = 2;
@@ -60,13 +77,28 @@ public class BoomerangController : MonoBehaviour
         // Lanzamiento
         if (Input.GetMouseButtonUp(0) && !isFlying && onHand)
         {
+            Debug.Log("soltamos el boton");
+            isCharging = false;
             lr.positionCount = 0;
             onHand = false;
             transform.SetParent(null);
             initialPosition = transform.position;
             rotation = true;
-            Launch();
+            //Launch();
+            LaunchBoomerang();
             lr.enabled = false;
+        }
+        // Acumular fuerza mientras se mantiene el click izquierdo
+        if (isCharging)
+        {
+            Debug.Log("cargando...");
+            currentForce += forceIncreaseRate * Time.deltaTime;
+            currentForce = Mathf.Clamp(currentForce, minForce, maxForce);
+
+            // Actualizar la posición del objetivo en función de la fuerza acumulada
+            float distance = Mathf.Lerp(0f, 10f, (currentForce - minForce) / (maxForce - minForce));
+            Vector3 targetPosition = target.position + (transform.position - target.position).normalized * distance;
+            target.position = targetPosition;
         }
         // Seguimiento de la línea
         if (isFlying && !isReturning)
@@ -78,7 +110,7 @@ public class BoomerangController : MonoBehaviour
         }
 
         // Comprobar la distancia del Boomerang
-        if (Vector3.Distance(transform.position, initialPosition) > maxDistance && !isReturning && !specialThrow ||
+        if (Vector3.Distance(transform.position, initialPosition) > maxDistance && !isReturning && !specialThrow || 
             Vector3.Distance(transform.position, targetPosition) < minDistance && !specialThrow)
         {
             Debug.Log("returning");
@@ -94,6 +126,18 @@ public class BoomerangController : MonoBehaviour
         //rb.AddForce(direction * launchForce);
         //rb.isKinematic = true;
         isFlying = true;
+    }
+    private void LaunchBoomerang()
+    {
+        // Instanciar el boomerang
+        //GameObject boomerang = Instantiate(boomerangPrefab, transform.position, Quaternion.identity);
+
+        // Calcular la dirección hacia el objetivo
+        Vector3 direction = (target.position - transform.position).normalized;
+
+        // Aplicar la fuerza al boomerang utilizando un enfoque basado en transformaciones
+        BoomerangMovement boomerangMovement = GetComponent<BoomerangMovement>();
+        boomerangMovement.ThrowBoomerang(direction, currentForce);
     }
 
     // Calcular la posición del cursor en el mundo
@@ -143,7 +187,7 @@ public class BoomerangController : MonoBehaviour
     void FixedUpdate()
     {
         //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
-        if (Vector3.Distance(transform.position, handPlace.position) <= minDistance && !isFlying && !specialThrow ||
+        if (Vector3.Distance(transform.position, handPlace.position) <= minDistance && !isFlying && !specialThrow || 
             Vector3.Distance(transform.position, handPlace.position) <= minDistance && isFlying && isReturning && !specialThrow)
         {
             Debug.Log("Player1.1");
@@ -155,7 +199,7 @@ public class BoomerangController : MonoBehaviour
         {
             //asi vuelve siempre al jugador
             returnPosition = handPlace.position;
-            transform.position = Vector3.Lerp(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
+            transform.position = Vector3.Lerp(transform.position, returnPosition,followSpeed * Time.fixedDeltaTime);
             //transform.position = Vector3.MoveTowards(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
             //VUELVE A LA MANO DEL JUGADOR
             //print(Vector3.Distance(transform.position, returnPosition));
@@ -230,7 +274,7 @@ public class BoomerangController : MonoBehaviour
 
                 }
                 //Debug.Log("enemy");
-
+                
             }
 
         }
@@ -258,7 +302,7 @@ public class BoomerangController : MonoBehaviour
         {
             print("collision con el enemigo");
             Damage damageObj = new Damage();
-            damageObj.amount = (int)damage;
+            damageObj.amount = (int) damage;
             damageObj.source = UnitType.Player;
             damageObj.targetType = TargetType.Single;
             damageableObject.ReceiveDamage(damageObj);

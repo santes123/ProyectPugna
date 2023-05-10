@@ -11,7 +11,7 @@ public class DrawLine : MonoBehaviour
 
     private Vector3 startPoint;
     public float maxLineLength;
-
+    float manaCost = 20f;
 
     void Awake()
     {
@@ -44,13 +44,27 @@ public class DrawLine : MonoBehaviour
 
             if (Input.GetMouseButtonUp(1))
             {
-                isDrawing = false;
-                lineRenderer.enabled = false;
-                followScript.UpdateWayPoints();
-                BoomerangScript.onHand = false;
-                transform.SetParent(null);
-                BoomerangScript.specialThrow = true;
-                BoomerangScript.rotation = true;
+                //gastamos mana al lanzar el efecto especial del boomerang
+                PlayerStats player = GameObject.Find("Player").GetComponent<PlayerStats>();
+                if (player.currentMana > 0)
+                {
+                    isDrawing = false;
+                    lineRenderer.enabled = false;
+                    followScript.UpdateWayPoints();
+                    BoomerangScript.onHand = false;
+                    transform.SetParent(null);
+                    BoomerangScript.specialThrow = true;
+                    BoomerangScript.rotation = true;
+                    player.UseSkill(manaCost);
+                    //BoomerangScript.isFlying = true;                
+                }
+                else
+                {
+                    lineRenderer.enabled = false;
+                    followScript.ClearWayPoints();
+                    Debug.Log("NO TIENES SUFICIENTE MANA");
+                }
+                
             }
         }
 

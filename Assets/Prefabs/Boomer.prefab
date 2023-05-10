@@ -207,6 +207,8 @@ GameObject:
   - component: {fileID: 6320788967034406403}
   - component: {fileID: 785274433}
   - component: {fileID: 5836317661756079275}
+  - component: {fileID: 8942158387398700583}
+  - component: {fileID: 620507236288203145}
   - component: {fileID: 1729194766076772026}
   - component: {fileID: 5483760284801292177}
   m_Layer: 0
@@ -387,6 +389,44 @@ MonoBehaviour:
   pointer: {fileID: 0}
   rotation: 0
   specialThrow: 0
+--- !u!114 &8942158387398700583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6320788967034406406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9903d749e5ea774bad094a7563c67b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &620507236288203145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6320788967034406406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 083e9814171122b4ea77ecd43b55a6dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  followSpeed: 0
+  maxDistance: 0
+  minDistance: 0
+  damage: 0
+  coldownHit: 0
+  onHand: 1
+  handPlace: {fileID: 0}
+  pointer: {fileID: 0}
+  rotation: 0
+  specialThrow: 0
+  target: {fileID: 0}
+  minForce: 5
+  maxForce: 20
+  forceIncreaseRate: 5
 --- !u!114 &1729194766076772026
 MonoBehaviour:
   m_ObjectHideFlags: 0
