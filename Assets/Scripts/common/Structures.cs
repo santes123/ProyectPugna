@@ -8,8 +8,17 @@ public struct Damage
 
 public enum TargetType
 {
-    Single, Area
+    Single, 
+    Area
 }
+public enum InteractableState
+{
+    Locked, 
+    Unlocked, 
+    Open, 
+    Closed
+}
+
 [System.Serializable]
 public struct Interaction
 {
