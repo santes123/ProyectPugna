@@ -11,7 +11,7 @@ public class DrawLine : MonoBehaviour
 
     private Vector3 startPoint;
     public float maxLineLength;
-    float manaCost = 20f;
+    public float manaCost;
 
     void Awake()
     {
@@ -22,7 +22,7 @@ public class DrawLine : MonoBehaviour
     {
         if (BoomerangScript.onHand)
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) && !BoomerangScript.isFlying && !BoomerangScript.isReturning)
             {
                 lineRenderer.positionCount = 0;
                 startPoint = transform.position;
@@ -30,7 +30,8 @@ public class DrawLine : MonoBehaviour
                 lineRenderer.enabled = true;
                 lineRenderer.positionCount = 2;
                 lineRenderer.SetPosition(0, startPoint);
-                lineRenderer.SetPosition(1, GetMouseWorldPosition());
+                Vector3 mousePosition = GetMouseWorldPosition();
+                lineRenderer.SetPosition(1, new Vector3(mousePosition.x, 1f, mousePosition.z));
             }
 
             if (isDrawing)
@@ -42,11 +43,12 @@ public class DrawLine : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonUp(1))
+            if (Input.GetMouseButtonUp(1) && !BoomerangScript.isFlying && !BoomerangScript.isReturning)
             {
                 //gastamos mana al lanzar el efecto especial del boomerang
                 PlayerStats player = GameObject.Find("Player").GetComponent<PlayerStats>();
-                if (player.currentMana > 0)
+
+                if (player.currentMana >= manaCost && lineRenderer.positionCount > 0)
                 {
                     isDrawing = false;
                     lineRenderer.enabled = false;
@@ -56,13 +58,14 @@ public class DrawLine : MonoBehaviour
                     BoomerangScript.specialThrow = true;
                     BoomerangScript.rotation = true;
                     player.UseSkill(manaCost);
+                    BoomerangScript.onColdown = true;
                     //BoomerangScript.isFlying = true;                
                 }
                 else
                 {
                     lineRenderer.enabled = false;
                     followScript.ClearWayPoints();
-                    Debug.Log("NO TIENES SUFICIENTE MANA");
+                    Debug.Log("NO TIENES SUFICIENTE MANA O NO SE PUEDE LANZAR");
                 }
                 
             }

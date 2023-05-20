@@ -24,7 +24,11 @@ public class FollowLine : MonoBehaviour
     {
         if (hasCompletedLine)
         {
+            //POSIBLE SUSTITUCION POR isReturning del boomerang a true y listo
             BoomerangScript.specialThrow = false;
+            BoomerangScript.isReturning = true;
+            hasCompletedLine = false;
+            /*
             // Moverse al transform de destino progresivamente
             Vector3 targetPosition = destination.transform.position;
             Vector3 currentPosition = transform.position;
@@ -39,7 +43,7 @@ public class FollowLine : MonoBehaviour
             else
             {
                 transform.position = Vector3.MoveTowards(currentPosition, targetPosition, speed * Time.deltaTime);
-            }
+            }*/
         }
         else
         {

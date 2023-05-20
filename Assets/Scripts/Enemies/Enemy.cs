@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class Enemy : LivingEntity
@@ -24,6 +25,9 @@ public class Enemy : LivingEntity
 
     public float damage;
 
+    //UI damage (añadirlo de forma dinamica posteriormente
+    public GameObject floatingDamageTextPrefab;
+
     protected override void Start()
     {
         base.Start();
@@ -39,6 +43,8 @@ public class Enemy : LivingEntity
         targetCollisionRadius = target.GetComponent<CharacterController>().radius;
 
         StartCoroutine(UpdatePath());
+
+        //floatingDamageTextPrefab = transform.GetChild(1).transform.GetChild(1).gameObject;
     }
 
     void Update()
@@ -122,6 +128,18 @@ public class Enemy : LivingEntity
                 damage.targetType = TargetType.Single;
 
                 damageableObject.ReceiveDamage(damage);
+                /*if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)
+                {
+                    floatingDamageTextPrefab.GetComponent<Text>().enabled = true;
+                }
+                FloatingDamageText floatingDamageText = floatingDamageTextPrefab.GetComponent<FloatingDamageText>();
+
+
+                if (floatingDamageText != null)
+                {
+                    // Configura el texto y el color del daño infligido
+                    floatingDamageText.SetDamageText(" - " + damage.amount.ToString(), Color.red);
+                }*/
             }
         }
         //hacemos daño al jugador

@@ -3,78 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-//LANZAMIENTO BOOMERANG FUNCIONAL CON AUMENTO DE FUERZA Y LINERENDERER ADAPTATIVO
-public class BoomerangController : MonoBehaviour
+//LANZAMIENTO BOOMERANG FUNCIONAL CON FUERZA ESTANDAR Y LINERENDERER FIJO
+public class BoomerangControllerFuncional2 : MonoBehaviour
 {
     // Variables públicas
     public float followSpeed;
     public float maxDistance;
     public float minDistance;
-    public float minDistanceToLaunch;
     public float damage;
     private float lastHitTime;
     public float coldownHit;
-    public float manaCostOfAttractingBoomerang;
+    public float manaCostOfAttractingBoomerang = 5;
 
     // Variables privadas
     private Vector3 initialPosition;
     private Vector3 targetPosition;
     private Vector3 localTargetPosition;
     private Vector3 returnPosition;
-    [HideInInspector]
     public bool isFlying = false;
-    [HideInInspector]
-    public bool isReturning = false;
+    private bool isReturning = false;
     private Rigidbody rb;
     private LineRenderer lr;
 
-    [HideInInspector]
     public bool onHand = true;
     public Transform handPlace;
     public Transform pointer;
-    [HideInInspector]
     public bool rotation = false;
 
-    [HideInInspector]
     public bool specialThrow = false;
 
-    [HideInInspector]
     bool bouncing = false;
     //float lerpSpeed = 2f;
     float distanceToMove = 5f;
-    [HideInInspector]
     bool onGround = false;
     public Camera mainCamera;
     //UI damage dealt
     public GameObject floatingDamageTextPrefab;
-    [HideInInspector]
     bool attracting;
     PlayerStats playerStats;
-    [HideInInspector]
     public bool onColdown = false;
-    public GameObject chargeBar;
-    public float distanceToEnd;
 
     //mouse movement and collision
 
     //interpolacion velocidad boomerang
     public float slowdownFactor = 0.5f; // Factor de desaceleración en el medio
     //private float currentLerpTime = 0.0f; // Tiempo de interpolación actual
-
-    //calculate endPoint
-    private bool isButtonPressed = false;
-    private Vector3 startPoint;
-    private Vector3 startPointOriginal;
-    private Vector3 endPoint;
-    private float pressStartTime;
-    //public float launchSpeed = 5f;
-
-    Vector3 direction;  // Dirección en la que te alejarás
-    public float distancePerSecond = 5; // Distancia a recorrer por segundo
-    //float pressDuration;
-    bool clickPressed = false;
-    int counterClicks = 0;
-    public float impulseForceWhenHit;
 
     // Inicialización
     void Start()
@@ -96,58 +69,80 @@ public class BoomerangController : MonoBehaviour
     // Actualización por fotograma
     void Update()
     {
-
         if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
         {
             //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
-            if (Input.GetMouseButtonDown(0) && onHand && !isFlying && !specialThrow && !isReturning)
+            if (Input.GetMouseButtonDown(0))
             {
-                //activamos la barra de progreso
-                chargeBar.SetActive(true);
-                chargeBar.GetComponent<ChargeBar>().target = gameObject;
-                chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
-                chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDistance);
-
-
-                isButtonPressed = true;
-                //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
-                startPoint = transform.position;
-                startPointOriginal = startPoint;
-                Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
-                startPoint = transform.position + direction * minDistanceToLaunch;
-                pressStartTime = Time.time;
-            }
-
-            if (isButtonPressed)
-            {
-                endPoint = CalculateEndPoint();
             }
             //atraer boomerang con poder mental
-            if (Input.GetMouseButton(0) && !isFlying && !onHand && !attracting && playerStats.currentMana >= 5 && !isReturning && !specialThrow)
+            if (Input.GetMouseButton(0) && !isFlying && !onHand && !attracting && playerStats.currentMana >= 5)
             {
-                //revisar bien esto
-                startPoint = transform.position;
-                startPointOriginal = startPoint;
-                //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
-                Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
-                startPoint = transform.position + direction * minDistanceToLaunch;
                 isReturning = true;
                 attracting = true;
                 //asi vuelve en linea recta a la posicion inicial de lanzamiento
                 returnPosition = handPlace.transform.position;
             }
-
-            // Lanzamiento
-            if (Input.GetMouseButtonUp(0) && !isFlying && onHand && !specialThrow && !isReturning)
+            //Carga
+            if (Input.GetMouseButton(0) && !isFlying && onHand)
             {
-                distanceToEnd = 0f;
-                chargeBar.SetActive(false);
-                //
-                clickPressed = false;
-                //reiniciamos el counter para empezar a generar el lineRenderer si el jugaodr tiene ya pulsado el click izquierdo
-                counterClicks = 0;
+                lr.positionCount = 2;
+                lr.enabled = true;
+                Vector3 mousePosition = GetMouseWorldPosition();
+                //mousePosition.y = 1f;
+                Vector3 targetPositionLine = transform.position;
 
+                lr.SetPosition(0, targetPositionLine);
+                lr.SetPosition(1, new Vector3(mousePosition.x, 1f, mousePosition.z));
 
+                //si colisiona con un muro el raycast, añadimos un tercer punto
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+
+                    if (hit.collider.gameObject.CompareTag("Obstacle"))
+                    {
+                        lr.positionCount = 3;
+
+                        Vector3 point = hit.point;
+                        point.y = 1f;
+                        transform.LookAt(point);
+
+                        Vector3 direccionEntrante = hit.collider.gameObject.transform.position - transform.position;
+                        //Vector3 direccionRebote = Vector3.Reflect(direccionEntrante, hit.collider.gameObject.transform.forward.normalized);
+                        Vector3 direccionRebote = Vector3.Reflect(transform.forward, hit.collider.gameObject.transform.position);
+
+                        float dotProduct = Vector3.Dot(direccionEntrante.normalized, transform.right);
+
+                        //Debug.Log("dotProduc = " + dotProduct);
+                        Vector3 positionA = new Vector3(transform.position.x, 0f, transform.position.z);
+                        Vector3 positionB = new Vector3(hit.collider.gameObject.transform.position.x, 0f, hit.collider.gameObject.transform.position.z);
+                        Vector3 direction = positionB - positionA;
+
+                        float angle = (dotProduct >= 0f) ? 45f : -45f;
+
+                        //float adjustedAngle = Mathf.Lerp(-50, 50, dotProduct);
+                        //HACER QUE EL ANGULO SEA DINAMICO ENTRE 2 VALORES PARA QUE SEA MAS PRECISO
+                        //AÑADIR UN AUMENO DE VELOCIDAD AL PRINCIPIO Y FINAL Y REDUCCIR LA VELOCIDAD EN EL MEDIO
+
+                        Quaternion rotacionRebote = Quaternion.Euler(0, angle, 0); // Ángulo de rebote de 45 grados
+
+                        Vector3 nuevaDireccion = rotacionRebote * direccionRebote;
+                        nuevaDireccion.y = transform.position.y;
+
+                        targetPosition = transform.position + nuevaDireccion.normalized * distanceToMove;
+                        targetPosition.y = transform.position.y;
+                        localTargetPosition = targetPosition;
+                        lr.SetPosition(1, point);
+                        lr.SetPosition(2, targetPosition);
+                        //Debug.Log("Pretarget = " + targetPosition);
+
+                    }
+                }
+            }
+            // Lanzamiento
+            if (Input.GetMouseButtonUp(0) && !isFlying && onHand)
+            {
                 lr.positionCount = 0;
                 onHand = false;
                 transform.SetParent(null);
@@ -156,7 +151,6 @@ public class BoomerangController : MonoBehaviour
                 Launch();
                 lr.enabled = false;
                 onColdown = true;
-                isButtonPressed = false;
             }
             // Seguimiento de la línea
             if (isFlying && !isReturning)
@@ -211,109 +205,8 @@ public class BoomerangController : MonoBehaviour
         }
 
     }
-    private void LateUpdate()
-    {
-        //AÑADIDO AL LATEUPDATE PARA UNA MEJOR ACTUALIZACION (AUN POR MEJORAR)
-        //Carga
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
-        {
-            if (Input.GetMouseButton(0) && !isFlying && onHand && !specialThrow && !isReturning)
-            {
-                //cambiamos los valores a los del boomerang
-                //CALCULAR PARA PASARLE LOS NUMEROS Y CALCULE LA FUERZA MAXIMA Y LA MUESTRE USANDO ENDPOINT
-                distanceToEnd = Vector3.Distance(startPointOriginal, endPoint);
 
-                //counter y booleano para el lineRenderer reset
-                clickPressed = true;
-                counterClicks++;
-                //ARREGLO PARA EL RESET DEL LINERENDERER SI SE MANTIENE PULSADO EL CLICK IZQUIERDO ANTES DE QUE LLEGUE EL BOOMERANG
-                if (clickPressed && counterClicks == 1)
-                {
-                    isButtonPressed = true;
-                    startPoint = transform.position;
-                    startPointOriginal = startPoint;
-                    //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
-                    Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
-                    startPoint = transform.position + direction * minDistanceToLaunch;
-                    pressStartTime = Time.time;
-                    endPoint = transform.position;
-                    clickPressed = false;
-                    counterClicks++;
-                }
-
-                lr.positionCount = 2;
-                lr.enabled = true;
-                Vector3 mousePosition = GetMouseWorldPosition();
-                //mousePosition.y = 1f;
-                Vector3 targetPositionLine = transform.position;
-
-                lr.SetPosition(0, targetPositionLine);
-
-                /*if (Vector3.Distance(startPoint, mousePosition) <= maxDistance)
-                {*/
-                lr.SetPosition(1, new Vector3(endPoint.x, 1f, endPoint.z));
-                //Debug.Log("endpoint = " + endPoint);
-                /*}
-                else
-                {
-                    lr.SetPosition(1, new Vector3(mousePosition.x, 1f, mousePosition.z));
-                }*/
-
-
-                //si colisiona con un muro el raycast, añadimos un tercer punto
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
-
-                    if (hit.collider.gameObject.CompareTag("Obstacle"))
-                    {
-                        Ray rayLr = new Ray(lr.GetPosition(0), lr.GetPosition(1) - lr.GetPosition(0));
-                        float maxDistance = Vector3.Distance(lr.GetPosition(0), lr.GetPosition(1));
-                        if (Physics.Raycast(rayLr, out RaycastHit hit2, maxDistance))
-                        {
-                            lr.positionCount = 3;
-
-                            Vector3 point = hit.point;
-                            point.y = 1f;
-                            transform.LookAt(point);
-
-                            Vector3 direccionEntrante = hit.collider.gameObject.transform.position - transform.position;
-                            //Vector3 direccionRebote = Vector3.Reflect(direccionEntrante, hit.collider.gameObject.transform.forward.normalized);
-                            Vector3 direccionRebote = Vector3.Reflect(transform.forward, hit.collider.gameObject.transform.position);
-
-                            float dotProduct = Vector3.Dot(direccionEntrante.normalized, transform.right);
-
-                            //Debug.Log("dotProduc = " + dotProduct);
-                            Vector3 positionA = new Vector3(transform.position.x, 0f, transform.position.z);
-                            Vector3 positionB = new Vector3(hit.collider.gameObject.transform.position.x, 0f, hit.collider.gameObject.transform.position.z);
-                            Vector3 direction = positionB - positionA;
-
-                            float angle = (dotProduct >= 0f) ? 45f : -45f;
-
-                            //float adjustedAngle = Mathf.Lerp(-50, 50, dotProduct);
-                            //HACER QUE EL ANGULO SEA DINAMICO ENTRE 2 VALORES PARA QUE SEA MAS PRECISO
-                            //AÑADIR UN AUMENO DE VELOCIDAD AL PRINCIPIO Y FINAL Y REDUCCIR LA VELOCIDAD EN EL MEDIO
-
-                            Quaternion rotacionRebote = Quaternion.Euler(0, angle, 0); // Ángulo de rebote de 45 grados
-
-                            Vector3 nuevaDireccion = rotacionRebote * direccionRebote;
-                            nuevaDireccion.y = transform.position.y;
-
-                            targetPosition = transform.position + nuevaDireccion.normalized * distanceToMove;
-                            targetPosition.y = transform.position.y;
-                            localTargetPosition = targetPosition;
-                            lr.SetPosition(1, point);
-                            lr.SetPosition(2, targetPosition);
-                            //Debug.Log("Pretarget = " + targetPosition);
-                        }
-
-
-                    }
-                }
-            }
-        }
-    }
-
+   
     // Actualizar la posición del Boomerang mientras está en vuelo
     void FixedUpdate()
     {
@@ -323,14 +216,13 @@ public class BoomerangController : MonoBehaviour
             if (Vector3.Distance(transform.position, handPlace.position) <= minDistance + 1 && !isFlying && !specialThrow ||
                 Vector3.Distance(transform.position, handPlace.position) <= minDistance + 1 && isFlying && isReturning && !specialThrow)
             {
-                //Debug.Log("Player1.1");
+                Debug.Log("Player1.1");
                 rb.useGravity = false;
                 GetComponent<Collider>().isTrigger = true;
                 onHand = true;
             }
             if (isReturning)
             {
-                //endPoint = Vector3.zero;
                 //asi vuelve siempre al jugador
                 returnPosition = handPlace.position;
                 transform.position = Vector3.Lerp(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
@@ -340,7 +232,6 @@ public class BoomerangController : MonoBehaviour
                 if (Vector3.Distance(transform.position, returnPosition) <= minDistance)
                 {
                     Debug.Log("returned 1");
-                    //endPoint = Vector3.zero;
                     isReturning = false;
                     isFlying = false;
                     transform.position = initialPosition;
@@ -350,11 +241,7 @@ public class BoomerangController : MonoBehaviour
                     //si lo atraemos con poder psiquico, gastamos mana y ponemos attracing a false
                     if (attracting)
                     {
-                        if (playerStats.currentMana >= manaCostOfAttractingBoomerang)
-                        {
-                            playerStats.UseSkill(manaCostOfAttractingBoomerang);
-                            
-                        }
+                        playerStats.UseSkill(manaCostOfAttractingBoomerang);
                         attracting = false;
                     }
                     //rb.isKinematic = false;
@@ -400,13 +287,26 @@ public class BoomerangController : MonoBehaviour
     // Lanzar el Boomerang
     void Launch()
     {
-        //targetPosition = GetMouseWorldPosition();
-        targetPosition = CalculateEndPoint();
-        //Vector3 direction = (targetPosition - transform.position).normalized;
+        targetPosition = GetMouseWorldPosition();
+        Vector3 direction = (targetPosition - transform.position).normalized;
         //rb.AddForce(direction * launchForce);
         //rb.isKinematic = true;
         isFlying = true;
     }
+
+    // Calcular la posición del cursor en el mundo
+    /*Vector3 GetCursorPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        Plane plane = new Plane(Vector3.up, Vector3.zero);
+
+        if (plane.Raycast(ray, out float distance))
+        {
+            return ray.GetPoint(distance);
+        }
+
+        return Vector3.zero;
+    }*/
     private Vector3 GetMouseWorldPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -557,7 +457,7 @@ public class BoomerangController : MonoBehaviour
             Vector3 normal = transform.position + other.gameObject.transform.position;
             normal = Vector3.Normalize(normal);
             normal.y = 0;
-            temporalRb.AddForce(normal * impulseForceWhenHit, ForceMode.Impulse);
+            temporalRb.AddForce(normal, ForceMode.Impulse);
             Destroy(temporalRb, 0.5f);
         }
     }
@@ -584,38 +484,5 @@ public class BoomerangController : MonoBehaviour
     {
         return handPlace.position.y;
     }
-    //calcular punto final de trayectoria
-    private Vector3 CalculateEndPoint()
-    {
 
-        Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPointOriginal);
-        if (Vector3.Distance(startPointOriginal, endPoint) >= maxDistance)
-        {
-            direction = direction * (maxDistance + 0.5f);
-            Vector3 endPoint2 = startPointOriginal + direction;
-            //Debug.Log("endPointOnFunction = " + endPoint2);
-            return endPoint2;
-        }/*else if (counterClicks == 1)
-        {
-            counterClicks++;
-            return Vector3.zero;
-        }*/
-        else
-        {
-            //AUMENTAR DISTANCIA POR SEGUNDO O AÑADIRLE UN NUMERO FIJO QUE SEA EL MINIMO SI EL TIEMPO ES MENOR A 1.5 SEGUNDOS
-            Vector3 displacement = direction * distancePerSecond;
-
-            float pressDuration = Time.time - pressStartTime;
-            //Debug.Log(pressDuration);
-
-            //float distance = Mathf.Clamp(pressDuration * launchSpeed, 0f, maxDistance);
-            Vector3 totalDisplacement = displacement * pressDuration;
-
-            Vector3 finalPoint = startPoint + totalDisplacement;
-            //Debug.Log("endPointOnFunction2 = " + finalPoint);
-            return finalPoint;
-        }
-
-
-    }
 }
