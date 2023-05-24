@@ -41,7 +41,8 @@ public class ChargeBar : MonoBehaviour
             }
             else
             {
-                maxCharge = boomerang.maxDistance;
+                maxCharge = boomerang.maxDistance;  //distancia real
+                //maxCharge = boomerang.maxDistance - boomerang.minDistanceToLaunch;  //distancia ficticia, pero realista en la barra
                 currentBarCharge = boomerang.distanceToEnd;
                 //con 1 decimal
                 string text = EliminateDecimalsOfAFloat(currentBarCharge);

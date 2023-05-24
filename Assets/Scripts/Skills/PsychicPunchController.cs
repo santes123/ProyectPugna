@@ -11,7 +11,7 @@ public class PsychicPunchController : MonoBehaviour
     public float maxDamage;
     public float initialManaCost;
     public float maxManaCost;
-    public float cooldown;
+    public float coldown;
 
     private GameObject currentSphere;
     public Transform spawnPoint;
@@ -19,8 +19,8 @@ public class PsychicPunchController : MonoBehaviour
     private float currentScale;
     public float currentDamage;
     private float currentManaCost;
-    private bool inCooldown;
-    private float remainingTime;
+    public bool onColdown;
+    public float remainingTime;
 
     PlayerStats playerStats;
     public bool onHand = false;
@@ -34,19 +34,21 @@ public class PsychicPunchController : MonoBehaviour
 
     void Update()
     {
+        //EL COLDOWN LO CALCULAMOS FUERA, PARA QUE CUANDO CAMBIE DE ARMA SE SIGA CALCULANDO
+        if (onColdown)
+        {
+            remainingTime -= Time.deltaTime;
+            //Debug.Log("remaining time = " + remainingTime);
+            if (remainingTime <= 0f)
+            {
+                onColdown = false;
+                remainingTime = 0f;
+            }
+        }
         if (playerStats.selectedMode == PlayerStats.GameMode.PyshicShot && playerStats.currentMana >= initialManaCost)
         {
-            if (inCooldown)
-            {
-                remainingTime -= Time.deltaTime;
-                Debug.Log("remaining time = " + remainingTime);
-                if (remainingTime <= 0f)
-                {
-                    inCooldown = false;
-                    remainingTime = 0f;
-                }
-            }
-            if (!inCooldown && Input.GetMouseButtonDown(0))
+
+            if (!onColdown && Input.GetMouseButtonDown(0))
             {
                 chargeBar.SetActive(true);
                 chargeBar.GetComponent<ChargeBar>().target = gameObject;
@@ -60,7 +62,7 @@ public class PsychicPunchController : MonoBehaviour
                 currentDamage = initialDamage;
                 currentManaCost = initialManaCost;
             }
-            else if (!inCooldown && Input.GetMouseButton(0) && currentSphere != null)
+            else if (!onColdown && Input.GetMouseButton(0) && currentSphere != null)
             {
                 // Incrementar la escala y la velocidad de la esfera mientras se mantiene pulsado el botón izquierdo del ratón
                 if (currentSphere != null)
@@ -74,7 +76,7 @@ public class PsychicPunchController : MonoBehaviour
                     currentManaCost = Mathf.Lerp(initialManaCost, maxManaCost, currentScale / maxScale);
                 }
             }
-            else if (!inCooldown && Input.GetMouseButtonUp(0) && currentSphere != null)
+            else if (!onColdown && Input.GetMouseButtonUp(0) && currentSphere != null)
             {
                 if (playerStats.currentMana >= currentManaCost)
                 {
@@ -99,8 +101,8 @@ public class PsychicPunchController : MonoBehaviour
                     }
                     currentSphere = null;
                     // Iniciar el cooldown
-                    inCooldown = true;
-                    remainingTime = cooldown;
+                    onColdown = true;
+                    remainingTime = coldown;
                     chargeBar.GetComponent<ChargeBar>().chargeBar.fillAmount = 0;
                     chargeBar.SetActive(false);
                 }

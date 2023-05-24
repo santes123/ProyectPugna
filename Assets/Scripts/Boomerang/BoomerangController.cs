@@ -39,11 +39,11 @@ public class BoomerangController : MonoBehaviour
     public bool specialThrow = false;
 
     [HideInInspector]
-    bool bouncing = false;
+    public bool bouncing = false;
     //float lerpSpeed = 2f;
     float distanceToMove = 5f;
     [HideInInspector]
-    bool onGround = false;
+    public bool onGround = false;
     public Camera mainCamera;
     //UI damage dealt
     public GameObject floatingDamageTextPrefab;
@@ -76,6 +76,14 @@ public class BoomerangController : MonoBehaviour
     int counterClicks = 0;
     public float impulseForceWhenHit;
 
+    public float expectedColdownTime = 0f;
+
+    public Text timing;
+    float startedTimeThrow = 0f;
+    public Text timePressedText;
+    float startedTimePress= 0f;
+    private float timePressed = 0f;
+
     // Inicialización
     void Start()
     {
@@ -99,6 +107,10 @@ public class BoomerangController : MonoBehaviour
 
         if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
         {
+            if (onColdown)
+            {
+                timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
+            }
             //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
             if (Input.GetMouseButtonDown(0) && onHand && !isFlying && !specialThrow && !isReturning)
             {
@@ -110,6 +122,7 @@ public class BoomerangController : MonoBehaviour
 
 
                 isButtonPressed = true;
+                startedTimePress = Time.time;
                 //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
                 startPoint = transform.position;
                 startPointOriginal = startPoint;
@@ -121,6 +134,12 @@ public class BoomerangController : MonoBehaviour
             if (isButtonPressed)
             {
                 endPoint = CalculateEndPoint();
+                timePressed = Time.time -  startedTimePress;
+                if (timePressed <= 1.5f)
+                {
+                    timePressedText.text = "TimePressed = " + timePressed.ToString();
+                }
+
             }
             //atraer boomerang con poder mental
             if (Input.GetMouseButton(0) && !isFlying && !onHand && !attracting && playerStats.currentMana >= 5 && !isReturning && !specialThrow)
@@ -147,7 +166,6 @@ public class BoomerangController : MonoBehaviour
                 //reiniciamos el counter para empezar a generar el lineRenderer si el jugaodr tiene ya pulsado el click izquierdo
                 counterClicks = 0;
 
-
                 lr.positionCount = 0;
                 onHand = false;
                 transform.SetParent(null);
@@ -157,6 +175,25 @@ public class BoomerangController : MonoBehaviour
                 lr.enabled = false;
                 onColdown = true;
                 isButtonPressed = false;
+
+                //calculamos el coldown estimado (FORMA CORRECTA, PERO EL T NO ES LINEAL)
+                Debug.Log("distancia entre inicio y fin = " + Vector3.Distance(transform.position, endPoint));
+                /*float distance = Vector3.Distance(transform.position, endPoint);
+                expectedColdownTime = (distance / followSpeed * Time.deltaTime);*/
+                if (timePressed > 0 && timePressed < 0.8f)
+                {
+                    expectedColdownTime = 0.7f;
+                }
+                else if(timePressed > 0.9 && timePressed < 1.5f)
+                {
+                    expectedColdownTime = 1.1f;
+                }
+                else
+                {
+                    expectedColdownTime = 1.1f;
+                }
+                Debug.Log("expected coldown = " + expectedColdownTime);
+                startedTimeThrow = Time.time;
             }
             // Seguimiento de la línea
             if (isFlying && !isReturning)
@@ -176,7 +213,12 @@ public class BoomerangController : MonoBehaviour
                     // Interpolación lineal utilizando el factor de desaceleración
                     float lerpValue = Mathf.Lerp(0.0f, 1.0f, Mathf.Pow(currentLerpTime, slowdown));*/
                     //targetPosition = targetPosition + Vector3.up;
-                    transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * followSpeed);
+                    // Calcular el nuevo desplazamiento en cada frame
+                    Debug.Log("tiempo = " + followSpeed * Time.deltaTime);
+                    Debug.Log("tiempo = " + followSpeed * Time.deltaTime);
+                    float t = Mathf.Clamp01(followSpeed * Time.deltaTime);
+                    Debug.Log("tiempo con clamp = " + t);
+                    transform.position = Vector3.Lerp(transform.position, targetPosition, t);
                 }
             }
 
@@ -189,6 +231,7 @@ public class BoomerangController : MonoBehaviour
             }
             if (bouncing)
             {
+                expectedColdownTime = 0f;
                 // Desplazar gradualmente hacia la posición de destino usando Lerp
                 Vector3 newPosition = Vector3.Lerp(transform.position, targetPosition, followSpeed * Time.deltaTime);
                 newPosition.y = transform.position.y; // Mantener la posición actual en el eje Y
@@ -202,6 +245,7 @@ public class BoomerangController : MonoBehaviour
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                     bouncing = false;
                     onGround = true;
+                    //GameObject.Find("Player").GetComponent<BoxCollider>().enabled = true;
                     rotation = false;
                     rb.isKinematic = false;
                     GetComponent<Collider>().isTrigger = false;
@@ -220,8 +264,9 @@ public class BoomerangController : MonoBehaviour
             if (Input.GetMouseButton(0) && !isFlying && onHand && !specialThrow && !isReturning)
             {
                 //cambiamos los valores a los del boomerang
-                //CALCULAR PARA PASARLE LOS NUMEROS Y CALCULE LA FUERZA MAXIMA Y LA MUESTRE USANDO ENDPOINT
-                distanceToEnd = Vector3.Distance(startPointOriginal, endPoint);
+                //CALCULA EL ENDPOINT REALISTA, EN EL COMENTARIO ESTA OTRO QUE USA LA BARRA ENTERA
+                distanceToEnd = Vector3.Distance(startPointOriginal, endPoint);  //esto es la distancia real, pero como empieza mas lejos no vale
+                //distanceToEnd = Vector3.Distance(startPoint, endPoint);  //esto es la distancia ficticia, contando desde el startPoint (launchMin)
 
                 //counter y booleano para el lineRenderer reset
                 clickPressed = true;
@@ -326,6 +371,7 @@ public class BoomerangController : MonoBehaviour
                 //Debug.Log("Player1.1");
                 rb.useGravity = false;
                 GetComponent<Collider>().isTrigger = true;
+                transform.SetParent(handPlace.transform);
                 onHand = true;
             }
             if (isReturning)
@@ -333,7 +379,8 @@ public class BoomerangController : MonoBehaviour
                 //endPoint = Vector3.zero;
                 //asi vuelve siempre al jugador
                 returnPosition = handPlace.position;
-                transform.position = Vector3.Lerp(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
+                float t = Mathf.Clamp01(followSpeed * Time.fixedDeltaTime);
+                transform.position = Vector3.Lerp(transform.position, returnPosition, t);
                 //transform.position = Vector3.MoveTowards(transform.position, returnPosition, followSpeed * Time.fixedDeltaTime);
                 //VUELVE A LA MANO DEL JUGADOR
                 //print(Vector3.Distance(transform.position, returnPosition));
@@ -480,6 +527,7 @@ public class BoomerangController : MonoBehaviour
         }
         if (other.CompareTag("Obstacle") && !isReturning && isFlying || other.CompareTag("Obstacle") && specialThrow)
         {
+            onColdown = false;
             if (specialThrow)
             {
                 //AÑADIR CODIGO PARA CUANDO CHOCA CON UN MURO Y QUE NO REBOTE (Y SE QUEDE EN EL SUELO SIN DAR ERRORES
@@ -523,6 +571,17 @@ public class BoomerangController : MonoBehaviour
 
                 Debug.Log("target = " + targetPosition);
             }
+        }
+        //collision con el player
+        if (other.CompareTag("Player") && !isFlying || other.CompareTag("Player") && isFlying && isReturning)
+        {
+
+            Debug.Log("Player1.1");
+            //Debug.Log(Time.deltaTime);
+            rb.useGravity = false;
+            GetComponent<Collider>().isTrigger = true;
+            onHand = true;
+            transform.SetParent(handPlace.transform);
         }
     }
     void MakeDamageToEnemyAndPush(Collider other, float damage)

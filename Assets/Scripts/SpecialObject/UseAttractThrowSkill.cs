@@ -5,19 +5,28 @@ using UnityEngine;
 public class UseAttractThrowSkill : MonoBehaviour
 {
     //variables locales
+    [HideInInspector]
     public bool onColdown = false;
+    [HideInInspector]
+    public float remainingTime;
+    public float coldownTime = 2f;
+    [HideInInspector]
     public GameObject target;
     SpecialObject selectedObjectScript;
     PlayerStats player;
 
-    /// ///////////////////////////////
+    //////////////////////////////////
+    [HideInInspector]
     public bool estaSiendoAtraido = false;
+    [HideInInspector]
     public bool haSidoLanzado = false;
     public float velocidadAtraccion;
     //float velocidadAtraccionOriginal;
     public float fuerzaBase;
     float fuerzaLanzamiento;
+    [HideInInspector]   
     public float fuerzaLanzamientoAnterior;
+    [HideInInspector]
     public Vector3 direccionLanzamientoAnterior;
     public float fuerzaMaxima;
     private float tiempoPulsado = 0f;
@@ -48,6 +57,16 @@ public class UseAttractThrowSkill : MonoBehaviour
 
     void Update()
     {
+        if (onColdown)
+        {
+            remainingTime -= Time.deltaTime;
+            //Debug.Log("remaining time = " + remainingTime);
+            if (remainingTime <= 0f)
+            {
+                onColdown = false;
+                remainingTime = 0f;
+            }
+        }
         if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
         {
             Debug.Log("MODO ATTRACT AND THROW ACTIVADO...");
@@ -57,7 +76,7 @@ public class UseAttractThrowSkill : MonoBehaviour
                 estaSiendoAtraido = true;
                 //asi solo atraemos al objetivo que acabamos de marcar
                 selectedObjectScript.estaSiendoAtraido = true;
-                onColdown = true;
+                //onColdown = true;
             }
             if (Input.GetMouseButton(0))
             {
@@ -98,7 +117,8 @@ public class UseAttractThrowSkill : MonoBehaviour
             if (Input.GetMouseButtonUp(1) && estaSiendoAtraido && selectedObjectScript.estaSiendoAtraido == true)
             {
                 //target.GetComponent<Rigidbody>().Sleep();
-                onColdown = false;
+                onColdown = true;
+                remainingTime = coldownTime;
                 botonPresionado = false;
                 print(tiempoPulsado);
                 if (tiempoPulsado <= 0.5f)
@@ -128,7 +148,9 @@ public class UseAttractThrowSkill : MonoBehaviour
                 selectedObjectScript.estaSiendoAtraido = false;
                 onHand = false;
                 selectedObjectScript.onHand = false;
-                Vector3 direccionLanzamiento = (pointer.position - target.transform.position).normalized;
+                //Vector3 direccionLanzamiento = (pointer.position - target.transform.position).normalized;
+                //FIXEAMOS LA DIRECCION DE LANZAMIENTO USANDO GETMOUSEWORLDPOSITION() -> METODO CREADO EN BOOMERANGCONTROLLER
+                Vector3 direccionLanzamiento = Vector3.Normalize(GetMouseWorldPosition() - transform.position);
 
                 //target.GetComponent<Rigidbody>().WakeUp();
                 target.GetComponent<Rigidbody>().AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
@@ -141,6 +163,7 @@ public class UseAttractThrowSkill : MonoBehaviour
         }
 
     }
+    //FUNCIONES UTILIDAD
     private bool CheckIfRayHitObject()
     {
         Ray ray = new Ray(transform.position, transform.forward);
@@ -159,6 +182,28 @@ public class UseAttractThrowSkill : MonoBehaviour
         {
             Debug.DrawRay(transform.position, transform.forward * 20f, Color.red);
             return false;
+        }
+    }
+    private Vector3 GetMouseWorldPosition()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        {
+            return hit.point + new Vector3(0f, 1f, 0f); // adjust height of point to be above terrain
+        }
+        else
+        {
+            Plane plane = new Plane(Vector3.up, transform.position);
+            float distance;
+            if (plane.Raycast(ray, out distance))
+            {
+                return ray.GetPoint(distance);
+            }
+            else
+            {
+                return Vector3.zero;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DashController : MonoBehaviour
@@ -18,6 +19,9 @@ public class DashController : MonoBehaviour
     public LayerMask obstacleLayer;
     CharacterController characterController;
     private BoxCollider temporaryCollider;
+
+    public float remainingTime = 0f;
+    private List<float> cooldownTimers = new List<float>();
 
     private void Start()
     {
@@ -56,6 +60,7 @@ public class DashController : MonoBehaviour
         transform.GetComponent<PlayerController>().enabled = false;
         currentCharges--;
         lastDashTime = Time.time;
+        cooldownTimers.Add(lastDashTime);
 
         // Crear el BoxCollider temporal
         temporaryCollider = gameObject.AddComponent<BoxCollider>();
@@ -110,6 +115,7 @@ public class DashController : MonoBehaviour
     {
         if (currentCharges >= maxCharges)
         {
+            remainingTime = 0;
             return;
         }
 
@@ -118,7 +124,10 @@ public class DashController : MonoBehaviour
             Debug.Log("carga regenerada...");
             currentCharges++;
             lastDashTime = Time.time;
+            remainingTime = 0;
         }
+        //añadir los timers a un list y verificarlos todos en orden
+        remainingTime = Time.time - lastDashTime;
     }
     private bool IsInsideGameObject()
     {

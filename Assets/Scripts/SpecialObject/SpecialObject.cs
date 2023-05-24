@@ -33,12 +33,15 @@ public class SpecialObject : MonoBehaviour
     public bool onColdown = false;
     private UseAttractThrowSkill useSkil;
 
+    public List<string> enemiesHited;
+
     //BoomerangController boomerangReference;
     void Start()
     {
         useSkil = GameObject.Find("Player").GetComponent<UseAttractThrowSkill>();
         rb = GetComponent<Rigidbody>();
         velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
+        enemiesHited = new List<string>();
         //fuerzaLanzamiento = fuerzaBase;
 
         //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
@@ -161,8 +164,11 @@ public class SpecialObject : MonoBehaviour
     }*/
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name))
         {
+            //añadimos el array a enemigos hiteados por este gameobject
+            enemiesHited.Add(other.gameObject.name);
+
             //APLICAMOS FUERZA AL ENEMIGO
             //other.gameObject.GetComponent<Rigidbody>().AddForce(rb.velocity, ForceMode.Impulse);
             // Comprobar si el objeto colisionado no tiene un Rigidbody
@@ -231,5 +237,6 @@ public class SpecialObject : MonoBehaviour
     private void ResetSkill()
     {
         haSidoLanzado = false;
+        enemiesHited.Clear();
     }
 }
