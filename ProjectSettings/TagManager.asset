@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Obstacle
   - Ground
+  - Door
   layers:
   - Default
   - TransparentFX
@@ -19,9 +20,9 @@ TagManager:
   - Enemy
   - Ground
   - CanBeAttracted
-  - 
-  - 
-  - 
+  - Obstacles
+  - Player
+  - ObjectsInteractWithPlayer
   - 
   - 
   - 

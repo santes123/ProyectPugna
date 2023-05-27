@@ -79,7 +79,17 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     public void UseSkill(float manaCost)
     {
-        mana -= manaCost;
+        //verificar si el manacost tiene mas de un decimal
+        bool moreThan1Decimal = Mathf.Floor(manaCost) != manaCost;
+        if (moreThan1Decimal)
+        {
+            mana -= Mathf.Floor(manaCost);
+        }
+        else
+        {
+            mana -= manaCost;
+        }
+        //mana -= manaCost;
         currentMana = mana;
         if (this.gameObject.GetComponent<PlayerController>())
         {

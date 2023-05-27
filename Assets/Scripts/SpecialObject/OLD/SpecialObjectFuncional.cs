@@ -2,26 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpecialObject : MonoBehaviour
+public class SpecialObjectFuncional : MonoBehaviour
 {
-    public bool estaSiendoAtraido = false;
-    public bool haSidoLanzado = false;
-    //public float velocidadAtraccion;
+    private bool estaSiendoAtraido = false;
+    private bool haSidoLanzado = false;
+    public float velocidadAtraccion;
     float velocidadAtraccionOriginal;
-    //public float fuerzaBase;
-    //float fuerzaLanzamiento;
-    //float fuerzaLanzamientoAnterior;
-    //Vector3 direccionLanzamientoAnterior;
-    //public float fuerzaMaxima;
-    //private float tiempoPulsado = 0f;
-    //public float incrementoDeFuerzaPorSegundo;
+    public float fuerzaBase;
+    float fuerzaLanzamiento;
+    float fuerzaLanzamientoAnterior;
+    Vector3 direccionLanzamientoAnterior;
+    public float fuerzaMaxima;
+    private float tiempoPulsado = 0f;
+    public float incrementoDeFuerzaPorSegundo;
     float distanceToTakeOnHand = 2f;
     public Transform player;
     public Transform handPlace;
-    //public Transform pointer;
-    public Rigidbody rb;
-    public bool onHand = false;
-    //public LayerMask collisionMask;
+    public Transform pointer;
+    Rigidbody rb;
+    bool onHand = false;
+    public LayerMask collisionMask;
 
     public float velocidadRotacion;
 
@@ -29,26 +29,23 @@ public class SpecialObject : MonoBehaviour
     public float fuerzaAleatoria;
 
     public float damage;
-    //bool botonPresionado = false;
+    bool botonPresionado = false;
     public bool onColdown = false;
-    private UseAttractThrowSkill useSkil;
+    public UseAttractThrowSkill useSkil;
 
-    public List<string> enemiesHited;
-
-    //BoomerangController boomerangReference;
+    BoomerangController boomerangReference;
     void Start()
     {
         useSkil = GameObject.Find("Player").GetComponent<UseAttractThrowSkill>();
         rb = GetComponent<Rigidbody>();
-        velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
-        enemiesHited = new List<string>();
-        //fuerzaLanzamiento = fuerzaBase;
+        velocidadAtraccionOriginal = velocidadAtraccion;
+        fuerzaLanzamiento = fuerzaBase;
 
-        //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
+        boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
     }
 
     void Update()
-    {/*
+    {
         //Debug.DrawRay(player.position, player.forward, Color.red, Mathf.Infinity);
         if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !useSkil.onColdown)
         {
@@ -59,12 +56,12 @@ public class SpecialObject : MonoBehaviour
         if (Input.GetMouseButton(0))
         {
             velocidadAtraccion += 2;
-        */
+        }
         if (onHand)
         {
             transform.position = handPlace.position;
             //reiniciamos la velocidad de atraccion al valor base
-            useSkil.velocidadAtraccion = velocidadAtraccionOriginal;
+            velocidadAtraccion = velocidadAtraccionOriginal;
             // Obtener las rotaciones actuales en los tres ejes
             Vector3 rotacionesActuales = transform.rotation.eulerAngles;
 
@@ -74,7 +71,7 @@ public class SpecialObject : MonoBehaviour
 
             // Actualizar las rotaciones del objeto
             transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
-        }/*
+        }
         //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
         if (Input.GetMouseButtonDown(1))
         {
@@ -83,19 +80,17 @@ public class SpecialObject : MonoBehaviour
         if (botonPresionado)
         {
             tiempoPulsado += Time.deltaTime;
-        }*/
+        }
         
     }
     void FixedUpdate()
     {
         //ATRACCION
-        
-        if (useSkil.estaSiendoAtraido && !useSkil.haSidoLanzado && estaSiendoAtraido/* && !boomerangReference.onHand*/)
+        if (estaSiendoAtraido && !haSidoLanzado/* && !boomerangReference.onHand*/)
         {
             if (Vector3.Distance(handPlace.position, transform.position) <= distanceToTakeOnHand)
             {
                 print("on hand");
-                useSkil.onHand = true;
                 onHand = true;
                 GetComponent<BoxCollider>().enabled = false;
                 rb.useGravity = false;
@@ -104,11 +99,11 @@ public class SpecialObject : MonoBehaviour
             {
                 Vector3 posicionJugador = player.position;
                 Vector3 direccion = (posicionJugador - transform.position).normalized;
-                rb.MovePosition(transform.position + direccion * useSkil.velocidadAtraccion * Time.fixedDeltaTime);
+                rb.MovePosition(transform.position + direccion * velocidadAtraccion * Time.fixedDeltaTime);
             }
         }
         //LANZAMIENTO
-        /*if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)
+        if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)
         {
             onColdown = false;
             useSkil.onColdown = false;
@@ -142,9 +137,9 @@ public class SpecialObject : MonoBehaviour
             fuerzaLanzamiento = fuerzaBase;
             Debug.Log("fuerza post lanzamiento = " + fuerzaLanzamiento);
             tiempoPulsado = 0f;
-        }*/
+        }
     }
-    /*private bool CheckIfRayHitObject()
+    private bool CheckIfRayHitObject()
     {
         Ray ray = new Ray(player.position, player.forward);
         RaycastHit hit;
@@ -161,14 +156,11 @@ public class SpecialObject : MonoBehaviour
             Debug.DrawRay(player.position, player.forward * 20f, Color.red);
             return false;
         }
-    }*/
+    }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name))
+        if (other.CompareTag("Enemy"))
         {
-            //añadimos el array a enemigos hiteados por este gameobject
-            enemiesHited.Add(other.gameObject.name);
-
             //APLICAMOS FUERZA AL ENEMIGO
             //other.gameObject.GetComponent<Rigidbody>().AddForce(rb.velocity, ForceMode.Impulse);
             // Comprobar si el objeto colisionado no tiene un Rigidbody
@@ -177,7 +169,7 @@ public class SpecialObject : MonoBehaviour
                 Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
                 temporalRb.useGravity = false;
                 //dividimos la fuerza entre 2 porque no usamos gravedad
-                temporalRb.AddForce(useSkil.direccionLanzamientoAnterior * useSkil.fuerzaLanzamientoAnterior / 2, ForceMode.Impulse);
+                temporalRb.AddForce(direccionLanzamientoAnterior * fuerzaLanzamientoAnterior / 2, ForceMode.Impulse);
                 Destroy(temporalRb, 0.5f);
             }
 
@@ -237,6 +229,5 @@ public class SpecialObject : MonoBehaviour
     private void ResetSkill()
     {
         haSidoLanzado = false;
-        enemiesHited.Clear();
     }
 }
