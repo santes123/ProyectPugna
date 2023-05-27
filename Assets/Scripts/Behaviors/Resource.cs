@@ -18,6 +18,7 @@ public class Resource : MonoBehaviour
         maxPool += amount;
         OnMaxPoolChanged?.Invoke();
     }
+
     public void ModifyResource(int amount) {
         currentAmount += amount;
         currentAmount = Mathf.Clamp(currentAmount, 0, maxPool);
