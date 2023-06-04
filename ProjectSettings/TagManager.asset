@@ -9,6 +9,10 @@ TagManager:
   - Obstacle
   - Ground
   - Door
+  - Boomerang
+  - ChargeBar
+  - Key
+  - SkillBar
   layers:
   - Default
   - TransparentFX

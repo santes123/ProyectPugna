@@ -5,7 +5,7 @@ using UnityEngine.InputSystem.XR;
 //[RequireComponent(typeof(GunController))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float speed = 5f;
+    [SerializeField] public float speed = 5f;
     Camera viewCamera;
     CharacterController player;
     //GunController gunController;
@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     public Crosshairs crosshairs;
     public BoomerangController boomerangController;
+    public bool invincible = false;
     void Awake() 
     {
         player = GetComponent<CharacterController>();
@@ -55,7 +56,14 @@ public class PlayerController : MonoBehaviour
             crosshairs.transform.position = point;
             crosshairs.DetectTargets(ray);
         }
-
+        if (invincible)
+        {
+            player.detectCollisions = false;
+        }
+        else
+        {
+            player.detectCollisions = true;
+        }
     }
 
     void GunSwitcher(float switchGun, float switchGun2)

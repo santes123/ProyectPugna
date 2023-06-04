@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -25,8 +26,15 @@ public class Enemy : LivingEntity
 
     public float damage;
 
+
     //UI damage (añadirlo de forma dinamica posteriormente
     public GameObject floatingDamageTextPrefab;
+
+    public bool freeze = false;
+    private float freezeDuration;
+
+    private GameObject debuffColdown;
+    private Image debuggImage;
 
     protected override void Start()
     {
@@ -34,7 +42,8 @@ public class Enemy : LivingEntity
         pathfinder = GetComponent<NavMeshAgent>();
 
         currentState = State.Chasing;
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        //target = GameObject.FindGameObjectWithTag("Player").transform;
+        target = FindObjectOfType<PlayerStats>().gameObject.transform;
         skinMaterial = GetComponentInChildren<Renderer>().material;
         //skinMaterial = GetComponent<Renderer>().material;
         originalColour = skinMaterial.color;
@@ -44,24 +53,49 @@ public class Enemy : LivingEntity
 
         StartCoroutine(UpdatePath());
 
+        debuffColdown = FindChildObjectWithImageComponent(this.gameObject.transform, "Coldown");
+        if (debuffColdown != null)
+        {
+            Debug.Log("OBJETO COLDOWN ENCONTRADO!");
+            //buff.gameObject.transform.parent.gameObject;
+            debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
+        }
         //floatingDamageTextPrefab = transform.GetChild(1).transform.GetChild(1).gameObject;
     }
 
     void Update()
     {
-        //no atacaran si el jugador ha muerto
-        if (target != null)
+        if (freeze)
         {
-            if (Time.time > nextAttackTime)
+            currentState = State.Idle;
+            freezeDuration -= Time.deltaTime;
+            debuffColdown.GetComponent<TextMeshPro>().text = freezeDuration.ToString("F1");
+            if (freezeDuration <= 0f)
             {
-                float sqrtToTarget = (target.position - transform.position).sqrMagnitude;
-                if (sqrtToTarget < Mathf.Pow(attackDistanceThreshhold + enemyCollisionRadius + targetCollisionRadius, 2))
+                freeze = false;
+                debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
+                GetComponent<NavMeshAgent>().enabled = true;
+            }
+        }
+        else
+        {
+            
+            currentState = State.Chasing;
+            //no atacaran si el jugador ha muerto
+            if (target != null)
+            {
+                if (Time.time > nextAttackTime)
                 {
-                    nextAttackTime = Time.time + timeBetweenAttacks;
-                    StartCoroutine(Attack());
+                    float sqrtToTarget = (target.position - transform.position).sqrMagnitude;
+                    if (sqrtToTarget < Mathf.Pow(attackDistanceThreshhold + enemyCollisionRadius + targetCollisionRadius, 2))
+                    {
+                        nextAttackTime = Time.time + timeBetweenAttacks;
+                        StartCoroutine(Attack());
+                    }
                 }
             }
-        } 
+        }
+
     }
     IEnumerator Attack()
     {
@@ -111,11 +145,16 @@ public class Enemy : LivingEntity
             yield return new WaitForSeconds(refreshRate);
         }
     }
-
+    public void Freeze(float timeToFreeze)
+    {
+        freeze = true;
+        freezeDuration = timeToFreeze;
+        debuffColdown.gameObject.transform.parent.gameObject.SetActive(true);
+    }
     private void OnTriggerEnter(Collider other)
     {
         //arreglar los errores al matar al jugador
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !freeze)
         {
             print("hit jugador");
             IDamageable damageableObject = other.GetComponent<IDamageable>();
@@ -156,5 +195,63 @@ public class Enemy : LivingEntity
                 damageableObject.TakeHit2(damage);
             }
         }*/
+    }
+    private GameObject FindChildObjectWithImageComponent(Transform parent, string childObjectName)
+    {
+        // Buscar en los hijos directos del objeto
+        foreach (Transform child in parent)
+        {
+            Debug.Log("NOMBRE DEL GAMEOBJECT = " + child.gameObject.name);
+            TextMeshPro imageComponent = child.gameObject.GetComponent<TextMeshPro>();
+            if (imageComponent != null && child.gameObject.name == childObjectName)
+            {
+                Debug.Log("NOMBRE DEL GAMEOBJECT ENCONTRADO = " + child.gameObject.name);
+                // Se encontró el objeto hijo con el componente Image y el nombre deseado
+                // Devolver el objeto padre en lugar del hijo
+                return child.gameObject/*.transform.parent.gameObject*/;
+            }
+
+            // Realizar una búsqueda recursiva en los hijos del objeto actual
+            GameObject foundObject = FindChildObjectWithImageComponent(child, childObjectName);
+            if (foundObject != null)
+            {
+                // Se encontró el objeto deseado en uno de los hijos
+                return foundObject;
+            }
+        }
+
+        // No se encontró ningún objeto hijo con el nombre y componente Image deseado
+        return null;
+    }
+    //recibir dañor
+    public override void ReceiveDamage(Damage damage)
+    {
+        base.ReceiveDamage(damage);
+        RecieveDamageVisual();
+        RecieveDamagePhysics(damage);
+
+    }
+    public void RecieveDamageVisual()
+    {
+        
+        Renderer hitRenderer = GetComponentInChildren<Renderer>();
+        // Cambiar el color del material del renderer
+        if (hitRenderer != null)
+        {
+            hitRenderer.material.color = Color.blue;
+        }
+    }
+    public void RecieveDamagePhysics(Damage damage)
+    {
+        if (!GetComponent<Rigidbody>())
+        {
+            Rigidbody temporalRb = gameObject.AddComponent<Rigidbody>();
+            temporalRb.useGravity = false;
+
+            // Obtener la dirección opuesta a la normal de la colisión
+
+            temporalRb.AddForce(damage.forceImpulse, ForceMode.Impulse);
+            Destroy(temporalRb, 0.5f);
+        }
     }
 }

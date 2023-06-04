@@ -18,6 +18,8 @@ public class FollowLine : MonoBehaviour
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        //find()
+        BoomerangScript = FindObjectOfType<BoomerangController>();
     }
 
     void Update()

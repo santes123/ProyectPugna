@@ -19,6 +19,8 @@ public class DashController : MonoBehaviour
     public LayerMask obstacleLayer;
     CharacterController characterController;
     private BoxCollider temporaryCollider;
+    public GameObject dashPrefabParticle;
+    private GameObject DashInstantiated;
 
     public float remainingTime = 0f;
     private List<float> cooldownTimers = new List<float>();
@@ -66,6 +68,8 @@ public class DashController : MonoBehaviour
         temporaryCollider = gameObject.AddComponent<BoxCollider>();
         temporaryCollider.isTrigger = true;
         temporaryCollider.size = characterController.bounds.size;
+        //instanciamos el prefab del dash
+        DashInstantiated = Instantiate(dashPrefabParticle, transform.position, Quaternion.identity);
     }
 
     private void PerformDash()
@@ -89,9 +93,12 @@ public class DashController : MonoBehaviour
         transform.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, t);
         //characterController.Move((dashTargetPosition - dashStartPosition) * t);
 
+        //SUSTITUIR T POR "FLASHFURATION"
         if (t >= 1f)
         {
             isDashing = false;
+            
+
             // Volver a activar los colliders u otras lógicas de colisión aquí.
             transform.GetComponent<CharacterController>().enabled = true;
             transform.GetComponent<PlayerController>().enabled = true;

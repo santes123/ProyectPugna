@@ -46,6 +46,10 @@ public class UseAttractThrowSkill : MonoBehaviour
 
     //public float damage;
     bool botonPresionado = false;
+    GameObject chargeBar;
+    [HideInInspector]
+    public float maxDistanceFromTargetToPlayer = 0f;
+    public float currentDistanceFromTargetToPlayer = 0f;
 
     //progresivamente pasar la parte de controles del SpecialObject aqui, tiene mas sentido
     void Start()
@@ -53,6 +57,10 @@ public class UseAttractThrowSkill : MonoBehaviour
         //velocidadAtraccionOriginal = velocidadAtraccion;
         fuerzaLanzamiento = fuerzaBase;
         player = GetComponent<PlayerStats>();
+        //chargeBar = GameObject.FindGameObjectWithTag("ChargeBar");
+        //Debug.Log("name = " + chargeBar.name);
+        //chargeBar = GameObject.Find("ChargeBar");
+        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
     }
 
     void Update()
@@ -76,7 +84,11 @@ public class UseAttractThrowSkill : MonoBehaviour
                 estaSiendoAtraido = true;
                 //asi solo atraemos al objetivo que acabamos de marcar
                 selectedObjectScript.estaSiendoAtraido = true;
-                //onColdown = true;
+                //activamos la barra de progreso
+                chargeBar.SetActive(true);
+                chargeBar.GetComponent<ChargeBar>().target = target;
+                chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
+                chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDistanceFromTargetToPlayer);
             }
             if (Input.GetMouseButton(0))
             {
@@ -105,6 +117,7 @@ public class UseAttractThrowSkill : MonoBehaviour
             if (botonPresionado)
             {
                 tiempoPulsado += Time.deltaTime;
+                currentDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, transform.position);
             }
         }
 
@@ -117,6 +130,7 @@ public class UseAttractThrowSkill : MonoBehaviour
             if (Input.GetMouseButtonUp(1) && estaSiendoAtraido && selectedObjectScript.estaSiendoAtraido == true)
             {
                 //target.GetComponent<Rigidbody>().Sleep();
+                chargeBar.SetActive(false);
                 onColdown = true;
                 remainingTime = coldownTime;
                 botonPresionado = false;
@@ -172,6 +186,7 @@ public class UseAttractThrowSkill : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, collisionMask, QueryTriggerInteraction.Collide))
         {
             target = hit.collider.gameObject;
+            maxDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, gameObject.transform.position);
             selectedObjectScript = target.GetComponent<SpecialObject>();
             print(target.name);
             Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.green);

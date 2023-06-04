@@ -16,6 +16,9 @@ public class DrawLine : MonoBehaviour
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        //find()
+        BoomerangScript = FindObjectOfType<BoomerangController>();
+        followScript = FindObjectOfType<FollowLine>();
     }
 
     void Update()

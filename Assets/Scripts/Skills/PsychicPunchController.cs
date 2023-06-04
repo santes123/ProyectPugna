@@ -29,7 +29,9 @@ public class PsychicPunchController : MonoBehaviour
 
     private void Start()
     {
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        //playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        playerStats = FindObjectOfType<PlayerStats>();
+        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
     }
 
     void Update()

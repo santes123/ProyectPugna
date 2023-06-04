@@ -12,14 +12,21 @@ public class ChargeBar : MonoBehaviour
     private float currentBarCharge;
     private float maxCharge;
     private PsychicPunchController psychicPusnch;
-    private BoomerangController boomerang;
+    //private BoomerangController boomerang;
+    private UseBoomerang playerBoomerang;
+    private UseAttractThrowSkill attractThrowSkill;
     public GameObject target = null;
 
     private void Start()
     {
         //luego hacer una funcion para cambiar los valores y poder usarlo con el boomerang o con lo que quiera
-        psychicPusnch = GameObject.Find("Player").GetComponent<PsychicPunchController>();
-        boomerang = GameObject.Find("Boomer").GetComponent<BoomerangController>();
+        //psychicPusnch = GameObject.Find("Player").GetComponent<PsychicPunchController>();
+        psychicPusnch = FindObjectOfType<PsychicPunchController>();
+        //boomerang = GameObject.Find("Boomer").GetComponent<BoomerangController>();
+        //playerBoomerang = GameObject.Find("Player").GetComponent<UseBoomerang>();
+        playerBoomerang = FindObjectOfType<UseBoomerang>();
+        //attractThrowSkill = GameObject.Find("Player").GetComponent<UseAttractThrowSkill>();
+        attractThrowSkill = FindObjectOfType<UseAttractThrowSkill>();
         /*maxCharge = psychicPusnch.maxDamage;
         currentBarCharge = psychicPusnch.currentDamage;
         textBar.text = psychicPusnch.currentDamage.ToString();*/
@@ -39,17 +46,35 @@ public class ChargeBar : MonoBehaviour
                 //textBar.text = Mathf.Floor(currentBarCharge).ToString();
                 chargeBar.fillAmount = currentBarCharge / maxCharge;
             }
-            else
+            else if(target.GetComponent<BoomerangController>())
             {
-                maxCharge = boomerang.maxDistance;  //distancia real
+                maxCharge = playerBoomerang.maxDistance;  //distancia real
                 //maxCharge = boomerang.maxDistance - boomerang.minDistanceToLaunch;  //distancia ficticia, pero realista en la barra
-                currentBarCharge = boomerang.distanceToEnd;
+                currentBarCharge = playerBoomerang.distanceToEnd;
                 //con 1 decimal
                 string text = EliminateDecimalsOfAFloat(currentBarCharge);
                 textBar.text = text;
                 //sin decimales (mas fluido)
                 //textBar.text = Mathf.Floor(currentBarCharge).ToString();
                 chargeBar.fillAmount = currentBarCharge / maxCharge;
+            }
+            else if(target.GetComponent<SpecialObject>())
+            {
+                //REVISAR AQUI PARA USAR LA BARRA PARA EL ATRAER Y LANZAR CORRECTAMENTE
+                maxCharge = attractThrowSkill.maxDistanceFromTargetToPlayer;  //distancia real
+                //maxCharge = boomerang.maxDistance - boomerang.minDistanceToLaunch;  //distancia ficticia, pero realista en la barra
+                currentBarCharge = attractThrowSkill.currentDistanceFromTargetToPlayer;
+                Debug.Log("currentCharge = " + currentBarCharge);
+                //con 1 decimal
+                string text = EliminateDecimalsOfAFloat(currentBarCharge);
+                textBar.text = text;
+                //sin decimales (mas fluido)
+                //textBar.text = Mathf.Floor(currentBarCharge).ToString();
+                chargeBar.fillAmount = currentBarCharge / maxCharge;
+            }
+            else
+            {
+
             }
             /*Debug.Log("bar amount = " + chargeBar.fillAmount);
             Debug.Log("current charge = " + currentBarCharge);

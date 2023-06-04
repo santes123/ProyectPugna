@@ -8,18 +8,28 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject loadButton;
     GameState saveInfo;
+    public string fileName = "/GameData";
 
     private void Start()
     {
-        if (File.Exists("savegame.bin"))
+        /*if (File.Exists("savegame.bin"))
         {
             loadButton.gameObject.SetActive(true);
+        }*/
+        if (File.Exists(Application.persistentDataPath + fileName))
+        {
+            Debug.Log("Archivo de guardado encontrado...");
+            loadButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            Debug.Log("No se ha encontrado el archivo de guardado...");
         }
     }
 
     public void PlayGame()
     {
-        if (File.Exists("savegame.bin"))
+        /*if (File.Exists("savegame.bin"))
         {
             File.Delete("savegame.bin");
             Debug.Log("Archivo eliminado correctamente");
@@ -27,6 +37,15 @@ public class MainMenu : MonoBehaviour
         else
         {
             Debug.Log("No se encontró el archivo a eliminar");
+        }*/
+        if (File.Exists(Application.persistentDataPath + fileName))
+        {
+            File.Delete(Application.persistentDataPath + fileName);
+            Debug.Log("Archivo eliminado correctamente");
+        }
+        else
+        {
+            Debug.Log("No se ha encontrado el archivo de guardado...");
         }
         SceneManager.LoadScene("CameraScene");
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static PlayerStats;
 
 [Serializable]
 public class GameState
@@ -9,7 +10,9 @@ public class GameState
     public float playerPositionY;
     public float playerPositionZ;
     public float currentPlayerHealth;
+    public float currentPlayerMana;
     public int score;
     public List<string> enemiesEliminated;
+    public GameMode lastSelectedMode;
     //public List<string> collectedItems;
 }

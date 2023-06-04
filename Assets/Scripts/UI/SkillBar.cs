@@ -37,7 +37,10 @@ public class SkillBar : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        player = FindObjectOfType<PlayerStats>();
+        contenedor = GameObject.FindGameObjectWithTag("SkillBar").transform;
+
         coldownImages = new Image[habilidades.Length];
         coldowns = new Text[habilidades.Length];
         imageSkill = new Image[habilidades.Length];
@@ -88,7 +91,8 @@ public class SkillBar : MonoBehaviour
             //Image[] images = GameObject.Find("Skill0").GetComponentsInChildren<Image>();
             Debug.Log(coldownImages[0].gameObject.name);
             coldownImages[0].gameObject.SetActive(true);
-            expectedBoomerangColdownTime = GameObject.Find("Boomer").GetComponent<BoomerangController>().expectedColdownTime;
+            //expectedBoomerangColdownTime = GameObject.Find("Player").GetComponent<UseBoomerang>().expectedColdownTime;
+            expectedBoomerangColdownTime = FindObjectOfType<UseBoomerang>().expectedColdownTime;
             remainingColdownTime = expectedBoomerangColdownTime;
             Debug.Log("remaining coldown = " + remainingColdownTime);
             coldown1 = true;
@@ -142,7 +146,9 @@ public class SkillBar : MonoBehaviour
             else
             {
                 remainingColdownTime = 0f;
-                coldowns[0].text = habilidades[0].container.GetComponent<BoomerangController>().expectedColdownTime.ToString("F1");
+                //coldowns[0].text = habilidades[0].container.GetComponent<BoomerangController>().expectedColdownTime.ToString("F1");
+                //coldowns[0].text = GameObject.Find("Player").GetComponent<UseBoomerang>().expectedColdownTime.ToString("F1");
+                coldowns[0].text = FindObjectOfType<UseBoomerang>().expectedColdownTime.ToString("F1");
                 coldownImages[0].fillAmount = 0f;
                 coldown1 = false;
             }
@@ -242,6 +248,18 @@ public class SkillBar : MonoBehaviour
         else if (habilidad.tecla.ToString() == "E")
         {
             textoTecla.text = "E";
+        }
+        else if (habilidad.tecla.ToString() == "Q")
+        {
+            textoTecla.text = "Q";
+        }
+        else if (habilidad.tecla.ToString() == "Z")
+        {
+            textoTecla.text = "Z";
+        }
+        else if (habilidad.tecla.ToString() == "R")
+        {
+            textoTecla.text = "R";
         }
     }
 }

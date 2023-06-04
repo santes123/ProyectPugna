@@ -15,23 +15,27 @@ public class GameManager : MonoBehaviour
     public List<string> enemiesKilled = new List<string>();
 
     GameState saveInfo;
+    GameState playerData;
     public string saveFileName = "savegame.bin";
 
     private void Awake()
     {
+        enemiesKilled = new List<string>();
+        _LoadData();
         if (File.Exists("savegame.bin"))
         {
-            LoadData();
+            //LoadData();
         }
         else
         {
             Debug.Log("No se encontró el archivo de guardado");
-            player = GameObject.Find("Player").GetComponent<PlayerStats>();
+            //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+            player = FindObjectOfType<PlayerStats>();
         }
     }
     void Start()
     {
-
+        //GetComponent<GameManager>().enabled = true;
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
     }
 
@@ -43,8 +47,8 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene("GameOverMenu");
         }
     }
-
-    public void LoadData()
+    //metodo LoadData antiguo
+    /*public void LoadData()
     {
         Debug.Log("loading info...");
         // Deserializar el objeto desde un archivo
@@ -60,6 +64,33 @@ public class GameManager : MonoBehaviour
         player.transform.position = LastPosition;
         enemiesKilled = saveInfo.enemiesEliminated;
         EliminateEnemiesKilledBefore(enemiesKilled);
+
+        //añadir load
+    }*/
+    public void _LoadData()
+    {
+        Debug.Log("loading data...");
+        GameData.Init();
+        playerData = GameData.Data.PlayerData;
+        Debug.Log("CURRENT HEALTH = " + playerData.currentPlayerHealth);
+        //asignar valores
+        player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        player.currentHealth = playerData.currentPlayerHealth;
+        player.currentMana = playerData.currentPlayerMana;
+        Vector3 LastPosition = new Vector3(playerData.playerPositionX, playerData.playerPositionY, playerData.playerPositionZ);
+        player.transform.position = LastPosition;
+        enemiesKilled = playerData.enemiesEliminated;
+        player.selectedMode = playerData.lastSelectedMode;
+
+        Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
+        Debug.Log("mana cargado = " + playerData.currentPlayerMana);
+        Debug.Log("selected mode cargado = " + playerData.lastSelectedMode);
+
+        if (enemiesKilled != null)
+        {
+            EliminateEnemiesKilledBefore(enemiesKilled);
+        }
+
     }
     void EliminateEnemiesKilledBefore(List<string> enemyNames)
     {
