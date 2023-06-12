@@ -89,12 +89,12 @@ public class SkillBar : MonoBehaviour
             !coldown1)
         {
             //Image[] images = GameObject.Find("Skill0").GetComponentsInChildren<Image>();
-            Debug.Log(coldownImages[0].gameObject.name);
+            //Debug.Log(coldownImages[0].gameObject.name);
             coldownImages[0].gameObject.SetActive(true);
             //expectedBoomerangColdownTime = GameObject.Find("Player").GetComponent<UseBoomerang>().expectedColdownTime;
             expectedBoomerangColdownTime = FindObjectOfType<UseBoomerang>().expectedColdownTime;
             remainingColdownTime = expectedBoomerangColdownTime;
-            Debug.Log("remaining coldown = " + remainingColdownTime);
+            //Debug.Log("remaining coldown = " + remainingColdownTime);
             coldown1 = true;
             Debug.Log("BOMMERANG EN COLDOWN");
         }else if (habilidades[1].container.GetComponent<UseAttractThrowSkill>().onColdown)
@@ -119,7 +119,7 @@ public class SkillBar : MonoBehaviour
                 Debug.Log("DASH EN COLDOWN");
                 float fillAmount = habilidades[3].container.GetComponent<DashController>().remainingTime /
                 habilidades[3].container.GetComponent<DashController>().chargeRegenTime;
-                Debug.Log("fill amount  = " + fillAmount);
+                //Debug.Log("fill amount  = " + fillAmount);
                 coldownImages[3].fillAmount = fillAmount;
                 coldowns[3].text = habilidades[3].container.GetComponent<DashController>().remainingTime.ToString("F1");
             }
@@ -161,7 +161,7 @@ public class SkillBar : MonoBehaviour
             if (remainingTime > 0)
             {
                 float fillAmount = remainingTime / coldown;
-                Debug.Log("fill amount  = " + fillAmount);
+                //Debug.Log("fill amount  = " + fillAmount);
                 coldownImages[1].fillAmount = fillAmount;
                 coldowns[1].text = remainingTime.ToString("F1");
             }
@@ -179,7 +179,7 @@ public class SkillBar : MonoBehaviour
             if (remainingTime > 0)
             {
                 float fillAmount = remainingTime / coldown;
-                Debug.Log("fill amount  = " + fillAmount);
+                //Debug.Log("fill amount  = " + fillAmount);
                 coldownImages[2].fillAmount = fillAmount;
                 coldowns[2].text = remainingTime.ToString("F1");
             }

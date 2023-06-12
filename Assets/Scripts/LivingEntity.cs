@@ -73,8 +73,8 @@ public class LivingEntity : MonoBehaviour, IDamageable
         //verificamos si es un enemigo
         if (gameObject.GetComponent<Enemy>())
         {
-            Debug.Log(gameManager);
-            Debug.Log(gameManager.enemiesKilled);
+            //Debug.Log(gameManager);
+            //Debug.Log(gameManager.enemiesKilled);
             if (gameManager.enemiesKilled == null)
             {
                 gameManager.enemiesKilled = new List<string>();

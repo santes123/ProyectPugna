@@ -102,11 +102,21 @@ public class SpecialObject : MonoBehaviour, IDamager
         {
             if (Vector3.Distance(handPlace.position, transform.position) <= distanceToTakeOnHand)
             {
+                //CALCULAR MANA POR SEGUNDO PULSADO Y HACER PARA QUE SI YA TIENES UNO EN LA MANO O ESTAS ATRAYENDO UNO, NO PODER ATRAER OTRO
                 print("on hand");
+                useSkil.estaSiendoAtraido = false;
                 useSkil.onHand = true;
                 onHand = true;
                 GetComponent<BoxCollider>().enabled = false;
                 rb.useGravity = false;
+                //consumimos mana fijo por ahora
+                if (useSkil.finalManaCost > useSkil.maxManaCost)
+                {
+                    useSkil.finalManaCost = useSkil.manaCost;
+                }
+                player.GetComponent<PlayerStats>().UseSkill(useSkil.finalManaCost);
+                useSkil.finalManaCost = 0f;
+                useSkil.chargeBar.SetActive(false);
             }
             else
             {

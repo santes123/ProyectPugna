@@ -13,11 +13,12 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI manaText;
     public TextMeshProUGUI pointsText;
     public List<string> enemiesKilled = new List<string>();
+    public GameObject pauseMenuUI;
 
     GameState saveInfo;
     GameState playerData;
     public string saveFileName = "savegame.bin";
-
+    public bool onPause = false;
     private void Awake()
     {
         enemiesKilled = new List<string>();
@@ -44,7 +45,22 @@ public class GameManager : MonoBehaviour
         if (player.currentHealth <= 0)
         {
             print("YOU ARE DEAD");
+            Cursor.visible = true;
             SceneManager.LoadScene("GameOverMenu");
+        }
+        //controlamos la tecla Escape para cuando el jugador quiere pausar
+        if (Input.GetKeyDown(KeyCode.Escape) && !onPause)
+        {
+            Debug.Log("PAUSE ON");
+            Time.timeScale = 0f;
+            onPause = true;
+            pauseMenuUI.SetActive(true);
+        }else if (Input.GetKeyDown(KeyCode.Escape) && onPause)
+        {
+            Debug.Log("PAUSE OFF");
+            Time.timeScale = 1f;
+            onPause = false;
+            pauseMenuUI.SetActive(false);
         }
     }
     //metodo LoadData antiguo
@@ -72,7 +88,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("loading data...");
         GameData.Init();
         playerData = GameData.Data.PlayerData;
-        Debug.Log("CURRENT HEALTH = " + playerData.currentPlayerHealth);
+        //Debug.Log("CURRENT HEALTH = " + playerData.currentPlayerHealth);
         //asignar valores
         player = GameObject.Find("Player").GetComponent<PlayerStats>();
         player.currentHealth = playerData.currentPlayerHealth;
@@ -82,9 +98,9 @@ public class GameManager : MonoBehaviour
         enemiesKilled = playerData.enemiesEliminated;
         player.selectedMode = playerData.lastSelectedMode;
 
-        Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
-        Debug.Log("mana cargado = " + playerData.currentPlayerMana);
-        Debug.Log("selected mode cargado = " + playerData.lastSelectedMode);
+        //Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
+        //Debug.Log("mana cargado = " + playerData.currentPlayerMana);
+        //Debug.Log("selected mode cargado = " + playerData.lastSelectedMode);
 
         if (enemiesKilled != null)
         {

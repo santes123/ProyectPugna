@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 //LANZAMIENTO BOOMERANG FUNCIONAL CON AUMENTO DE FUERZA Y LINERENDERER ADAPTATIVO
 public class BoomerangController : MonoBehaviour, IDamager
 {
-    // Variables públicas
+    // Variables pÃºblicas
     //public float damage;
     public float damageBoomerang;
     public float lastHitTime;
@@ -47,8 +47,8 @@ public class BoomerangController : MonoBehaviour, IDamager
     public bool onColdown = false;
 
     //interpolacion velocidad boomerang
-    //public float slowdownFactor = 0.5f; // Factor de desaceleración en el medio
-    //private float currentLerpTime = 0.0f; // Tiempo de interpolación actual
+    //public float slowdownFactor = 0.5f; // Factor de desaceleraciÃ³n en el medio
+    //private float currentLerpTime = 0.0f; // Tiempo de interpolaciÃ³n actual
 
 
     public float impulseForceWhenHit;
@@ -60,7 +60,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     public GameObject prefabBoomerangRotation;
     private GameObject boomerangEffectInstantiated;
 
-    // Inicialización
+    // InicializaciÃ³n
     private void Awake()
     {
         floatingDamageTextPrefab = FindObjectOfType<FloatingDamageText>().gameObject;
@@ -80,23 +80,23 @@ public class BoomerangController : MonoBehaviour, IDamager
         damageBoomerang = boomerangPlayer.damage;
     }
 
-    // Actualización por fotograma
+    // ActualizaciÃ³n por fotograma
     void Update()
     {
 
         if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
         {
-            Debug.Log("EL BOOMERANG HACE COSAS!");
+            //Debug.Log("EL BOOMERANG HACE COSAS!");
 
-            // Seguimiento de la línea
+            // Seguimiento de la lÃ­nea
             if (isFlying && !isReturning)
             {
-                Debug.Log("EL BOOMERANG SE MUEVE");
+                //Debug.Log("EL BOOMERANG SE MUEVE");
                 if (boomerangPlayer.targetPosition != Vector3.zero)
                 {
 
                     // Calcular el nuevo desplazamiento en cada frame
-                    Debug.Log("EL BOOMERANG SE MUEVE");
+                    //Debug.Log("EL BOOMERANG SE MUEVE");
 
                     float t = Mathf.Clamp01(boomerangPlayer.followSpeed * Time.deltaTime);
                     transform.position = Vector3.Lerp(transform.position, boomerangPlayer.targetPosition, t);
@@ -107,18 +107,29 @@ public class BoomerangController : MonoBehaviour, IDamager
             if (Vector3.Distance(transform.position, initialPosition) > boomerangPlayer.maxDistance && !isReturning && !specialThrow && !bouncing & !onGround ||
                 Vector3.Distance(transform.position, boomerangPlayer.targetPosition) < boomerangPlayer.minDistance && !specialThrow && !bouncing && !onGround)
             {
+
+ 
+                //Debug.Log("transform.position = " + transform.position);
+                Debug.Log("distancia entre boomerang e initialPosition = " + Vector3.Distance(transform.position, initialPosition));
+                //Debug.Log("initialPosition = " + initialPosition);
+                Debug.Log("maxDistance = " + boomerangPlayer.maxDistance);
+                Debug.Log("distancia entre boomerang y targetPosition = " + Vector3.Distance(transform.position, boomerangPlayer.targetPosition));
+                //Debug.Log("targetPosition = " + boomerangPlayer.targetPosition);
+                Debug.Log("minDistance = " + boomerangPlayer.minDistance);
+
+
                 Debug.Log("returning");
                 Return();
             }
             if (bouncing)
             {
                 boomerangPlayer.expectedColdownTime = 0f;
-                // Desplazar gradualmente hacia la posición de destino usando Lerp
+                // Desplazar gradualmente hacia la posiciÃ³n de destino usando Lerp
                 Vector3 newPosition = Vector3.Lerp(transform.position, boomerangPlayer.targetPosition, boomerangPlayer.followSpeed * Time.deltaTime);
-                newPosition.y = transform.position.y; // Mantener la posición actual en el eje Y
+                newPosition.y = transform.position.y; // Mantener la posiciÃ³n actual en el eje Y
                 transform.position = newPosition;
 
-                // Aplicar gravedad después de haberse desplazado a la posición de destino
+                // Aplicar gravedad despuÃ©s de haberse desplazado a la posiciÃ³n de destino
                 if (Vector3.Distance(transform.position, boomerangPlayer.targetPosition) <= boomerangPlayer.minDistance)
                 {
                     Debug.Log("llegue al destino");
@@ -138,12 +149,12 @@ public class BoomerangController : MonoBehaviour, IDamager
     {
     }
 
-    // Actualizar la posición del Boomerang mientras está en vuelo
+    // Actualizar la posiciÃ³n del Boomerang mientras estÃ¡ en vuelo
     void FixedUpdate()
     {
         if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
         {
-            //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
+            //APAÃ‘O PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
             if (Vector3.Distance(transform.position, handPlace.position) <= boomerangPlayer.minDistance + 1 && !isFlying && !specialThrow ||
                 Vector3.Distance(transform.position, handPlace.position) <= boomerangPlayer.minDistance + 1 && isFlying && isReturning && !specialThrow)
             {
@@ -164,7 +175,7 @@ public class BoomerangController : MonoBehaviour, IDamager
                 //print(Vector3.Distance(transform.position, returnPosition));
                 if (Vector3.Distance(transform.position, returnPosition) <= boomerangPlayer.minDistance)
                 {
-                    Debug.Log("returned 1");
+                    //Debug.Log("returned 1");
                     //endPoint = Vector3.zero;
                     isReturning = false;
                     isFlying = false;
@@ -221,14 +232,16 @@ public class BoomerangController : MonoBehaviour, IDamager
                 bouncing = false;
                 rb.isKinematic = true;
                 transform.position = handPlace.position;
-                //AÑADIDO POSTERIORMENTE CUANDO LO ATRAES CON PODER MENTAL USANDO ISRETURNING
+                initialPosition = transform.position;
+                //AÃ‘ADIDO POSTERIORMENTE CUANDO LO ATRAES CON PODER MENTAL USANDO ISRETURNING
                 GetComponent<Rigidbody>().useGravity = true; 
             }
         }
     }
-    // Volver a la posición inicial
+    // Volver a la posiciÃ³n inicial
     void Return()
     {
+        Debug.Log("METODO RETURN");
         isReturning = true;
         //asi vuelve en linea recta a la posicion inicial de lanzamiento
         returnPosition = initialPosition;
@@ -236,6 +249,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     // Detectar colisiones
     void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("EL BOOMERANG COLISIONO CON = " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Player") && !isFlying || collision.gameObject.CompareTag("Player") && isFlying && isReturning)
         {
             Debug.Log("Player");
@@ -246,7 +260,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     }
     private void OnTriggerEnter(Collider other)
     {
-
+        Debug.Log("EL BOOMERANG HIZO TRIGGER CON = " + other.gameObject.name);
         if (other.CompareTag("Enemy") && !onHand && isFlying && !boomerangUpgradeController.areaDamageMode 
             || other.CompareTag("Enemy") && !onHand && bouncing && !boomerangUpgradeController.areaDamageMode ||
             other.CompareTag("Enemy") && !onHand && specialThrow)
@@ -279,7 +293,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             onColdown = false;
             if (specialThrow)
             {
-                //AÑADIR CODIGO PARA CUANDO CHOCA CON UN MURO Y QUE NO REBOTE (Y SE QUEDE EN EL SUELO SIN DAR ERRORES
+                //AÃ‘ADIR CODIGO PARA CUANDO CHOCA CON UN MURO Y QUE NO REBOTE (Y SE QUEDE EN EL SUELO SIN DAR ERRORES
                 specialThrow = false;
                 lr.positionCount = 0;
                 GetComponent<FollowLine>().waypoints.Clear();
@@ -295,6 +309,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             if (!bouncing)
             {
                 bouncing = true;
+                //actualizar y crear un metodo que calcule el final point del rebote y asi poder sostener varios rebotes
                 boomerangPlayer.targetPosition = boomerangPlayer.localTargetPosition;
 
                 Debug.Log("target = " + boomerangPlayer.targetPosition);
@@ -311,7 +326,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     }
     public void MakeDamageToEnemyAndPush(Collider other, float damage)
     {
-        //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
+        //HACEMOS DAÃ‘O AL ENEMIGO MEDIANTE LA INTERFAZ
         IDamageable damageableObject = other.GetComponent<IDamageable>();
         if (damageableObject != null)
         {
@@ -320,6 +335,12 @@ public class BoomerangController : MonoBehaviour, IDamager
             damageObj.amount = (int)damage;
             damageObj.source = UnitType.Player;
             damageObj.targetType = TargetType.Single;
+
+            // Obtener la direccion opuesta a la normal de la colision
+            Vector3 normal = other.transform.position - transform.position;
+            normal.y = 0;
+            normal.Normalize();
+            damageObj.forceImpulse = normal * impulseForceWhenHit;
             //llamamos al metodo de la interfaz
             DoDamage(damageableObject, damageObj);
             //damageableObject.ReceiveDamage(damageObj);
@@ -330,7 +351,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             {
                 hitRenderer.material.color = Color.blue;
             }
-            //mostramos la UI de daño inflingido
+            //mostramos la UI de daÃ±o inflingido
             DealDamageToEnemy(damage);
         }
         if (!other.gameObject.GetComponent<Rigidbody>())
@@ -338,7 +359,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
             temporalRb.useGravity = false;
 
-            // Obtener la dirección opuesta a la normal de la colisión
+            // Obtener la direcciÃ³n opuesta a la normal de la colisiÃ³n
             Vector3 normal = transform.position + other.gameObject.transform.position;
             normal = Vector3.Normalize(normal);
             normal.y = 0;
@@ -348,7 +369,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     }
     void DealDamageToEnemy(float damage)
     {
-        // Calcula el daño infligido al enemigo y realiza las acciones necesarias
+        // Calcula el daÃ±o infligido al enemigo y realiza las acciones necesarias
         if (floatingDamageTextPrefab != null)
         {
             if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)
@@ -360,7 +381,7 @@ public class BoomerangController : MonoBehaviour, IDamager
 
             if (floatingDamageText != null)
             {
-                // Configura el texto y el color del daño infligidos
+                // Configura el texto y el color del daÃ±o infligidos
                 floatingDamageText.SetDamageText(" - " + damage.ToString(), Color.red);
             }
         }
@@ -373,5 +394,10 @@ public class BoomerangController : MonoBehaviour, IDamager
     public void DoDamage(IDamageable target, Damage damage)
     {
         target.ReceiveDamage(damage);
+    }
+    //funcion para calcular el punto final de rebote al chocar con un obstaculo y poder calcular multiples rebotes (codigo del LR)
+    public void CalculateBouncingPoint()
+    {
+
     }
 }

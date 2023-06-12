@@ -19,9 +19,11 @@ public class PlayerController : MonoBehaviour
     public Crosshairs crosshairs;
     public BoomerangController boomerangController;
     public bool invincible = false;
+    private GameManager gameManager;
     void Awake() 
     {
         player = GetComponent<CharacterController>();
+        gameManager = FindObjectOfType<GameManager>();
         //gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }
@@ -37,10 +39,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Move(move.GetVector3());
-        Point(look.GetVector2());
-        Shoot(fire.GetFloat());
-        GunSwitcher(switchGun.GetFloat(), switchGun2.GetFloat());
+        if (!gameManager.onPause)
+        {
+            Move(move.GetVector3());
+            Point(look.GetVector2());
+            Shoot(fire.GetFloat());
+            GunSwitcher(switchGun.GetFloat(), switchGun2.GetFloat());
+        }
+
 
         //move the pointer
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);

@@ -60,7 +60,12 @@ public class MainMenu : MonoBehaviour
 
     public void CloseGame()
     {
-        Application.Quit();
+        //Application.Quit();
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 
     //CARGADO DE DATOS

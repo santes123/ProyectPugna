@@ -69,7 +69,7 @@ public class DashController : MonoBehaviour
         temporaryCollider.isTrigger = true;
         temporaryCollider.size = characterController.bounds.size;
         //instanciamos el prefab del dash
-        DashInstantiated = Instantiate(dashPrefabParticle, transform.position, Quaternion.identity);
+        DashInstantiated = Instantiate(dashPrefabParticle, transform.position, transform.rotation);
     }
 
     private void PerformDash()

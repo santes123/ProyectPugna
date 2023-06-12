@@ -17,7 +17,7 @@ public class EnemyHealthBar : MonoBehaviour
     {
         //enemy = GameObject.Find("Player").GetComponent<PlayerStats>();
         enemy = GetLastParent(this.gameObject).GetComponent<Enemy>();
-        Debug.Log(GetLastParent(this.gameObject).name);
+        //Debug.Log(GetLastParent(this.gameObject).name);
         maxHealth = enemy.startingHealth;
         currentHealth = enemy.currentHealth;
     }

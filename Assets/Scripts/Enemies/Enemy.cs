@@ -56,7 +56,7 @@ public class Enemy : LivingEntity
         debuffColdown = FindChildObjectWithImageComponent(this.gameObject.transform, "Coldown");
         if (debuffColdown != null)
         {
-            Debug.Log("OBJETO COLDOWN ENCONTRADO!");
+            //Debug.Log("OBJETO COLDOWN ENCONTRADO!");
             //buff.gameObject.transform.parent.gameObject;
             debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
         }
@@ -201,11 +201,11 @@ public class Enemy : LivingEntity
         // Buscar en los hijos directos del objeto
         foreach (Transform child in parent)
         {
-            Debug.Log("NOMBRE DEL GAMEOBJECT = " + child.gameObject.name);
+            //Debug.Log("NOMBRE DEL GAMEOBJECT = " + child.gameObject.name);
             TextMeshPro imageComponent = child.gameObject.GetComponent<TextMeshPro>();
             if (imageComponent != null && child.gameObject.name == childObjectName)
             {
-                Debug.Log("NOMBRE DEL GAMEOBJECT ENCONTRADO = " + child.gameObject.name);
+                //Debug.Log("NOMBRE DEL GAMEOBJECT ENCONTRADO = " + child.gameObject.name);
                 // Se encontró el objeto hijo con el componente Image y el nombre deseado
                 // Devolver el objeto padre en lugar del hijo
                 return child.gameObject/*.transform.parent.gameObject*/;

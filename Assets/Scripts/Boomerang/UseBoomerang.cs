@@ -89,10 +89,16 @@ public class UseBoomerang : MonoBehaviour
             {
                 timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
             }
+            Debug.Log("onHand = " + boomerangController.onHand);
+            Debug.Log("isFlying = " + boomerangController.isFlying);
+            Debug.Log("specialThrow = " + boomerangController.specialThrow);
+            //SE CALCULA MAL EL ISRETURNING Y ESTA A TRUE, POR ESO NO LANZA
+            Debug.Log("isReturning = " + boomerangController.isReturning);
             //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
             if (Input.GetMouseButtonDown(0) && boomerangController.onHand && !boomerangController.isFlying && !boomerangController.specialThrow && 
                 !boomerangController.isReturning)
             {
+                Debug.Log("BOOM = CLICK IZQUIERDO PULSADO");
                 //activamos la barra de progreso
                 chargeBar.SetActive(true);
                 chargeBar.GetComponent<ChargeBar>().target = boomerangController.gameObject;
@@ -112,6 +118,7 @@ public class UseBoomerang : MonoBehaviour
 
             if (isButtonPressed)
             {
+                Debug.Log("BOOM = BUTTON PRESSED");
                 endPoint = CalculateEndPoint();
                 timePressed = Time.time - startedTimePress;
                 if (timePressed <= 1.5f)
@@ -124,6 +131,7 @@ public class UseBoomerang : MonoBehaviour
             if (Input.GetMouseButton(0) && !boomerangController.isFlying && !boomerangController.onHand && !boomerangController.attracting && 
                 playerStats.currentMana >= 5 && !boomerangController.isReturning && !boomerangController.specialThrow)
             {
+                Debug.Log("BOOM = ATRAER BOOMERANG CON PODER MENTAL");
                 //revisar bien esto
                 startPoint = boomerangController.gameObject.transform.position;
                 startPointOriginal = startPoint;
@@ -140,6 +148,7 @@ public class UseBoomerang : MonoBehaviour
             if (Input.GetMouseButtonUp(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow && 
                 !boomerangController.isReturning)
             {
+                Debug.Log("BOOM = CLICK IZQUIERDO SOLTADO");
                 //update del damage del boomerangController, por si pillamos un Powerup
                 boomerangController.damageBoomerang = damage;
                 Debug.Log("boomerang lanzado");
@@ -191,6 +200,7 @@ public class UseBoomerang : MonoBehaviour
             if (Input.GetMouseButton(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow 
                 && !boomerangController.isReturning)
             {
+                Debug.Log("BOOM = CLICK IZQUIERDO MANTENER PULSADO LR");
                 //cambiamos los valores a los del boomerang
                 //CALCULA EL ENDPOINT REALISTA, EN EL COMENTARIO ESTA OTRO QUE USA LA BARRA ENTERA
                 distanceToEnd = Vector3.Distance(startPointOriginal, endPoint);  //esto es la distancia real, pero como empieza mas lejos no vale

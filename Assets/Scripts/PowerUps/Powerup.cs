@@ -20,9 +20,17 @@ public class Powerup : MonoBehaviour
     GameObject buffUI;
     float coldownTime;
     bool onDuration = false;
+    public GameObject particlesPrefab;
+    private ParticleSystem particlesSystem;
+    private GameObject particlesObject;
     private void Start()
     {
         powerupTimer = FindObjectOfType<PowerupUIBar>();
+        //instanciamos lel prafab de particles
+        particlesObject = Instantiate(particlesPrefab, transform.position, Quaternion.identity);
+        particlesObject.transform.SetParent(gameObject.transform);
+        particlesSystem = particlesObject.GetComponent<ParticleSystem>();
+        particlesSystem.Stop(); // Detiene las partículas inicialmente
     }
     private void Update()
     {
@@ -81,6 +89,7 @@ public class Powerup : MonoBehaviour
                 coldownTime = powerupDuration;
                 break;
         }
+        particlesSystem.Play(); // Activa las partículas
         onDuration = true;
         // Desactiva el poder después de cierto tiempo
         Invoke(nameof(DeactivatePowerup), powerupDuration);

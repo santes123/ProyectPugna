@@ -57,10 +57,22 @@ public class ChargeBar : MonoBehaviour
                 //sin decimales (mas fluido)
                 //textBar.text = Mathf.Floor(currentBarCharge).ToString();
                 chargeBar.fillAmount = currentBarCharge / maxCharge;
-            }
+            }//LANZAMIENTO OBJETO
+            else if (target.GetComponent<SpecialObject>() && target.GetComponent<SpecialObject>().onHand)
+            {
+                maxCharge = attractThrowSkill.fuerzaMaxima;  //distancia real
+                //maxCharge = boomerang.maxDistance - boomerang.minDistanceToLaunch;  //distancia ficticia, pero realista en la barra
+                currentBarCharge = attractThrowSkill.fuerzaLanzamiento;
+                Debug.Log("currentCharge = " + currentBarCharge);
+                //con 1 decimal
+                string text = EliminateDecimalsOfAFloat(currentBarCharge);
+                textBar.text = text;
+                //sin decimales (mas fluido)
+                //textBar.text = Mathf.Floor(currentBarCharge).ToString();
+                chargeBar.fillAmount = currentBarCharge / maxCharge;
+            }//ATRAER OBJETO (meter algun parametro mas para filtrar el if)
             else if(target.GetComponent<SpecialObject>())
             {
-                //REVISAR AQUI PARA USAR LA BARRA PARA EL ATRAER Y LANZAR CORRECTAMENTE
                 maxCharge = attractThrowSkill.maxDistanceFromTargetToPlayer;  //distancia real
                 //maxCharge = boomerang.maxDistance - boomerang.minDistanceToLaunch;  //distancia ficticia, pero realista en la barra
                 currentBarCharge = attractThrowSkill.currentDistanceFromTargetToPlayer;
@@ -74,7 +86,7 @@ public class ChargeBar : MonoBehaviour
             }
             else
             {
-
+                Debug.Log("NO HAY TARGET");
             }
             /*Debug.Log("bar amount = " + chargeBar.fillAmount);
             Debug.Log("current charge = " + currentBarCharge);
