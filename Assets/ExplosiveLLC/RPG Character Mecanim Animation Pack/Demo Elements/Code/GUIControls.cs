@@ -12,7 +12,7 @@ using UnityEngine.InputSystem;
 
 namespace RPGCharacterAnims
 {
-    public class GUIControls : MonoBehaviour
+    /*public class GUIControls : MonoBehaviour
     {
         private RPGCharacterController rpgCharacterController;
         private RPGCharacterWeaponController rpgCharacterWeaponController;
@@ -687,5 +687,5 @@ namespace RPGCharacterAnims
 			// Perform the weapon switch.
 			if (doSwitch) { rpgCharacterController.TryStartAction(HandlerTypes.SwitchWeapon, context); }
 		}
-	}
+	}*/
 }
