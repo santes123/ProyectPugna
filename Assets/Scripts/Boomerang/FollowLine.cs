@@ -20,6 +20,7 @@ public class FollowLine : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         //find()
         BoomerangScript = FindObjectOfType<BoomerangController>();
+        destination = GameObject.Find("hand_right");
     }
 
     void Update()

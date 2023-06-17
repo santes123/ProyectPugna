@@ -158,3 +158,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupType: 0
   powerupDuration: 5
+  particlesPrefab: {fileID: 7395350200383773721, guid: 8beba65eb2ce4074993e4272e1645cfa,
+    type: 3}

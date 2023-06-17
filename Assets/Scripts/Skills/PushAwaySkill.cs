@@ -40,7 +40,6 @@ public class PushAwaySkill : MonoBehaviour, IDamager
     private void UseAbility()
     {
         areaInstantiated = Instantiate(prefabAreaExplosion, transform.position + Vector3.up, Quaternion.identity);
-        //CONSEGUIR QUE FUNCIONE USANDO EL METODO GEDTARGETS() DE AREA OF EFFECT
         //Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
         List<LivingEntity> damageablesFound = aoe.GetTargets<LivingEntity>();
         Debug.Log("lenght list = " + damageablesFound.Count);
@@ -132,11 +131,12 @@ public class PushAwaySkill : MonoBehaviour, IDamager
     public void DoDamage(IDamageable target, Damage damage)
     {
         target.ReceiveDamage(damage);
+        DealDamageToEnemy(damage.amount);
     }
 
     void DealDamageToEnemy(float damage)
     {
-        // Calcula el da�o infligido al enemigo y realiza las acciones necesarias
+        // Calcula el daño infligido al enemigo y realiza las acciones necesarias
         if (floatingDamageTextPrefab != null)
         {
             if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)

@@ -50,6 +50,7 @@ public class SpecialObject : MonoBehaviour, IDamager
         rb = GetComponent<Rigidbody>();
         velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
         enemiesHited = new List<string>();
+        handPlace = GameObject.Find("hand_right").transform;
         //fuerzaLanzamiento = fuerzaBase;
 
         //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
@@ -124,6 +125,10 @@ public class SpecialObject : MonoBehaviour, IDamager
                 Vector3 direccion = (posicionJugador - transform.position).normalized;
                 rb.MovePosition(transform.position + direccion * useSkil.velocidadAtraccion * Time.fixedDeltaTime);
             }
+        }
+        else
+        {
+            Debug.Log("No tienes suficiente mana para seguir!");
         }
         //LANZAMIENTO
         /*if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)

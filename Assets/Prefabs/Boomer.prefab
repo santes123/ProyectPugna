@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4511580686555804593}
   - component: {fileID: 4898395957922694003}
   - component: {fileID: 2100032492418928130}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 7358801947275364745}
   - component: {fileID: 8781499435780984336}
   - component: {fileID: 8843884319286302321}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cube2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -209,7 +209,10 @@ GameObject:
   - component: {fileID: 5836317661756079275}
   - component: {fileID: 1729194766076772026}
   - component: {fileID: 5483760284801292177}
-  m_Layer: 0
+  - component: {fileID: 950984780}
+  - component: {fileID: 950984781}
+  - component: {fileID: 950984790}
+  m_Layer: 11
   m_Name: Boomer
   m_TagString: SpecialObject
   m_Icon: {fileID: 0}
@@ -244,8 +247,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.6399505, y: 0.5, z: 1.389034}
-  m_Center: {x: 0.3396622, y: 0, z: 0.06166199}
+  m_Size: {x: 1.2378293, y: 0.5, z: 1.1948845}
+  m_Center: {x: 0.31461865, y: 0, z: 0.04856801}
 --- !u!120 &6320788967034406403
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -377,20 +380,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613f22240d94a404b96ff1aa92368519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followSpeed: 5
-  maxDistance: 10
-  minDistance: 1.6
-  damage: 2.5
-  coldownHit: 0.5
+  damageBoomerang: 0
+  lastHitTime: 0
+  coldownHit: 0.1
+  manaCostOfAttractingBoomerang: 5
+  returnPosition: {x: 0, y: 0, z: 0}
   isFlying: 0
+  isReturning: 0
   onHand: 0
   handPlace: {fileID: 0}
-  pointer: {fileID: 0}
   rotation: 0
   specialThrow: 0
-  mainCamera: {fileID: 0}
+  bouncing: 0
+  onGround: 0
   floatingDamageTextPrefab: {fileID: 0}
-  slowdownFactor: 0.5
+  attracting: 0
+  onColdown: 0
+  impulseForceWhenHit: 2.5
+  rotationSpeed: 360
+  maxBouncingCounter: 2
+  updatedTiming: 0
 --- !u!114 &1729194766076772026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +416,7 @@ MonoBehaviour:
   followScript: {fileID: 5483760284801292177}
   BoomerangScript: {fileID: 5836317661756079275}
   maxLineLength: 40
+  manaCost: 20
 --- !u!114 &5483760284801292177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -425,3 +435,60 @@ MonoBehaviour:
   waypoints: []
   destination: {fileID: 0}
   BoomerangScript: {fileID: 5836317661756079275}
+--- !u!114 &950984780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6320788967034406406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aac5bdb644579eb409666c391299540c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  areaDamageRadius: 4
+  freezeDuration: 3
+  areaDamageMode: 0
+  freezeMode: 0
+  damageOnAreaDamage: 3
+  damageOnFreeze: 1
+--- !u!114 &950984781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6320788967034406406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8635ce599c74a49a7f609c53980ccc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particlesPrefab: {fileID: 5335753327985139135, guid: 283395f22c1bc674381ba203dcc06b7e,
+    type: 3}
+  particlesFreezePrefab: {fileID: 1944020486928733632, guid: 2508c72002b8c2544afbd6f7c563c561,
+    type: 3}
+  particlesExplosionPrefab: {fileID: 1424455748126514, guid: b5b7bac92a5d1e944aeae6aa6c2249dd,
+    type: 3}
+  particlesFreezeActivatedPrefab: {fileID: 2826620945768669008, guid: bb47d517a6af7df4a93545b0cf26d9e9,
+    type: 3}
+  particlesExplosionActivatedPrefab: {fileID: 1534949854296103914, guid: 840c4bbb92ba5a447882ab96945c92af,
+    type: 3}
+--- !u!114 &950984790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6320788967034406406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f12179290b7a87479488d9c338f317c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 3
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  shouldHitTriggers: 1

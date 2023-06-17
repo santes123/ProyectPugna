@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     {
         player = GetComponent<CharacterController>();
         gameManager = FindObjectOfType<GameManager>();
+        crosshairs = FindObjectOfType<Crosshairs>();
+        boomerangController = FindObjectOfType<BoomerangController>();
         //gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }

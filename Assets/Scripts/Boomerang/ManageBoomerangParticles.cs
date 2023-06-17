@@ -19,7 +19,7 @@ public class ManageBoomerangParticles : MonoBehaviour
     void Start()
     {
         boomerangController = GetComponent<BoomerangController>();
-        particlesObject = Instantiate(particlesPrefab, transform.position, Quaternion.identity);
+        particlesObject = Instantiate(particlesPrefab, transform.position, particlesPrefab.transform.rotation, transform);
         particlesSystem = particlesObject.GetComponent<ParticleSystem>();
         particlesSystem.Stop(); // Detiene las partículas inicialmente
     }
@@ -40,20 +40,20 @@ public class ManageBoomerangParticles : MonoBehaviour
     }
     public void InstantiateFreezeParticle()
     {
-        Instantiate(particlesFreezePrefab, transform.position, Quaternion.identity);
+        Instantiate(particlesFreezePrefab, transform.position, particlesFreezePrefab.transform.rotation);
     }
     public void InstantiateExplosionParticle()
     {
-        Instantiate(particlesExplosionPrefab, transform.position, Quaternion.identity);
+        Instantiate(particlesExplosionPrefab, transform.position, particlesExplosionPrefab.transform.rotation);
     }
     public GameObject InstantiateFreezeEffect()
     {
-         GameObject GO = Instantiate(particlesFreezeActivatedPrefab, transform.position, Quaternion.identity);
+         GameObject GO = Instantiate(particlesFreezeActivatedPrefab, transform.position, particlesFreezeActivatedPrefab.transform.rotation);
         return GO;
     }
     public GameObject InstantiateExplosionEffect()
     {
-        GameObject GO = Instantiate(particlesExplosionActivatedPrefab, transform.position, Quaternion.identity);
+        GameObject GO = Instantiate(particlesExplosionActivatedPrefab, transform.position, particlesExplosionActivatedPrefab.transform.rotation);
         return GO;
     }
 }

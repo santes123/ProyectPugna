@@ -61,6 +61,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   powerupType: 1
   powerupDuration: 5
+  particlesPrefab: {fileID: 6033639086024806036, guid: abcab2d1049d70847b5b3460d8770b18,
+    type: 3}
 --- !u!1 &7370161744721444252
 GameObject:
   m_ObjectHideFlags: 0

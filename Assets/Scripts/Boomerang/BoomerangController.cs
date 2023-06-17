@@ -15,7 +15,8 @@ public class BoomerangController : MonoBehaviour, IDamager
 
     // Variables privadas
     private Vector3 initialPosition;
-    private Vector3 returnPosition;
+    [HideInInspector]
+    public Vector3 returnPosition;
     [HideInInspector]
     public bool isFlying = false;
     [HideInInspector]
@@ -57,8 +58,14 @@ public class BoomerangController : MonoBehaviour, IDamager
     UseBoomerang boomerangPlayer;
     BoomerangUpgradeController boomerangUpgradeController;
     //prefab efecto boomerang
-    public GameObject prefabBoomerangRotation;
-    private GameObject boomerangEffectInstantiated;
+    /*public GameObject prefabBoomerangRotation;
+    private GameObject boomerangEffectInstantiated;*/
+
+    //variables para gestionar rebotes multiples
+    int counterBouncing = 0;
+    public int maxBouncingCounter = 2;
+    [HideInInspector]
+    public bool updatedTiming = false;
 
     // Inicialización
     private void Awake()
@@ -78,6 +85,7 @@ public class BoomerangController : MonoBehaviour, IDamager
         //boomerangPlayer = GameObject.Find("Player").GetComponent<UseBoomerang>();
         boomerangPlayer = FindObjectOfType<UseBoomerang>();
         damageBoomerang = boomerangPlayer.damage;
+        handPlace = GameObject.Find("hand_right").transform;
     }
 
     // Actualización por fotograma
@@ -132,7 +140,7 @@ public class BoomerangController : MonoBehaviour, IDamager
                 // Aplicar gravedad después de haberse desplazado a la posición de destino
                 if (Vector3.Distance(transform.position, boomerangPlayer.targetPosition) <= boomerangPlayer.minDistance)
                 {
-                    Debug.Log("llegue al destino");
+                    Debug.Log("llegue al destino Bouncing");
                     GetComponent<Rigidbody>().useGravity = true;
                     GetComponent<Rigidbody>().velocity = Vector3.zero;
                     bouncing = false;
@@ -141,6 +149,11 @@ public class BoomerangController : MonoBehaviour, IDamager
                     rb.isKinematic = false;
                     GetComponent<Collider>().isTrigger = false;
                 }
+            }
+            if (specialThrow & !updatedTiming)
+            {
+                boomerangPlayer.startedTimeThrow = Time.time;
+                updatedTiming = true;
             }
         }
 
@@ -239,7 +252,7 @@ public class BoomerangController : MonoBehaviour, IDamager
         }
     }
     // Volver a la posición inicial
-    void Return()
+    public void Return()
     {
         Debug.Log("METODO RETURN");
         isReturning = true;
@@ -268,6 +281,11 @@ public class BoomerangController : MonoBehaviour, IDamager
             //damageBoomerang = boomerangPlayer.damage;
             if (Time.time - lastHitTime > coldownHit)
             {
+                //regeneramos el mana al golpear al enemigo
+                if (playerStats.currentMana < playerStats.startingMana)
+                {
+                    FindObjectOfType<ManaRegeneration>().RegenerateManaOnHit();
+                }
                 lastHitTime = Time.time;
                 if (specialThrow)
                 {
@@ -288,8 +306,10 @@ public class BoomerangController : MonoBehaviour, IDamager
                 }
             }
         }
-        if (other.CompareTag("Obstacle") && !isReturning && isFlying || other.CompareTag("Obstacle") && specialThrow)
+        if (other.CompareTag("Obstacle") && !isReturning && isFlying || other.CompareTag("Obstacle") && specialThrow ||
+            other.CompareTag("Obstacle") && !isReturning && !isFlying && bouncing) // controlamos los rebotes multiples
         {
+            Debug.Log("collision con un obstaculo");
             onColdown = false;
             if (specialThrow)
             {
@@ -308,11 +328,38 @@ public class BoomerangController : MonoBehaviour, IDamager
 
             if (!bouncing)
             {
+                Debug.Log("BOUNCING POR PRIMERA VEZ");
                 bouncing = true;
+                counterBouncing = 0;
+                counterBouncing++;
+                //transform.LookAt(other.transform);
                 //actualizar y crear un metodo que calcule el final point del rebote y asi poder sostener varios rebotes
-                boomerangPlayer.targetPosition = boomerangPlayer.localTargetPosition;
+                if (boomerangPlayer.localTargetPosition != Vector3.zero) boomerangPlayer.targetPosition = boomerangPlayer.localTargetPosition;
 
-                Debug.Log("target = " + boomerangPlayer.targetPosition);
+                Debug.Log("targetPosition first bounce = " + boomerangPlayer.targetPosition);
+                //controlamos el bounce cuando rebote por segunda vez
+            }else if (bouncing && counterBouncing < maxBouncingCounter)
+            {
+                Debug.Log("BOUNCING POR SEGUNDA VEZ");
+                counterBouncing++;
+                transform.LookAt(other.transform);
+                //calculamos el punto final de trayectoria con el rebote
+                //CalculateBouncingPoint();
+                if(boomerangPlayer.localTargetPosition2 != Vector3.zero) boomerangPlayer.targetPosition = boomerangPlayer.localTargetPosition2;
+                Debug.Log("targetPosition second bounce = " + boomerangPlayer.targetPosition);
+
+            }
+            else //filtramos para que no atraviese muros, si ha superado el numero maximos de rebotes
+            {
+                Debug.Log("llegue al destino");
+                GetComponent<Rigidbody>().useGravity = true;
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                bouncing = false;
+                onGround = true;
+                rotation = false;
+                rb.isKinematic = false;
+                GetComponent<Collider>().isTrigger = false;
+                onColdown = false;
             }
         }
         //collision con el player
@@ -396,8 +443,46 @@ public class BoomerangController : MonoBehaviour, IDamager
         target.ReceiveDamage(damage);
     }
     //funcion para calcular el punto final de rebote al chocar con un obstaculo y poder calcular multiples rebotes (codigo del LR)
-    public void CalculateBouncingPoint()
+    /*public void CalculateBouncingPoint()
     {
+        //si colisiona con un muro el raycast, añadimos un tercer punto
+        Ray ray = new Ray(transform.position, transform.forward);
+        if (Physics.Raycast(ray, out RaycastHit hit, 2f))
+        {
+            Debug.Log("BOUNCING POR SEGUNDA VEZ RAYCAST");
+            if (hit.collider.gameObject.CompareTag("Obstacle"))
+            {
+                //Vector3 point = hit.point;
+                //point.y = 1f;
+                //transform.LookAt(point);
 
-    }
+                Vector3 direccionEntrante = hit.collider.gameObject.transform.position - transform.position;
+                //Vector3 direccionRebote = Vector3.Reflect(direccionEntrante, hit.collider.gameObject.transform.forward.normalized);
+                Vector3 direccionRebote = Vector3.Reflect(transform.forward, hit.collider.gameObject.transform.position);
+
+                float dotProduct = Vector3.Dot(direccionEntrante.normalized, transform.right);
+
+                //Vector3 positionA = new Vector3(transform.position.x, 0f, transform.position.z);
+                //Vector3 positionB = new Vector3(hit.collider.gameObject.transform.position.x, 0f, hit.collider.gameObject.transform.position.z);
+                //Vector3 direction = positionB - positionA;
+
+                float angle = (dotProduct >= 0f) ? 45f : -45f;
+
+                //HACER QUE EL ANGULO SEA DINAMICO ENTRE 2 VALORES PARA QUE SEA MAS PRECISO
+                //AÑADIR UN AUMENO DE VELOCIDAD AL PRINCIPIO Y FINAL Y REDUCCIR LA VELOCIDAD EN EL MEDIO
+
+                Quaternion rotacionRebote = Quaternion.Euler(0, angle, 0); // Ángulo de rebote de 45 grados
+
+                Vector3 nuevaDireccion = rotacionRebote * direccionRebote;
+                nuevaDireccion.y = transform.position.y;
+
+                boomerangPlayer.targetPosition = transform.position + nuevaDireccion.normalized * boomerangPlayer.distanceToDisplacementOnBouncing;
+                Debug.Log("target position = " + boomerangPlayer.targetPosition);
+                boomerangPlayer.targetPosition.y = transform.position.y;
+                boomerangPlayer.localTargetPosition = boomerangPlayer.targetPosition;
+
+                //boomerangPlayer.targetPosition = boomerangPlayer.localTargetPosition;
+            }
+        }
+    }*/
 }

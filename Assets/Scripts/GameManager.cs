@@ -11,16 +11,23 @@ public class GameManager : MonoBehaviour
     private PlayerStats player;
     public TextMeshProUGUI hpText;
     public TextMeshProUGUI manaText;
-    public TextMeshProUGUI pointsText;
+    //public TextMeshProUGUI pointsText;
     public List<string> enemiesKilled = new List<string>();
     public GameObject pauseMenuUI;
 
-    GameState saveInfo;
+    //GameState saveInfo;
     GameState playerData;
     public string saveFileName = "savegame.bin";
     public bool onPause = false;
     private void Awake()
     {
+        //asignacion de variables necesarias
+        pauseMenuUI = FindObjectOfType<PauseMenu>().gameObject;
+        pauseMenuUI.SetActive(false);
+        hpText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
+        manaText = FindObjectOfType<ManaBar>().GetComponentInChildren<TextMeshProUGUI>();
+        //pointsText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
+
         enemiesKilled = new List<string>();
         _LoadData();
         if (File.Exists("savegame.bin"))

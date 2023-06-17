@@ -68,6 +68,7 @@ public class UseAttractThrowSkill : MonoBehaviour
         //Debug.Log("name = " + chargeBar.name);
         //chargeBar = GameObject.Find("ChargeBar");
         chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        pointer = FindObjectOfType<Crosshairs>().GetComponent<Transform>();
     }
 
     void Update()
@@ -103,8 +104,16 @@ public class UseAttractThrowSkill : MonoBehaviour
             if (Input.GetMouseButton(0) && estaSiendoAtraido)
             {
                 velocidadAtraccion += 2;
-                finalManaCost += incrementoDeCosteManaPorSegundo;
-                currentDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, transform.position);
+                if (finalManaCost > player.currentMana || player.currentMana == 0)
+                {
+                    estaSiendoAtraido = false;
+                }
+                else
+                {
+                    finalManaCost += incrementoDeCosteManaPorSegundo;
+                    currentDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, transform.position);
+                }
+
             }
             /*if (onHand)
             {

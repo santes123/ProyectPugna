@@ -85,7 +85,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
         GameObject.Destroy(gameObject);
     }
 
-    public void UseSkill(float manaCost)
+    public virtual void UseSkill(float manaCost)
     {
         //verificar si el manacost tiene mas de un decimal
         bool moreThan1Decimal = Mathf.Floor(manaCost) != manaCost;
@@ -99,6 +99,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
         }
         //mana -= manaCost;
         currentMana = mana;
+        Debug.Log("currentmanaLivingEntity = " + currentMana);
         if (this.gameObject.GetComponent<PlayerController>())
         {
             gameManager.manaText.text = currentMana.ToString();
@@ -106,6 +107,25 @@ public class LivingEntity : MonoBehaviour, IDamageable
         if (mana <= 0)
         {
             Debug.Log("NO TIENES SUFICIENTE MANA");
+        }
+    }
+    public virtual void RegenerateMana(float manaToRegenerate)
+    {
+        //verificar si el manacost tiene mas de un decimal
+        bool moreThan1Decimal = Mathf.Floor(manaToRegenerate) != manaToRegenerate;
+        if (moreThan1Decimal)
+        {
+            mana += Mathf.Floor(manaToRegenerate);
+        }
+        else
+        {
+            mana += manaToRegenerate;
+        }
+        currentMana = mana;
+        Debug.Log("currentmanaLivingEntity = " + currentMana);
+        if (this.gameObject.GetComponent<PlayerController>())
+        {
+            gameManager.manaText.text = currentMana.ToString();
         }
     }
 }

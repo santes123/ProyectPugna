@@ -15,6 +15,7 @@ public class PlayerStats : LivingEntity, IInteractor
     UseAttractThrowSkill skillAttractThrow;
     BoomerangController boomerang;
     UseBoomerang playerBoomerang;
+
     [HideInInspector] public GameMode selectedMode;
     //[HideInInspector] public GameObject targetObject;
     public enum GameMode
@@ -26,6 +27,8 @@ public class PlayerStats : LivingEntity, IInteractor
 
     protected override void Start()
     {
+        base.Start();
+        //base.currentMana = currentMana;
         boomerangGO = FindObjectOfType<BoomerangController>().gameObject;
         controller = GetComponent<PlayerController>();
         skillAttractThrow = GetComponent<UseAttractThrowSkill>();
@@ -33,7 +36,7 @@ public class PlayerStats : LivingEntity, IInteractor
         boomerang = FindObjectOfType<BoomerangController>();
         //playerBoomerang = GameObject.Find("Player").GetComponent<UseBoomerang>();
         playerBoomerang = FindObjectOfType<UseBoomerang>();
-        base.Start();
+        mode = GameObject.Find("Mode").GetComponent<Text>();
 
         //inicializamos el mana
         if (currentMana <= 0)
@@ -185,5 +188,12 @@ public class PlayerStats : LivingEntity, IInteractor
         //targetObject.GetComponent<SwitchController>().ActivateSwitch();
         //targetObject = null;
         target.Interact(interaction);
+    }
+
+    public override void UseSkill(float manaCost)
+    {
+
+        base.UseSkill(manaCost);
+        Debug.Log("currentmanaPlayerStats = " + currentMana);
     }
 }

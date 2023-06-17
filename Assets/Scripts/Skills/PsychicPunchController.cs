@@ -83,6 +83,7 @@ public class PsychicPunchController : MonoBehaviour
                 if (playerStats.currentMana >= currentManaCost)
                 {
                     playerStats.UseSkill(currentManaCost);
+                    //Debug.Log("currentmana psychicShot = " + playerStats.currentMana);
                     // Lanzar la esfera cuando se suelta el botón izquierdo del ratón
                     if (currentSphere != null)
                     {

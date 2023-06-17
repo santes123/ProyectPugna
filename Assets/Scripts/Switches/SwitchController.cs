@@ -20,8 +20,8 @@ public class SwitchController : MonoBehaviour, IInteractable
         UpdateKeyColor();
         generator = GameObject.Find("GameManager").GetComponent<SwitchDoorIDGenerator>();
         keyID = generator.GetAvailableKeyID();
-        //Debug.Log("keyID = " + keyID);
-        //Debug.Log("GO name = " + transform.gameObject.name);
+        Debug.Log("keyID = " + keyID);
+        Debug.Log("GO name = " + transform.gameObject.name);
 
         // Buscar la puerta correspondiente según el ID en el tag "Door"
         GameObject[] doors = GameObject.FindGameObjectsWithTag("Door");
@@ -82,6 +82,7 @@ public class SwitchController : MonoBehaviour, IInteractable
         switchState = !switchState;
 
         // Cambiar el estado de la puerta según el estado del switch
+        Debug.Log("door name = " + door.gameObject.name);
         door.GetComponent<DoorController>().SetDoorState(switchState);
 
         // Actualizar el color de la llave

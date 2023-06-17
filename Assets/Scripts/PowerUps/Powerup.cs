@@ -27,7 +27,7 @@ public class Powerup : MonoBehaviour
     {
         powerupTimer = FindObjectOfType<PowerupUIBar>();
         //instanciamos lel prafab de particles
-        particlesObject = Instantiate(particlesPrefab, transform.position, Quaternion.identity);
+        particlesObject = Instantiate(particlesPrefab, transform.position, particlesPrefab.transform.rotation);
         particlesObject.transform.SetParent(gameObject.transform);
         particlesSystem = particlesObject.GetComponent<ParticleSystem>();
         particlesSystem.Stop(); // Detiene las partículas inicialmente
@@ -49,7 +49,11 @@ public class Powerup : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerReference = other.gameObject;
+            //aplicamos el buffo
             ApplyPowerup(other.gameObject);
+            //aplicamos el area al jugador
+            playerReference.GetComponent<BuffManager>().ApplyBuff(powerupType, powerupDuration);
+
             Collider collider = GetComponent<Collider>();
             Renderer render = GetComponentInChildren<Renderer>();
             //Destroy(gameObject);
