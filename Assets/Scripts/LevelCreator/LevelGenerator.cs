@@ -55,9 +55,9 @@ public class LevelGenerator : MonoBehaviour
         int width = levelMap.width;
         int height = levelMap.height;
         //recorremos la imagen para instanciar los objetos segun la imagen.
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < height; j++) {
-                int index = i * height + j;
+        for(int i = 0; i < height; i++) {
+            for(int j = 0; j < width; j++) {
+                int index = i * width + j;
 
                 //posicion del objeto a generar segun la imagen.
                 SpawnPrefabAtPosition( allPixels[index], i , j, layer.offset, layer.spacing, layer.colorToPrefabSettings );
@@ -76,9 +76,9 @@ public class LevelGenerator : MonoBehaviour
         foreach(ColorToPrefab ctp in colorToPrefab) {
             if(ctp.color.Equals(c)) {
                 //instanciamos el objeto.
-                float x = (posX * spacing.x) + offset.x;
-                float z = (posY * spacing.y) + offset.y;
-                GameObject go = Instantiate( ctp.prefab, new Vector3(x, 0f, z), Quaternion.identity );
+                float z = (posX * spacing.x) + offset.x;
+                float x = (posY * spacing.y) + offset.y;
+                GameObject go = Instantiate( ctp.prefab, new Vector3(x, 0f, z), Quaternion.identity, transform );
                 //algo mas para configurar al gameobject?
                 return;
             }
