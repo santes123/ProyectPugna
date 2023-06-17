@@ -39,6 +39,10 @@ public class SkillBar : MonoBehaviour
     {
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
         player = FindObjectOfType<PlayerStats>();
+        habilidades[0].container = FindObjectOfType<BoomerangController>().gameObject;
+        habilidades[1].container = FindObjectOfType<UseAttractThrowSkill>().gameObject;
+        habilidades[2].container = FindObjectOfType<PsychicPunchController>().gameObject;
+        habilidades[3].container = FindObjectOfType<DashController>().gameObject;
         contenedor = GameObject.FindGameObjectWithTag("SkillBar").transform;
 
         coldownImages = new Image[habilidades.Length];

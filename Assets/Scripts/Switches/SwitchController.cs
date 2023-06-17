@@ -64,6 +64,15 @@ public class SwitchController : MonoBehaviour, IInteractable
             ActivateSwitch();
         }
     }*/
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Boomerang"))
+        {
+            // El jugador está en el área del collider del interruptor
+            Debug.Log("cambiando estado...");
+            ActivateSwitch();
+        }
+    }
     private void UpdateKeyColor()
     {
         // Cambiar el color de la llave según el estado del switch

@@ -66,6 +66,7 @@ public class UseBoomerang : MonoBehaviour
         playerStats = gameObject.GetComponent<PlayerStats>();
         //boomerangController = GameObject.Find("Boomer").GetComponent<BoomerangController>();
         boomerangController = FindObjectOfType<BoomerangController>();
+        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
     }
     // Inicialización
     void Start()

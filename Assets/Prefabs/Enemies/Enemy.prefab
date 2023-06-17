@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 86981088}
   - component: {fileID: 86981087}
   - component: {fileID: 86981086}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 422101772}
   - component: {fileID: 422101774}
   - component: {fileID: 422101773}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   - component: {fileID: 436288290}
   - component: {fileID: 436288292}
   - component: {fileID: 436288291}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 820548468}
   - component: {fileID: 820548470}
   - component: {fileID: 820548469}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CurrentHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -402,7 +402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1906855826}
   - component: {fileID: 1906855827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 9106998283117674730}
   - component: {fileID: 9106998283117674729}
   - component: {fileID: 9106998283117674733}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Visuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -685,6 +685,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1171441523860055812, guid: 3d13f67be0e981c48bf84ae8525450ee,
         type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1171441523860055812, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
@@ -708,15 +713,45 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2445825263690025065, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 3278054768238979136, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3278054768238979136, guid: 3d13f67be0e981c48bf84ae8525450ee,
         type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3406785826043584476, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233568122833809019, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5524977404957420699, guid: 3d13f67be0e981c48bf84ae8525450ee,
         type: 3}
       propertyPath: m_Name
       value: DebuffUIPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 5524977404957420699, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 5965587411636635602, guid: 3d13f67be0e981c48bf84ae8525450ee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6182773772341360936, guid: 3d13f67be0e981c48bf84ae8525450ee,
         type: 3}
@@ -1013,6 +1048,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DamageDealt
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414127518090693891, guid: bc58f287345746342af3c6066373c641,
+        type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4414127518090693891, guid: bc58f287345746342af3c6066373c641,
         type: 3}
