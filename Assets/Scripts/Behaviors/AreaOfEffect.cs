@@ -18,6 +18,7 @@ public class AreaOfEffect : MonoBehaviour
             if(comp != null) {
                 targetsFound.Add(comp);
             }
+
         }
         return targetsFound;
     }

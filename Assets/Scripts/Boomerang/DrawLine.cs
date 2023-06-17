@@ -16,6 +16,9 @@ public class DrawLine : MonoBehaviour
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
+        //find()
+        BoomerangScript = FindObjectOfType<BoomerangController>();
+        followScript = FindObjectOfType<FollowLine>();
     }
 
     void Update()
@@ -59,6 +62,7 @@ public class DrawLine : MonoBehaviour
                     BoomerangScript.rotation = true;
                     player.UseSkill(manaCost);
                     BoomerangScript.onColdown = true;
+                    BoomerangScript.updatedTiming = false;
                     //BoomerangScript.isFlying = true;                
                 }
                 else

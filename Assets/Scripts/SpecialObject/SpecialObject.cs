@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class SpecialObject : MonoBehaviour
+public class SpecialObject : MonoBehaviour, IDamager
 {
     public bool estaSiendoAtraido = false;
     public bool haSidoLanzado = false;
@@ -34,14 +35,22 @@ public class SpecialObject : MonoBehaviour
     private UseAttractThrowSkill useSkil;
 
     public List<string> enemiesHited;
+    public GameObject floatingDamageTextPrefab;
 
     //BoomerangController boomerangReference;
+    private void Awake()
+    {
+        floatingDamageTextPrefab = FindObjectOfType<FloatingDamageText>().gameObject;
+    }
     void Start()
     {
-        useSkil = GameObject.Find("Player").GetComponent<UseAttractThrowSkill>();
+        //useSkil = GameObject.Find("Player").GetComponent<UseAttractThrowSkill>();
+        useSkil = FindObjectOfType<UseAttractThrowSkill>();
+        player = FindObjectOfType<PlayerStats>().gameObject.transform;
         rb = GetComponent<Rigidbody>();
         velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
         enemiesHited = new List<string>();
+        handPlace = GameObject.Find("hand_right").transform;
         //fuerzaLanzamiento = fuerzaBase;
 
         //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
@@ -94,11 +103,21 @@ public class SpecialObject : MonoBehaviour
         {
             if (Vector3.Distance(handPlace.position, transform.position) <= distanceToTakeOnHand)
             {
+                //CALCULAR MANA POR SEGUNDO PULSADO Y HACER PARA QUE SI YA TIENES UNO EN LA MANO O ESTAS ATRAYENDO UNO, NO PODER ATRAER OTRO
                 print("on hand");
+                useSkil.estaSiendoAtraido = false;
                 useSkil.onHand = true;
                 onHand = true;
                 GetComponent<BoxCollider>().enabled = false;
                 rb.useGravity = false;
+                //consumimos mana fijo por ahora
+                if (useSkil.finalManaCost > useSkil.maxManaCost)
+                {
+                    useSkil.finalManaCost = useSkil.manaCost;
+                }
+                player.GetComponent<PlayerStats>().UseSkill(useSkil.finalManaCost);
+                useSkil.finalManaCost = 0f;
+                useSkil.chargeBar.SetActive(false);
             }
             else
             {
@@ -106,6 +125,10 @@ public class SpecialObject : MonoBehaviour
                 Vector3 direccion = (posicionJugador - transform.position).normalized;
                 rb.MovePosition(transform.position + direccion * useSkil.velocidadAtraccion * Time.fixedDeltaTime);
             }
+        }
+        else
+        {
+            Debug.Log("No tienes suficiente mana para seguir!");
         }
         //LANZAMIENTO
         /*if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)
@@ -179,6 +202,7 @@ public class SpecialObject : MonoBehaviour
                 //dividimos la fuerza entre 2 porque no usamos gravedad
                 temporalRb.AddForce(useSkil.direccionLanzamientoAnterior * useSkil.fuerzaLanzamientoAnterior / 2, ForceMode.Impulse);
                 Destroy(temporalRb, 0.5f);
+                DealDamageToEnemy(damage);
             }
 
             //HACEMOS REBOTAR EL OBJETO EN EL ENEMIGO Y RESETEAMOS LA SKILL
@@ -217,7 +241,10 @@ public class SpecialObject : MonoBehaviour
                 damageObj.amount = (int)damage;
                 damageObj.source = UnitType.Player;
                 damageObj.targetType = TargetType.Single;
-                damageableObject.ReceiveDamage(damageObj);
+
+                //llamamos a la interfaz IDamager
+                DoDamage(damageableObject, damageObj);
+                //damageableObject.ReceiveDamage(damageObj);
                 Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
                 // Cambiar el color del material del renderer
                 if (hitRenderer != null)
@@ -238,5 +265,29 @@ public class SpecialObject : MonoBehaviour
     {
         haSidoLanzado = false;
         enemiesHited.Clear();
+    }
+    void DealDamageToEnemy(float damage)
+    {
+        // Calcula el daño infligido al enemigo y realiza las acciones necesarias
+        if (floatingDamageTextPrefab != null)
+        {
+            if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)
+            {
+                floatingDamageTextPrefab.GetComponent<Text>().enabled = true;
+            }
+            FloatingDamageText floatingDamageText = floatingDamageTextPrefab.GetComponent<FloatingDamageText>();
+
+
+            if (floatingDamageText != null)
+            {
+                // Configura el texto y el color del daño infligidos
+                floatingDamageText.SetDamageText(" - " + damage.ToString(), Color.red);
+            }
+        }
+    }
+    //metodo de la interfaz IDamager
+    public void DoDamage(IDamageable target, Damage damage)
+    {
+        target.ReceiveDamage(damage);
     }
 }

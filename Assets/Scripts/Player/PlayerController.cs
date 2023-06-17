@@ -5,7 +5,7 @@ using UnityEngine.InputSystem.XR;
 //[RequireComponent(typeof(GunController))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float speed = 5f;
+    [SerializeField] public float speed = 5f;
     Camera viewCamera;
     CharacterController player;
     //GunController gunController;
@@ -18,9 +18,14 @@ public class PlayerController : MonoBehaviour
 
     public Crosshairs crosshairs;
     public BoomerangController boomerangController;
+    public bool invincible = false;
+    private GameManager gameManager;
     void Awake() 
     {
         player = GetComponent<CharacterController>();
+        gameManager = FindObjectOfType<GameManager>();
+        crosshairs = FindObjectOfType<Crosshairs>();
+        boomerangController = FindObjectOfType<BoomerangController>();
         //gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
     }
@@ -36,10 +41,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Move(move.GetVector3());
-        Point(look.GetVector2());
-        Shoot(fire.GetFloat());
-        GunSwitcher(switchGun.GetFloat(), switchGun2.GetFloat());
+        if (!gameManager.onPause)
+        {
+            Move(move.GetVector3());
+            Point(look.GetVector2());
+            Shoot(fire.GetFloat());
+            GunSwitcher(switchGun.GetFloat(), switchGun2.GetFloat());
+        }
+
 
         //move the pointer
         Ray ray = viewCamera.ScreenPointToRay(Input.mousePosition);
@@ -55,7 +64,14 @@ public class PlayerController : MonoBehaviour
             crosshairs.transform.position = point;
             crosshairs.DetectTargets(ray);
         }
-
+        if (invincible)
+        {
+            player.detectCollisions = false;
+        }
+        else
+        {
+            player.detectCollisions = true;
+        }
     }
 
     void GunSwitcher(float switchGun, float switchGun2)

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class GameOverMenu : MonoBehaviour
 {
+    //AÑADIR PARA PODER CARGAR PARTIDA EN GAMEOVER MENU
     public GameObject chargeButton;
     private void Start()
     {
@@ -16,11 +17,18 @@ public class GameOverMenu : MonoBehaviour
     public void ResetGame()
     {
         SceneManager.LoadScene("CameraScene");
+        //cargar desde el ultimo savepoint
+        Debug.Log("cargando en el ultimo savepoint...");
     }
 
     public void CloseGame()
     {
-        Application.Quit();
+        //Application.Quit();
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
     }
 
 }

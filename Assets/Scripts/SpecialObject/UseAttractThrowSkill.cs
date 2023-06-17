@@ -11,7 +11,7 @@ public class UseAttractThrowSkill : MonoBehaviour
     public float remainingTime;
     public float coldownTime = 2f;
     [HideInInspector]
-    public GameObject target;
+    public GameObject target = null;
     SpecialObject selectedObjectScript;
     PlayerStats player;
 
@@ -23,7 +23,8 @@ public class UseAttractThrowSkill : MonoBehaviour
     public float velocidadAtraccion;
     //float velocidadAtraccionOriginal;
     public float fuerzaBase;
-    float fuerzaLanzamiento;
+    [HideInInspector]
+    public float fuerzaLanzamiento;
     [HideInInspector]   
     public float fuerzaLanzamientoAnterior;
     [HideInInspector]
@@ -46,6 +47,16 @@ public class UseAttractThrowSkill : MonoBehaviour
 
     //public float damage;
     bool botonPresionado = false;
+    [HideInInspector]
+    public GameObject chargeBar;
+    [HideInInspector]
+    public float maxDistanceFromTargetToPlayer = 0f;
+    public float currentDistanceFromTargetToPlayer = 0f;
+
+    public float manaCost;
+    public float incrementoDeCosteManaPorSegundo;
+    public float maxManaCost;
+    public float finalManaCost;
 
     //progresivamente pasar la parte de controles del SpecialObject aqui, tiene mas sentido
     void Start()
@@ -53,6 +64,11 @@ public class UseAttractThrowSkill : MonoBehaviour
         //velocidadAtraccionOriginal = velocidadAtraccion;
         fuerzaLanzamiento = fuerzaBase;
         player = GetComponent<PlayerStats>();
+        //chargeBar = GameObject.FindGameObjectWithTag("ChargeBar");
+        //Debug.Log("name = " + chargeBar.name);
+        //chargeBar = GameObject.Find("ChargeBar");
+        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        pointer = FindObjectOfType<Crosshairs>().GetComponent<Transform>();
     }
 
     void Update()
@@ -65,22 +81,39 @@ public class UseAttractThrowSkill : MonoBehaviour
             {
                 onColdown = false;
                 remainingTime = 0f;
+                //reiniciamos el target para poder seleccionar otro objetivo
+                target = null;
             }
         }
         if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
         {
+
             Debug.Log("MODO ATTRACT AND THROW ACTIVADO...");
-            if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown)
+            if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost)
             {
                 Debug.Log("ATRAYENDO...");
                 estaSiendoAtraido = true;
                 //asi solo atraemos al objetivo que acabamos de marcar
                 selectedObjectScript.estaSiendoAtraido = true;
-                //onColdown = true;
+                //activamos la barra de progreso
+                chargeBar.SetActive(true);
+                chargeBar.GetComponent<ChargeBar>().target = target;
+                chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
+                chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDistanceFromTargetToPlayer);
             }
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0) && estaSiendoAtraido)
             {
                 velocidadAtraccion += 2;
+                if (finalManaCost > player.currentMana || player.currentMana == 0)
+                {
+                    estaSiendoAtraido = false;
+                }
+                else
+                {
+                    finalManaCost += incrementoDeCosteManaPorSegundo;
+                    currentDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, transform.position);
+                }
+
             }
             /*if (onHand)
             {
@@ -98,13 +131,22 @@ public class UseAttractThrowSkill : MonoBehaviour
                 target.transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
             }*/
             //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) && target.GetComponent<SpecialObject>().onHand)
             {
                 botonPresionado = true;
+                chargeBar.SetActive(true);
+                chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
             }
             if (botonPresionado)
             {
                 tiempoPulsado += Time.deltaTime;
+                fuerzaLanzamiento = fuerzaLanzamiento + tiempoPulsado * incrementoDeFuerzaPorSegundo;
+                if (fuerzaLanzamiento >= fuerzaMaxima)
+                {
+                    fuerzaLanzamiento = fuerzaMaxima;
+                }
+                //currentDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, transform.position);
+
             }
         }
 
@@ -114,9 +156,11 @@ public class UseAttractThrowSkill : MonoBehaviour
         if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
         {
             //LANZAMIENTO
-            if (Input.GetMouseButtonUp(1) && estaSiendoAtraido && selectedObjectScript.estaSiendoAtraido == true)
+            if (Input.GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost)
             {
+                
                 //target.GetComponent<Rigidbody>().Sleep();
+                chargeBar.SetActive(false);
                 onColdown = true;
                 remainingTime = coldownTime;
                 botonPresionado = false;
@@ -124,14 +168,21 @@ public class UseAttractThrowSkill : MonoBehaviour
                 if (tiempoPulsado <= 0.5f)
                 {
                     fuerzaLanzamiento = fuerzaBase;
+                    finalManaCost = manaCost;
                 }
                 else
                 {
-                    fuerzaLanzamiento = fuerzaLanzamiento + tiempoPulsado * incrementoDeFuerzaPorSegundo;
+                    //fuerzaLanzamiento = fuerzaLanzamiento + tiempoPulsado * incrementoDeFuerzaPorSegundo;
+                    //incrementamos el coste de mana, segun el tiempo pulsado
+                    finalManaCost = manaCost * tiempoPulsado * incrementoDeCosteManaPorSegundo;
                     Debug.Log("fuerza lanzamiento calculada = " + fuerzaLanzamiento);
-                    if (fuerzaLanzamiento >= fuerzaMaxima)
+                    /*if (fuerzaLanzamiento >= fuerzaMaxima)
                     {
                         fuerzaLanzamiento = fuerzaMaxima;
+                    }*/
+                    if (finalManaCost > maxManaCost)
+                    {
+                        finalManaCost = maxManaCost;
                     }
                 }
                 Debug.Log("fuerza pre lanzamiento = " + fuerzaLanzamiento);
@@ -153,12 +204,20 @@ public class UseAttractThrowSkill : MonoBehaviour
                 Vector3 direccionLanzamiento = Vector3.Normalize(GetMouseWorldPosition() - transform.position);
 
                 //target.GetComponent<Rigidbody>().WakeUp();
-                target.GetComponent<Rigidbody>().AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
+                //target.GetComponent<Rigidbody>().AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
                 direccionLanzamientoAnterior = direccionLanzamiento;
                 fuerzaLanzamientoAnterior = fuerzaLanzamiento;
                 fuerzaLanzamiento = fuerzaBase;
                 Debug.Log("fuerza post lanzamiento = " + fuerzaLanzamiento);
                 tiempoPulsado = 0f;
+
+                //consumimos mana fijo por ahora
+                if (finalManaCost <= player.currentMana)
+                {
+                    player.UseSkill(finalManaCost);
+                    target.GetComponent<Rigidbody>().AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
+                }
+                finalManaCost = 0f;
             }
         }
 
@@ -171,12 +230,25 @@ public class UseAttractThrowSkill : MonoBehaviour
         //Debug.DrawRay(player.position, player.forward, Color.red, Mathf.Infinity);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, collisionMask, QueryTriggerInteraction.Collide))
         {
-            target = hit.collider.gameObject;
-            selectedObjectScript = target.GetComponent<SpecialObject>();
-            print(target.name);
-            Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.green);
-            print("collision con un objeto atraible");
-            return true;
+
+            if (target == null)
+            {
+
+                target = hit.collider.gameObject;
+                Debug.Log("TARGET ENCONTRADO!");
+                Debug.Log("target = " + target.name);
+                maxDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, gameObject.transform.position);
+                selectedObjectScript = target.GetComponent<SpecialObject>();
+                print(target.name);
+                Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.green);
+                print("collision con un objeto atraible");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
         else
         {

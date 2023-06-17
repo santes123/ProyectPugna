@@ -37,7 +37,10 @@ public class SkillBar : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        player = FindObjectOfType<PlayerStats>();
+        contenedor = GameObject.FindGameObjectWithTag("SkillBar").transform;
+
         coldownImages = new Image[habilidades.Length];
         coldowns = new Text[habilidades.Length];
         imageSkill = new Image[habilidades.Length];
@@ -86,11 +89,12 @@ public class SkillBar : MonoBehaviour
             !coldown1)
         {
             //Image[] images = GameObject.Find("Skill0").GetComponentsInChildren<Image>();
-            Debug.Log(coldownImages[0].gameObject.name);
+            //Debug.Log(coldownImages[0].gameObject.name);
             coldownImages[0].gameObject.SetActive(true);
-            expectedBoomerangColdownTime = GameObject.Find("Boomer").GetComponent<BoomerangController>().expectedColdownTime;
+            //expectedBoomerangColdownTime = GameObject.Find("Player").GetComponent<UseBoomerang>().expectedColdownTime;
+            expectedBoomerangColdownTime = FindObjectOfType<UseBoomerang>().expectedColdownTime;
             remainingColdownTime = expectedBoomerangColdownTime;
-            Debug.Log("remaining coldown = " + remainingColdownTime);
+            //Debug.Log("remaining coldown = " + remainingColdownTime);
             coldown1 = true;
             Debug.Log("BOMMERANG EN COLDOWN");
         }else if (habilidades[1].container.GetComponent<UseAttractThrowSkill>().onColdown)
@@ -115,7 +119,7 @@ public class SkillBar : MonoBehaviour
                 Debug.Log("DASH EN COLDOWN");
                 float fillAmount = habilidades[3].container.GetComponent<DashController>().remainingTime /
                 habilidades[3].container.GetComponent<DashController>().chargeRegenTime;
-                Debug.Log("fill amount  = " + fillAmount);
+                //Debug.Log("fill amount  = " + fillAmount);
                 coldownImages[3].fillAmount = fillAmount;
                 coldowns[3].text = habilidades[3].container.GetComponent<DashController>().remainingTime.ToString("F1");
             }
@@ -142,7 +146,9 @@ public class SkillBar : MonoBehaviour
             else
             {
                 remainingColdownTime = 0f;
-                coldowns[0].text = habilidades[0].container.GetComponent<BoomerangController>().expectedColdownTime.ToString("F1");
+                //coldowns[0].text = habilidades[0].container.GetComponent<BoomerangController>().expectedColdownTime.ToString("F1");
+                //coldowns[0].text = GameObject.Find("Player").GetComponent<UseBoomerang>().expectedColdownTime.ToString("F1");
+                coldowns[0].text = FindObjectOfType<UseBoomerang>().expectedColdownTime.ToString("F1");
                 coldownImages[0].fillAmount = 0f;
                 coldown1 = false;
             }
@@ -155,7 +161,7 @@ public class SkillBar : MonoBehaviour
             if (remainingTime > 0)
             {
                 float fillAmount = remainingTime / coldown;
-                Debug.Log("fill amount  = " + fillAmount);
+                //Debug.Log("fill amount  = " + fillAmount);
                 coldownImages[1].fillAmount = fillAmount;
                 coldowns[1].text = remainingTime.ToString("F1");
             }
@@ -173,7 +179,7 @@ public class SkillBar : MonoBehaviour
             if (remainingTime > 0)
             {
                 float fillAmount = remainingTime / coldown;
-                Debug.Log("fill amount  = " + fillAmount);
+                //Debug.Log("fill amount  = " + fillAmount);
                 coldownImages[2].fillAmount = fillAmount;
                 coldowns[2].text = remainingTime.ToString("F1");
             }
@@ -242,6 +248,18 @@ public class SkillBar : MonoBehaviour
         else if (habilidad.tecla.ToString() == "E")
         {
             textoTecla.text = "E";
+        }
+        else if (habilidad.tecla.ToString() == "Q")
+        {
+            textoTecla.text = "Q";
+        }
+        else if (habilidad.tecla.ToString() == "Z")
+        {
+            textoTecla.text = "Z";
+        }
+        else if (habilidad.tecla.ToString() == "R")
+        {
+            textoTecla.text = "R";
         }
     }
 }

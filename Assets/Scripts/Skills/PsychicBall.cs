@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PsychicBall : MonoBehaviour
+public class PsychicBall : MonoBehaviour, IDamager
 {
     public int damage;
     public float velocity;
@@ -11,13 +12,11 @@ public class PsychicBall : MonoBehaviour
     public float impulseForce;
 
     private float lifeTime;
-
-    void Start()
+    public GameObject floatingDamageTextPrefab;
+    private void Awake()
     {
-
+        floatingDamageTextPrefab = FindObjectOfType<FloatingDamageText>().gameObject;
     }
-
-
     void Update()
     {
         if (throwed)
@@ -58,7 +57,9 @@ public class PsychicBall : MonoBehaviour
             damageObj.amount = damage;
             damageObj.source = UnitType.Player;
             damageObj.targetType = TargetType.Single;
-            damageableObject.ReceiveDamage(damageObj);
+            //usamos el metodo DoDamage de IDamager
+            DoDamage(damageableObject, damageObj);
+            //damageableObject.ReceiveDamage(damageObj);
 
             Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
             // Cambiar el color del material del renderer
@@ -67,7 +68,7 @@ public class PsychicBall : MonoBehaviour
                 hitRenderer.material.color = Color.blue;
             }
             //mostramos la UI de daño inflingido
-            //DealDamageToEnemy(damage);
+            DealDamageToEnemy(damage);
         }
         if (!other.gameObject.GetComponent<Rigidbody>())
         {
@@ -84,23 +85,29 @@ public class PsychicBall : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-    /*void DealDamageToEnemy(float damage)
+    //metodo de la interfaz IDamager
+    public void DoDamage(IDamageable target, Damage damage)
     {
-        // Calcula el daño infligido al enemigo y realiza las acciones necesarias
-        if (floatingDamageTextPrefab != null)
-        {
-            if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)
-            {
-                floatingDamageTextPrefab.GetComponent<Text>().enabled = true;
-            }
-            FloatingDamageText floatingDamageText = floatingDamageTextPrefab.GetComponent<FloatingDamageText>();
+        target.ReceiveDamage(damage);
+    }
+    //AÑADIR EL DAÑO INFLINGIDO CON LOS FLOATINGTEXT DE DAÑO
+    void DealDamageToEnemy(float damage)
+    {
+       // Calcula el daño infligido al enemigo y realiza las acciones necesarias
+       if (floatingDamageTextPrefab != null)
+       {
+           if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)
+           {
+               floatingDamageTextPrefab.GetComponent<Text>().enabled = true;
+           }
+           FloatingDamageText floatingDamageText = floatingDamageTextPrefab.GetComponent<FloatingDamageText>();
 
 
-            if (floatingDamageText != null)
-            {
-                // Configura el texto y el color del daño infligidos
-                floatingDamageText.SetDamageText(" - " + damage.ToString(), Color.red);
-            }
-        }
-    }*/
+           if (floatingDamageText != null)
+           {
+               // Configura el texto y el color del daño infligidos
+               floatingDamageText.SetDamageText(" - " + damage.ToString(), Color.red);
+           }
+       }
+    }
 }

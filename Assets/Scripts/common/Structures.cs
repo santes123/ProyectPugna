@@ -1,9 +1,11 @@
+using UnityEngine;
 [System.Serializable]
 public struct Damage
 {
     public UnitType source;
     public int amount;
     public TargetType targetType;
+    public Vector3 forceImpulse;
 }
 
 public enum TargetType

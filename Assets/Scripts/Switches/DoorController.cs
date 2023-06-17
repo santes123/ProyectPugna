@@ -13,14 +13,25 @@ public class DoorController : MonoBehaviour
     public int doorID;
     SwitchDoorIDGenerator generator;
 
-    private void Start()
+    private void Awake()
     {
-        generator = GameObject.Find("GameManager").GetComponent<SwitchDoorIDGenerator>();
+        //generator = GameObject.Find("GameManager").GetComponent<SwitchDoorIDGenerator>();
+        generator = FindObjectOfType<SwitchDoorIDGenerator>();
         doorID = generator.GetAvailableDoorID();
         Debug.Log("DoorID = " + doorID);
         Debug.Log("GO name = " + transform.gameObject.name);
         // Asegurarse de que la puerta esté cerrada al inicio del juego
         targetPosition = closedPosition.position;
+    }
+    private void Start()
+    {
+        //generator = GameObject.Find("GameManager").GetComponent<SwitchDoorIDGenerator>();
+        /*generator = FindObjectOfType<SwitchDoorIDGenerator>();
+        doorID = generator.GetAvailableDoorID();
+        Debug.Log("DoorID = " + doorID);
+        Debug.Log("GO name = " + transform.gameObject.name);
+        // Asegurarse de que la puerta esté cerrada al inicio del juego
+        targetPosition = closedPosition.position;*/
     }
 
     private void Update()

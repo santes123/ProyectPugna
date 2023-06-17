@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SwitchController : MonoBehaviour
+public class SwitchController : MonoBehaviour, IInteractable
 {
     private GameObject door; // Referencia al objeto de la puerta
     public bool isOn = false; // Estado inicial del interruptor
@@ -16,6 +16,7 @@ public class SwitchController : MonoBehaviour
 
     private void Start()
     {
+        keyRenderer = GetComponentInChildren<Renderer>();
         UpdateKeyColor();
         generator = GameObject.Find("GameManager").GetComponent<SwitchDoorIDGenerator>();
         keyID = generator.GetAvailableKeyID();
@@ -40,6 +41,7 @@ public class SwitchController : MonoBehaviour
             Debug.LogWarning("No se encontró la puerta correspondiente al ID de la llave.");
         }
     }
+    /*
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -55,13 +57,13 @@ public class SwitchController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Boomer"))
+        if (other.CompareTag("SpecialObject"))
         {
             // El jugador está en el área del collider del interruptor
             Debug.Log("cambiando estado...");
             ActivateSwitch();
         }
-    }
+    }*/
     private void UpdateKeyColor()
     {
         // Cambiar el color de la llave según el estado del switch
@@ -74,15 +76,22 @@ public class SwitchController : MonoBehaviour
             keyRenderer.material = redMaterial;
         }
     }
-    private void ActivateSwitch()
+    public void ActivateSwitch()
     {
         // Cambiar el estado del switch cuando se active
         switchState = !switchState;
 
         // Cambiar el estado de la puerta según el estado del switch
+        Debug.Log("door name = " + door.gameObject.name);
         door.GetComponent<DoorController>().SetDoorState(switchState);
 
         // Actualizar el color de la llave
         UpdateKeyColor();
+    }
+    //Interfaz para GameObject que es interactuado por otros gameObject
+    public void Interact(Interaction interaction)
+    {
+        Debug.Log("tipo de objetivo = " + interaction.source);
+        ActivateSwitch();
     }
 }

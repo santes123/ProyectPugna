@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7025264362241998798}
   m_Layer: 9
   m_Name: SpecialObject
-  m_TagString: Untagged
+  m_TagString: SpecialObject
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -76,20 +76,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1654267b31cb464e947698d8fbe2f68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocidadAtraccion: 5
-  fuerzaBase: 10
-  fuerzaMaxima: 20
-  incrementoDeFuerzaPorSegundo: 5
+  estaSiendoAtraido: 0
+  haSidoLanzado: 0
   player: {fileID: 0}
   handPlace: {fileID: 0}
-  pointer: {fileID: 0}
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 512
+  rb: {fileID: 0}
+  onHand: 0
   velocidadRotacion: 20
   fuerzaRebote: 4
   fuerzaAleatoria: 2
-  damage: 1
+  damage: 2
+  onColdown: 0
+  enemiesHited: []
+  floatingDamageTextPrefab: {fileID: 0}
 --- !u!1 &7025264362717560253
 GameObject:
   m_ObjectHideFlags: 0

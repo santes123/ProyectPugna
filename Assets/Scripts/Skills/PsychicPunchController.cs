@@ -29,7 +29,9 @@ public class PsychicPunchController : MonoBehaviour
 
     private void Start()
     {
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        //playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        playerStats = FindObjectOfType<PlayerStats>();
+        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
     }
 
     void Update()
@@ -81,6 +83,7 @@ public class PsychicPunchController : MonoBehaviour
                 if (playerStats.currentMana >= currentManaCost)
                 {
                     playerStats.UseSkill(currentManaCost);
+                    //Debug.Log("currentmana psychicShot = " + playerStats.currentMana);
                     // Lanzar la esfera cuando se suelta el botón izquierdo del ratón
                     if (currentSphere != null)
                     {

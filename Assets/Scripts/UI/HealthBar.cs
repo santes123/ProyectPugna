@@ -13,7 +13,8 @@ public class HealthBar : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        player = FindObjectOfType<PlayerStats>();
         maxHealth = player.startingHealth;
         currentHealth = player.currentHealth;
     }

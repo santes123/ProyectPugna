@@ -184,7 +184,7 @@ MonoBehaviour:
   openSpeed: 1
   door1_movable: {fileID: 125017060824683935}
   isOpen: 0
-  doorID: 1
+  doorID: 2
 --- !u!65 &125017060690239448
 BoxCollider:
   m_ObjectHideFlags: 0
