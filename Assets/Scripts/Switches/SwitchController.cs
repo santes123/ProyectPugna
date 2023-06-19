@@ -66,7 +66,7 @@ public class SwitchController : MonoBehaviour, IInteractable
     }*/
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Boomerang"))
+        if (other.CompareTag("Boomerang") && other.gameObject.GetComponent<BoomerangController>().isFlying)
         {
             // El jugador está en el área del collider del interruptor
             Debug.Log("cambiando estado...");

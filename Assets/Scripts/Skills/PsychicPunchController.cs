@@ -4,6 +4,8 @@ public class PsychicPunchController : MonoBehaviour
 {
     public GameObject esferaPrefab;
     public float initialSpeed;
+    public float initialImpulseForce;
+    public float maxImpulseForce;
     public float maxSpeed;
     public float initialScale;
     public float maxScale;
@@ -18,6 +20,7 @@ public class PsychicPunchController : MonoBehaviour
     public float currentSpeed;
     private float currentScale;
     public float currentDamage;
+    public float currentImpulseForce;
     private float currentManaCost;
     public bool onColdown;
     public float remainingTime;
@@ -47,11 +50,17 @@ public class PsychicPunchController : MonoBehaviour
                 remainingTime = 0f;
             }
         }
-        if (playerStats.selectedMode == PlayerStats.GameMode.PyshicShot && playerStats.currentMana >= initialManaCost)
+        if (playerStats.selectedMode == PlayerStats.GameMode.PyshicShot/* && playerStats.currentMana >= initialManaCost*/)
         {
 
-            if (!onColdown && Input.GetMouseButtonDown(0))
+            if (!onColdown && Input.GetMouseButtonDown(0)/* && playerStats.currentMana >= initialManaCost*/)
             {
+                if (playerStats.currentMana < initialManaCost)
+                {
+                    FindObjectOfType<GameManager>().ShowNoManaText();
+                    Debug.Log("No tienes mana suficiente");
+                    return;
+                }
                 chargeBar.SetActive(true);
                 chargeBar.GetComponent<ChargeBar>().target = gameObject;
                 chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDamage);
@@ -63,6 +72,7 @@ public class PsychicPunchController : MonoBehaviour
                 currentScale = initialScale;
                 currentDamage = initialDamage;
                 currentManaCost = initialManaCost;
+                currentImpulseForce = initialImpulseForce;
             }
             else if (!onColdown && Input.GetMouseButton(0) && currentSphere != null)
             {
@@ -76,6 +86,7 @@ public class PsychicPunchController : MonoBehaviour
                     currentSpeed = Mathf.Lerp(initialSpeed, maxSpeed, currentScale / maxScale);
                     currentDamage = Mathf.Lerp(initialDamage, maxDamage, currentScale / maxScale);
                     currentManaCost = Mathf.Lerp(initialManaCost, maxManaCost, currentScale / maxScale);
+                    currentImpulseForce = Mathf.Lerp(initialImpulseForce, maxImpulseForce, currentScale / maxScale);
                 }
             }
             else if (!onColdown && Input.GetMouseButtonUp(0) && currentSphere != null)
@@ -100,6 +111,7 @@ public class PsychicPunchController : MonoBehaviour
                         int damageInt = Mathf.RoundToInt(currentDamage);
                         ballScript.damage = damageInt;
                         ballScript.velocity = currentSpeed;
+                        ballScript.impulseForce = currentImpulseForce;
                         ballScript.throwed = true;
                     }
                     currentSphere = null;
@@ -111,6 +123,8 @@ public class PsychicPunchController : MonoBehaviour
                 }
                 else
                 {
+                    //mostramos el texto "no mana"
+                    FindObjectOfType<GameManager>().ShowNoManaText();
                     Debug.Log("No tienes mana suficiente");
                     onHand = false;
                     Destroy(currentSphere);
@@ -119,8 +133,11 @@ public class PsychicPunchController : MonoBehaviour
             }
             else
             {
-                Debug.Log("Skill on Coldown...");
+              Debug.Log("Skill on Coldown...");
             }
+        }
+        else
+        {
         }
     }
     private void LateUpdate()

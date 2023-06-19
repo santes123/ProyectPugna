@@ -177,4 +177,5 @@ MonoBehaviour:
   velocity: 2
   maxDistance: 10
   throwed: 0
-  impulseForce: 5
+  impulseForce: 10
+  floatingDamageTextPrefab: {fileID: 0}

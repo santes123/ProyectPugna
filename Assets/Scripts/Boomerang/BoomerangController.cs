@@ -392,16 +392,16 @@ public class BoomerangController : MonoBehaviour, IDamager
             DoDamage(damageableObject, damageObj);
             //damageableObject.ReceiveDamage(damageObj);
 
-            Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
+           /* Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
             // Cambiar el color del material del renderer
             if (hitRenderer != null)
             {
                 hitRenderer.material.color = Color.blue;
-            }
+            }*/
             //mostramos la UI de daño inflingido
             DealDamageToEnemy(damage);
         }
-        if (!other.gameObject.GetComponent<Rigidbody>())
+        /*if (!other.gameObject.GetComponent<Rigidbody>())
         {
             Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
             temporalRb.useGravity = false;
@@ -412,7 +412,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             normal.y = 0;
             temporalRb.AddForce(normal * impulseForceWhenHit, ForceMode.Impulse);
             Destroy(temporalRb, 0.5f);
-        }
+        }*/
     }
     void DealDamageToEnemy(float damage)
     {

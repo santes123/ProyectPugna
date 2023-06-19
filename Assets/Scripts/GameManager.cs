@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,6 @@ public class GameManager : MonoBehaviour
     //public TextMeshProUGUI pointsText;
     public List<string> enemiesKilled = new List<string>();
     public GameObject pauseMenuUI;
-    public GameObject pauseMenuUI2;
 
     //GameState saveInfo;
     GameState playerData;
@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
     public bool onPause = false;
     public bool playerInstantiated = false;
     public bool playable = false;
+    //public Button button;
+    public GameObject noManaTextGO;
     private void Awake()
     {
         //asignacion de variables necesarias
@@ -31,7 +33,7 @@ public class GameManager : MonoBehaviour
         hpText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
         manaText = FindObjectOfType<ManaBar>().GetComponentInChildren<TextMeshProUGUI>();
         //pointsText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
-
+        noManaTextGO = FindObjectOfType<FloatingText>().gameObject;
         enemiesKilled = new List<string>();
 
         //StartCoroutine(FindPlayer());
@@ -71,15 +73,43 @@ public class GameManager : MonoBehaviour
                 Time.timeScale = 0f;
                 onPause = true;
                 pauseMenuUI.SetActive(true);
-                //pauseMenuUI2.SetActive(true);
+                //deshabilitamos los scripts que molestan
+                FindObjectOfType<Crosshairs>().enabled = false;
+                FindObjectOfType<PlayerController>().enabled = false;
+                FindObjectOfType<PlayerStats>().enabled = false;
+                FindObjectOfType<UseBoomerang>().enabled = false;
+                FindObjectOfType<DashController>().enabled = false;
+                FindObjectOfType<PushAwaySkill>().enabled = false;
+                FindObjectOfType<ManaRegeneration>().enabled = false;
+                if (FindObjectOfType<BoomerangController>())
+                {
+                    FindObjectOfType<BoomerangController>().enabled = false;
+                    FindObjectOfType<DrawLine>().enabled = false;
+                    FindObjectOfType<BoomerangUpgradeController>().enabled = false;
+                }
+                //button.onClick.Invoke();
             }
             else if (Input.GetKeyDown(KeyCode.Escape) && onPause)
             {
                 Debug.Log("PAUSE OFF");
+
+                //habilitamos los scripts de nuevo
+                FindObjectOfType<Crosshairs>().enabled = true;
+                FindObjectOfType<PlayerController>().enabled = true;
+                FindObjectOfType<PlayerStats>().enabled = true;
+                FindObjectOfType<UseBoomerang>().enabled = true;
+                FindObjectOfType<DashController>().enabled = true;
+                FindObjectOfType<PushAwaySkill>().enabled = true;
+                FindObjectOfType<ManaRegeneration>().enabled = true;
+                if (FindObjectOfType<BoomerangController>())
+                {
+                    FindObjectOfType<BoomerangController>().enabled = true;
+                    FindObjectOfType<DrawLine>().enabled = true;
+                    FindObjectOfType<BoomerangUpgradeController>().enabled = true;
+                }
                 Time.timeScale = 1f;
                 onPause = false;
                 pauseMenuUI.SetActive(false);
-                //pauseMenuUI2.SetActive(false);
             }
         }
 
@@ -107,7 +137,7 @@ public class GameManager : MonoBehaviour
     public void _LoadData()
     {
         Debug.Log("loading data...");
-        GameData.Init();
+        //GameData.Init();
         Debug.Log("GAMEDATA = " + GameData.Data.PlayerData.currentPlayerHealth);
         playerData = GameData.Data.PlayerData;
         if (playerData.currentPlayerHealth > 0)
@@ -168,4 +198,23 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    //funcion para mostrar texto en pantalla cuando no tienes mana para realizar una accion e intentas hacerla igualmente
+    public void ShowNoManaText()
+    {
+        if (noManaTextGO != null)
+        {
+            if (!noManaTextGO.GetComponent<Text>().isActiveAndEnabled)
+            {
+                noManaTextGO.GetComponent<Text>().enabled = true;
+            }
+            FloatingText floatingDamageText = noManaTextGO.GetComponent<FloatingText>();
+
+
+            if (noManaTextGO != null)
+            {
+                floatingDamageText.SetText("NO TIENES SUFICIENTE MANA!", Color.red);
+            }
+        }
+    }
+
 }

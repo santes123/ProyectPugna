@@ -330,7 +330,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2328522668875790501
 Transform:
   m_ObjectHideFlags: 0
@@ -360,6 +360,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 2328522668875790522}
+  targetCanvas: {fileID: 2328522668384010706}
+  targetElement: {fileID: 2328522669201539226}
 --- !u!1 &2328522669067447883
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,7 +486,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2328522668875790500}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ExitGame
+        m_MethodName: _ExitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -618,7 +620,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2328522668875790500}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: ResumeGame
+        m_MethodName: _ResumeGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

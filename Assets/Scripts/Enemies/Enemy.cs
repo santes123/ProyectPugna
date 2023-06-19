@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : LivingEntity
+public class Enemy : LivingEntity, IDamager
 {
     public enum State {Idle, Chasing, Attacking };
     State currentState;
@@ -35,6 +35,8 @@ public class Enemy : LivingEntity
 
     private GameObject debuffColdown;
     private Image debuggImage;
+    [HideInInspector]
+    public bool bounceOnEnemies = false;
 
     protected override void Start()
     {
@@ -180,6 +182,9 @@ public class Enemy : LivingEntity
                     floatingDamageText.SetDamageText(" - " + damage.amount.ToString(), Color.red);
                 }*/
             }
+        }else if (other.CompareTag("Enemy") && bounceOnEnemies)
+        {
+            MakeDamageAndPushEnemy(other);
         }
         //hacemos daño al jugador
        /* Ray ray = new Ray(transform.position, transform.forward);
@@ -253,5 +258,32 @@ public class Enemy : LivingEntity
             temporalRb.AddForce(damage.forceImpulse, ForceMode.Impulse);
             Destroy(temporalRb, 0.5f);
         }
+    }
+    public void MakeDamageAndPushEnemy(Collider other)
+    {
+        //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
+        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            print("collision con el enemigo");
+            Damage damageObj = new Damage();
+            damageObj.amount = (int)damage;
+            damageObj.source = UnitType.Player;
+            damageObj.targetType = TargetType.Single;
+
+            // Obtener la direccion opuesta a la normal de la colision
+            Vector3 normal = other.transform.position - transform.position;
+            normal.y = 0;
+            normal.Normalize();
+            damageObj.forceImpulse = normal * 5f;
+            //llamamos al metodo de la interfaz
+            DoDamage(damageableObject, damageObj);
+            //damageableObject.ReceiveDamage(damageObj);
+        }
+    }
+
+    public void DoDamage(IDamageable target, Damage damage)
+    {
+        target.ReceiveDamage(damage);
     }
 }
