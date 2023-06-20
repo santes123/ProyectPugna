@@ -106,6 +106,7 @@ public class SpecialObject : MonoBehaviour, IDamager
                 //CALCULAR MANA POR SEGUNDO PULSADO Y HACER PARA QUE SI YA TIENES UNO EN LA MANO O ESTAS ATRAYENDO UNO, NO PODER ATRAER OTRO
                 print("on hand");
                 useSkil.estaSiendoAtraido = false;
+                //estaSiendoAtraido = false;
                 useSkil.onHand = true;
                 onHand = true;
                 GetComponent<BoxCollider>().enabled = false;
