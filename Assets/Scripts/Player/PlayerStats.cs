@@ -123,7 +123,10 @@ public class PlayerStats : LivingEntity, IInteractor
         if (boomerang.onHand)
         {
             boomerangGO.SetActive(false);
-        }
+        }/*else if ()
+        {
+
+        }*/
         else
         {
             boomerang.specialThrow = false;
