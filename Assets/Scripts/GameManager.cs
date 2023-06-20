@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,6 +21,10 @@ public class GameManager : MonoBehaviour
     GameState playerData;
     public string saveFileName = "savegame.bin";
     public bool onPause = false;
+    public bool playerInstantiated = false;
+    public bool playable = false;
+    //public Button button;
+    public GameObject noManaTextGO;
     private void Awake()
     {
         //asignacion de variables necesarias
@@ -27,10 +33,12 @@ public class GameManager : MonoBehaviour
         hpText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
         manaText = FindObjectOfType<ManaBar>().GetComponentInChildren<TextMeshProUGUI>();
         //pointsText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
-
+        noManaTextGO = FindObjectOfType<FloatingText>().gameObject;
         enemiesKilled = new List<string>();
-        _LoadData();
-        if (File.Exists("savegame.bin"))
+
+        //StartCoroutine(FindPlayer());
+        //_LoadData();
+        /*if (File.Exists("savegame.bin"))
         {
             //LoadData();
         }
@@ -39,36 +47,72 @@ public class GameManager : MonoBehaviour
             Debug.Log("No se encontró el archivo de guardado");
             //player = GameObject.Find("Player").GetComponent<PlayerStats>();
             player = FindObjectOfType<PlayerStats>();
-        }
+        }*/
     }
     void Start()
     {
         //GetComponent<GameManager>().enabled = true;
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+        StartCoroutine(FindPlayer());
     }
 
     void Update()
     {
-        if (player.currentHealth <= 0)
+        if (playable)
         {
-            print("YOU ARE DEAD");
-            Cursor.visible = true;
-            SceneManager.LoadScene("GameOverMenu");
+            if (player.currentHealth <= 0)
+            {
+                print("YOU ARE DEAD");
+                Cursor.visible = true;
+                SceneManager.LoadScene("GameOverMenu");
+            }
+            //controlamos la tecla Escape para cuando el jugador quiere pausar
+            if (Input.GetKeyDown(KeyCode.Escape) && !onPause)
+            {
+                Debug.Log("PAUSE ON");
+                Time.timeScale = 0f;
+                onPause = true;
+                pauseMenuUI.SetActive(true);
+                //deshabilitamos los scripts que molestan
+                FindObjectOfType<Crosshairs>().enabled = false;
+                FindObjectOfType<PlayerController>().enabled = false;
+                FindObjectOfType<PlayerStats>().enabled = false;
+                FindObjectOfType<UseBoomerang>().enabled = false;
+                FindObjectOfType<DashController>().enabled = false;
+                FindObjectOfType<PushAwaySkill>().enabled = false;
+                FindObjectOfType<ManaRegeneration>().enabled = false;
+                if (FindObjectOfType<BoomerangController>())
+                {
+                    FindObjectOfType<BoomerangController>().enabled = false;
+                    FindObjectOfType<DrawLine>().enabled = false;
+                    FindObjectOfType<BoomerangUpgradeController>().enabled = false;
+                }
+                //button.onClick.Invoke();
+            }
+            else if (Input.GetKeyDown(KeyCode.Escape) && onPause)
+            {
+                Debug.Log("PAUSE OFF");
+
+                //habilitamos los scripts de nuevo
+                FindObjectOfType<Crosshairs>().enabled = true;
+                FindObjectOfType<PlayerController>().enabled = true;
+                FindObjectOfType<PlayerStats>().enabled = true;
+                FindObjectOfType<UseBoomerang>().enabled = true;
+                FindObjectOfType<DashController>().enabled = true;
+                FindObjectOfType<PushAwaySkill>().enabled = true;
+                FindObjectOfType<ManaRegeneration>().enabled = true;
+                if (FindObjectOfType<BoomerangController>())
+                {
+                    FindObjectOfType<BoomerangController>().enabled = true;
+                    FindObjectOfType<DrawLine>().enabled = true;
+                    FindObjectOfType<BoomerangUpgradeController>().enabled = true;
+                }
+                Time.timeScale = 1f;
+                onPause = false;
+                pauseMenuUI.SetActive(false);
+            }
         }
-        //controlamos la tecla Escape para cuando el jugador quiere pausar
-        if (Input.GetKeyDown(KeyCode.Escape) && !onPause)
-        {
-            Debug.Log("PAUSE ON");
-            Time.timeScale = 0f;
-            onPause = true;
-            pauseMenuUI.SetActive(true);
-        }else if (Input.GetKeyDown(KeyCode.Escape) && onPause)
-        {
-            Debug.Log("PAUSE OFF");
-            Time.timeScale = 1f;
-            onPause = false;
-            pauseMenuUI.SetActive(false);
-        }
+
     }
     //metodo LoadData antiguo
     /*public void LoadData()
@@ -93,25 +137,32 @@ public class GameManager : MonoBehaviour
     public void _LoadData()
     {
         Debug.Log("loading data...");
-        GameData.Init();
+        //GameData.Init();
+        Debug.Log("GAMEDATA = " + GameData.Data.PlayerData.currentPlayerHealth);
         playerData = GameData.Data.PlayerData;
-        //Debug.Log("CURRENT HEALTH = " + playerData.currentPlayerHealth);
-        //asignar valores
-        player = GameObject.Find("Player").GetComponent<PlayerStats>();
-        player.currentHealth = playerData.currentPlayerHealth;
-        player.currentMana = playerData.currentPlayerMana;
-        Vector3 LastPosition = new Vector3(playerData.playerPositionX, playerData.playerPositionY, playerData.playerPositionZ);
-        player.transform.position = LastPosition;
-        enemiesKilled = playerData.enemiesEliminated;
-        player.selectedMode = playerData.lastSelectedMode;
-
-        //Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
-        //Debug.Log("mana cargado = " + playerData.currentPlayerMana);
-        //Debug.Log("selected mode cargado = " + playerData.lastSelectedMode);
-
-        if (enemiesKilled != null)
+        if (playerData.currentPlayerHealth > 0)
         {
-            EliminateEnemiesKilledBefore(enemiesKilled);
+            //Debug.Log("CURRENT HEALTH = " + playerData.currentPlayerHealth);
+            //asignar valores
+            //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+            player.SetCurrentHeath(playerData.currentPlayerHealth);
+            //player.currentHealth = playerData.currentPlayerHealth;
+            player.SetCurrentMana(playerData.currentPlayerMana);
+            //player.currentMana = playerData.currentPlayerMana;
+            Vector3 LastPosition = new Vector3(playerData.playerPositionX, playerData.playerPositionY, playerData.playerPositionZ);
+            player.transform.position = LastPosition;
+            enemiesKilled = playerData.enemiesEliminated;
+            player.selectedMode = playerData.lastSelectedMode;
+
+            //Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
+            //Debug.Log("mana cargado = " + playerData.currentPlayerMana);
+            //Debug.Log("selected mode cargado = " + playerData.lastSelectedMode);
+
+            if (enemiesKilled != null)
+            {
+                EliminateEnemiesKilledBefore(enemiesKilled);
+            }
+               
         }
 
     }
@@ -128,6 +179,40 @@ public class GameManager : MonoBehaviour
             else
             {
                 Debug.LogWarning($"No se encontró el enemigo {enemyName} en la escena.");
+            }
+        }
+    }
+    //buscamos al jugador con una corutina
+    IEnumerator FindPlayer()
+    {
+        while (player == null)
+        {
+            if (playerInstantiated)
+            {
+                player = FindObjectOfType<PlayerStats>();
+ 
+                if (player != null) yield return new WaitForSeconds(0.5f);
+                _LoadData();
+                Debug.Log("player = " + player.name);
+                playable = true;
+            }
+        }
+    }
+    //funcion para mostrar texto en pantalla cuando no tienes mana para realizar una accion e intentas hacerla igualmente
+    public void ShowNoManaText()
+    {
+        if (noManaTextGO != null)
+        {
+            if (!noManaTextGO.GetComponent<Text>().isActiveAndEnabled)
+            {
+                noManaTextGO.GetComponent<Text>().enabled = true;
+            }
+            FloatingText floatingDamageText = noManaTextGO.GetComponent<FloatingText>();
+
+
+            if (noManaTextGO != null)
+            {
+                floatingDamageText.SetText("NO TIENES SUFICIENTE MANA!", Color.red);
             }
         }
     }

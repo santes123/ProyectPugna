@@ -128,4 +128,22 @@ public class LivingEntity : MonoBehaviour, IDamageable
             gameManager.manaText.text = currentMana.ToString();
         }
     }
+    public void SetCurrentMana(float _mana)
+    {
+        mana = _mana;
+        currentMana = mana;
+        if (this.gameObject.GetComponent<PlayerController>())
+        {
+            gameManager.manaText.text = currentMana.ToString();
+        }
+    }
+    public void SetCurrentHeath(float _health)
+    {
+        health = _health;
+        currentHealth = health;
+        if (this.gameObject.GetComponent<PlayerController>())
+        {
+            gameManager.hpText.text = currentHealth.ToString();
+        }
+    }
 }

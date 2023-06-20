@@ -10,12 +10,16 @@ public class PsychicBall : MonoBehaviour, IDamager
     public float maxDistance = 15f;
     public bool throwed = false;
     public float impulseForce;
+    private List<GameObject> enemiesHited;
+    private bool enemyHited = false;
 
     private float lifeTime;
     public GameObject floatingDamageTextPrefab;
+    public GameObject enemyHitedReference;
     private void Awake()
     {
         floatingDamageTextPrefab = FindObjectOfType<FloatingDamageText>().gameObject;
+        enemiesHited = new List<GameObject>();
     }
     void Update()
     {
@@ -31,7 +35,22 @@ public class PsychicBall : MonoBehaviour, IDamager
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("Enemy name = " + other.gameObject.name);
-            MakeDamageToEnemyAndPush(other, damage);
+            for (int i = 0; i < enemiesHited.Count; i++)
+            {
+                if (enemiesHited[i].name == other.gameObject.name)
+                {
+                    enemyHited = true;
+                }
+            }
+            if (!enemyHited)
+            {
+                MakeDamageToEnemyAndPush(other, damage);
+                enemiesHited.Add(other.gameObject);
+                enemyHited = false;
+                //destruimos la esfera despues de golpear al primer enemigo
+                Destroy(gameObject);
+            }
+
         }
         if (other.CompareTag("Obstacle"))
         {
@@ -53,24 +72,36 @@ public class PsychicBall : MonoBehaviour, IDamager
         if (damageableObject != null)
         {
             print("collision con el enemigo");
+            Debug.Log("damage = " + damage);
+            Debug.Log("impulse = " + impulseForce);
             Damage damageObj = new Damage();
             damageObj.amount = damage;
             damageObj.source = UnitType.Player;
             damageObj.targetType = TargetType.Single;
+            // Obtener la direccion opuesta a la normal de la colision
+            //Vector3 normal = other.transform.position - transform.position;
+            Vector3 normal = (other.gameObject.transform.position - transform.position);
+            normal.y = 0;
+            normal.Normalize();
+            damageObj.forceImpulse = normal * impulseForce;
             //usamos el metodo DoDamage de IDamager
             DoDamage(damageableObject, damageObj);
+            //dejamos que rebote con otros enemigos
+            other.GetComponent<Enemy>().bounceOnEnemies = true;
+            enemyHitedReference = other.gameObject;
+            StartCoroutine(EnemyPushEnemy());
             //damageableObject.ReceiveDamage(damageObj);
 
-            Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
+           /* Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
             // Cambiar el color del material del renderer
             if (hitRenderer != null)
             {
                 hitRenderer.material.color = Color.blue;
-            }
+            }*/
             //mostramos la UI de daño inflingido
             DealDamageToEnemy(damage);
         }
-        if (!other.gameObject.GetComponent<Rigidbody>())
+        /*if (!other.gameObject.GetComponent<Rigidbody>())
         {
             Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
             temporalRb.useGravity = false;
@@ -83,7 +114,7 @@ public class PsychicBall : MonoBehaviour, IDamager
             temporalRb.AddForce(normal * impulseForce, ForceMode.Impulse);
             Destroy(temporalRb, 0.5f);
             Destroy(this.gameObject);
-        }
+        }*/
     }
     //metodo de la interfaz IDamager
     public void DoDamage(IDamageable target, Damage damage)
@@ -109,5 +140,10 @@ public class PsychicBall : MonoBehaviour, IDamager
                floatingDamageText.SetDamageText(" - " + damage.ToString(), Color.red);
            }
        }
+    }
+    IEnumerator EnemyPushEnemy()
+    {
+        yield return new WaitForSeconds(1f);
+        enemyHitedReference.GetComponent<Enemy>().bounceOnEnemies = false;
     }
 }

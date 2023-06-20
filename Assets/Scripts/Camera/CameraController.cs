@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
 
 [RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
@@ -15,10 +16,14 @@ public class CameraController : MonoBehaviour
     public float zoomLimiter = 50f;
 
     private Camera camera;
+    private Transform player;
+    private GameManager gameManager;
     private void Awake()
     {
-        targets.Add(FindObjectOfType<PlayerController>().GetComponent<Transform>());
-        targets.Add(FindObjectOfType<BoomerangController>().GetComponent<Transform>());
+        gameManager = FindObjectOfType<GameManager>();
+        StartCoroutine(FindPlayer());
+        //targets.Add(player.GetComponent<Transform>());
+        //targets.Add(FindObjectOfType<BoomerangController>().GetComponent<Transform>());
     }
     private void Start()
     {
@@ -68,5 +73,21 @@ public class CameraController : MonoBehaviour
             bounds.Encapsulate(targets[i].position);
         }
         return bounds.center;
+    }
+    //buscamos al jugador con una corutina
+    IEnumerator FindPlayer()
+    {
+        while (player == null)
+        {
+            if (gameManager.playerInstantiated)
+            {
+                player = FindObjectOfType<PlayerController>().GetComponent<Transform>();
+                targets.Add(player.GetComponent<Transform>());
+                targets.Add(FindObjectOfType<BoomerangController>().GetComponent<Transform>());
+                Debug.Log("player = " + player.name);
+                Debug.Log("targets count = " + targets.Count);
+                if (player != null) yield return null;
+            }
+        }
     }
 }

@@ -92,6 +92,7 @@ public class UseAttractThrowSkill : MonoBehaviour
             if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost)
             {
                 Debug.Log("ATRAYENDO...");
+
                 estaSiendoAtraido = true;
                 //asi solo atraemos al objetivo que acabamos de marcar
                 selectedObjectScript.estaSiendoAtraido = true;
@@ -107,6 +108,8 @@ public class UseAttractThrowSkill : MonoBehaviour
                 if (finalManaCost > player.currentMana || player.currentMana == 0)
                 {
                     estaSiendoAtraido = false;
+                    Debug.Log("NO TIENES SUFICIENTE MANA!");
+                    //añadir variables para cancelar y poder volver a atraerlo
                 }
                 else
                 {

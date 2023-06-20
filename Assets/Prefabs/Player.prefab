@@ -784,6 +784,8 @@ MonoBehaviour:
   esferaPrefab: {fileID: 5572282687115576243, guid: 64c873f7735ff8d44bb9343063cb342b,
     type: 3}
   initialSpeed: 10
+  initialImpulseForce: 5
+  maxImpulseForce: 15
   maxSpeed: 15
   initialScale: 0.5
   maxScale: 1.5
@@ -795,6 +797,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 6595653067598192924}
   currentSpeed: 0
   currentDamage: 0
+  currentImpulseForce: 0
   onColdown: 0
   remainingTime: 0
   onHand: 0
@@ -3697,6 +3700,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Boomer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320788967034406406, guid: 018d9428bc90dce40a2c5148032799a2,
+        type: 3}
+      propertyPath: m_TagString
+      value: Boomerang
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 018d9428bc90dce40a2c5148032799a2, type: 3}

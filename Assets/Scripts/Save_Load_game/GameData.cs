@@ -29,11 +29,9 @@ public static class GameData {
 
 	static void LoadOrCreate ()
 	{
-		
 		Data = DataManager.Load<GamePersistenData> ();
 		//Debug.Log("loading data..");
 		if (Data == null) {
-			//Debug.Log("Data es null");
 			Data = new GamePersistenData ();
 			Save ();
 		}			
@@ -48,6 +46,7 @@ public static class GameData {
 	public static void Save ()
 	{
 		//Debug.Log("guardando...");
+		Debug.Log("gurdando papasito...");
 		DataManager.Save (Data);
 	}
 

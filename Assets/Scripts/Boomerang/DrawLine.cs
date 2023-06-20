@@ -83,11 +83,13 @@ public class DrawLine : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
         {
+            Debug.Log("SUELO ENCONTRADO");
             return hit.point + new Vector3(0f, 1f, 0f); // adjust height of point to be above terrain
         }
         else
         {
-            Plane plane = new Plane(transform.up, transform.position);
+            Debug.Log("SUELO NO ENCONTRADO");
+            Plane plane = new Plane(Vector3.up, transform.position);
             float distance;
             if (plane.Raycast(ray, out distance))
             {

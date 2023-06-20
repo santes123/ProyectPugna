@@ -85,9 +85,11 @@ public class SavePoint : MonoBehaviour
     {
         Debug.Log("saving data...");
         //asignar valores
-        PlayerStats playerstats = other.GetComponent<PlayerStats>();
+        PlayerStats playerstats = other.gameObject.GetComponent<PlayerStats>();
         //GameObject player = GameObject.Find("Player");
         GameObject player = playerstats.gameObject;
+        Debug.Log("gamedata = " + GameData.Data);
+        Debug.Log("playerstats = " + playerstats);
         GameData.Data.PlayerData.currentPlayerHealth = playerstats.currentHealth;
         GameData.Data.PlayerData.currentPlayerMana = playerstats.currentMana;
         GameData.Data.PlayerData.playerPositionX = player.transform.position.x;
