@@ -5744,7 +5744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ad9caf456911214ab1391b1320dc39f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 685503827910932999, guid: 08f2225fafb330f4482336ed74fd5743,
+  playerPrefab: {fileID: 685503827910932999, guid: 3cf83d81251a01a44b214eba01fdee13,
     type: 3}
   camera: {fileID: 0}
   gameManager: {fileID: 0}
@@ -64445,8 +64445,8 @@ MonoBehaviour:
   offset: {x: 0, y: 8, z: -4}
   velocity: {x: 0, y: 0, z: 0}
   smoothTime: 0.1
-  minZoom: 55
-  maxZoom: 80
+  minZoom: 40
+  maxZoom: 60
   zoomLimiter: 30
 --- !u!114 &1807862622
 MonoBehaviour:
@@ -67957,7 +67957,6 @@ Transform:
   - {fileID: 2009614939}
   - {fileID: 208878695}
   - {fileID: 1811659031}
-  - {fileID: 733311818}
   - {fileID: 1045887186}
   - {fileID: 285353683}
   - {fileID: 1354364772}
@@ -67972,6 +67971,7 @@ Transform:
   - {fileID: 1411429806}
   - {fileID: 252471672}
   - {fileID: 1603700676}
+  - {fileID: 917710390}
   - {fileID: 514851285}
   - {fileID: 731464734}
   - {fileID: 1542547306}
@@ -67984,7 +67984,7 @@ Transform:
   - {fileID: 1761231534}
   - {fileID: 125537302}
   - {fileID: 217754979}
-  - {fileID: 917710390}
+  - {fileID: 733311818}
   - {fileID: 53319800}
   m_Father: {fileID: 1208928980}
   m_RootOrder: 0
