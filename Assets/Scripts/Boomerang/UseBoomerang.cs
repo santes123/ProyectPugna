@@ -60,13 +60,14 @@ public class UseBoomerang : MonoBehaviour
 
     [HideInInspector]
     public BoomerangController boomerangController;
-
+    Animator animator;
     private void Awake()
     {
         playerStats = gameObject.GetComponent<PlayerStats>();
         //boomerangController = GameObject.Find("Boomer").GetComponent<BoomerangController>();
         boomerangController = FindObjectOfType<BoomerangController>();
         chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        animator = GetComponentInChildren<Animator>();
     }
     // Inicialización
     void Start()
@@ -105,6 +106,7 @@ public class UseBoomerang : MonoBehaviour
                 !boomerangController.isReturning)
             {
                 Debug.Log("BOOM = CLICK IZQUIERDO PULSADO");
+                animator.SetTrigger("Charge");
                 //activamos la barra de progreso
                 chargeBar.SetActive(true);
                 chargeBar.GetComponent<ChargeBar>().target = boomerangController.gameObject;
@@ -155,6 +157,7 @@ public class UseBoomerang : MonoBehaviour
             if (Input.GetMouseButtonUp(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow && 
                 !boomerangController.isReturning && isButtonPressed)
             {
+                animator.SetTrigger("Attack");
                 Debug.Log("BOOM = CLICK IZQUIERDO SOLTADO");
                 //update del damage del boomerangController, por si pillamos un Powerup
                 boomerangController.damageBoomerang = damage;

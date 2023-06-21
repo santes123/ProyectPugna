@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     public BoomerangController boomerangController;
     public bool invincible = false;
     private GameManager gameManager;
+    private Animator animator;
     void Awake() 
     {
         player = GetComponent<CharacterController>();
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
         boomerangController = FindObjectOfType<BoomerangController>();
         //gunController = GetComponent<GunController>();
         viewCamera = Camera.main;
+        animator = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -96,6 +98,7 @@ public class PlayerController : MonoBehaviour
     void Move(Vector3 movement)
     {
         player.SimpleMove(movement * speed);
+        animator.SetFloat("Speed", movement.magnitude);
     }
 
     void Point(Vector2 mousePosition)

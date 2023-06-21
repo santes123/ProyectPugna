@@ -37,7 +37,6 @@ public class Enemy : LivingEntity, IDamager
     private Image debuggImage;
     [HideInInspector]
     public bool bounceOnEnemies = false;
-
     protected override void Start()
     {
         base.Start();
@@ -169,6 +168,7 @@ public class Enemy : LivingEntity, IDamager
                 damage.targetType = TargetType.Single;
 
                 damageableObject.ReceiveDamage(damage);
+                other.gameObject.GetComponentInChildren<Animator>().SetTrigger("GetHit");
                 /*if (!floatingDamageTextPrefab.GetComponent<Text>().isActiveAndEnabled)
                 {
                     floatingDamageTextPrefab.GetComponent<Text>().enabled = true;
