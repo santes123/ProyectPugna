@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AttackBehavior : EnemyBehavior
+public class AttackBehavior : EnemyBehavior, IDamager
 {
     float timeBetweenAttacks = 3f;
     float nextAttack;
@@ -28,5 +28,26 @@ public class AttackBehavior : EnemyBehavior
 
     public override void UpdateAnimator() {
        
+    }
+
+    public Damage damage;
+
+    public void Attack() {
+        //first we get the targets.
+        List<IDamageable> damageablesFound = GetTargets();
+
+        //then we apply the damage on all the targets found.
+        foreach(IDamageable damageable in damageablesFound) {
+            DoDamage(damageable, damage);
+        }
+    }
+
+    public List<IDamageable> GetTargets() {
+        AreaOfEffect aoe = GetComponent<AreaOfEffect>();
+        return aoe.GetTargets<IDamageable>();
+    }
+
+    public void DoDamage(IDamageable target, Damage damage) {
+        target.ReceiveDamage(damage);
     }
 }

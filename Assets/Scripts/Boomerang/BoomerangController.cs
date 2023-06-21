@@ -442,6 +442,9 @@ public class BoomerangController : MonoBehaviour, IDamager
     {
         target.ReceiveDamage(damage);
     }
+
+    public void Attack() {
+    }
     //funcion para calcular el punto final de rebote al chocar con un obstaculo y poder calcular multiples rebotes (codigo del LR)
     /*public void CalculateBouncingPoint()
     {

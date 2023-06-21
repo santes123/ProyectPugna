@@ -146,4 +146,7 @@ public class PsychicBall : MonoBehaviour, IDamager
         yield return new WaitForSeconds(1f);
         enemyHitedReference.GetComponent<Enemy>().bounceOnEnemies = false;
     }
+
+    public void Attack() {
+    }
 }

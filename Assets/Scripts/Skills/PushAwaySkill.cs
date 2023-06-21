@@ -153,4 +153,8 @@ public class PushAwaySkill : MonoBehaviour, IDamager
             }
         }
     }
+
+    public void Attack() {
+        
+    }
 }

@@ -2107,7 +2107,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!64 &1572120543
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2235,13 +2235,14 @@ GameObject:
   - component: {fileID: 2049846011}
   - component: {fileID: 2049846012}
   - component: {fileID: 2049846013}
+  - component: {fileID: 2049846014}
   m_Layer: 0
   m_Name: Enemy1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!195 &2049846006
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2356,6 +2357,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87df371f3a5eae147a482d45d2bdc124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage:
+    source: 0
+    amount: 10
+    targetType: 0
+    forceImpulse: {x: 0, y: 0, z: 0}
 --- !u!114 &2049846013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2368,6 +2374,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf90fcdf1ddc7241bcc08171121887b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2049846014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2049846005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c337d48246ad9419b9abb212ed0de8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 2
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  shouldHitTriggers: 1
 --- !u!1 &2116022574
 GameObject:
   m_ObjectHideFlags: 0

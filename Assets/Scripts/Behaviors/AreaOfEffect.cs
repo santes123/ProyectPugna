@@ -10,7 +10,7 @@ public class AreaOfEffect : MonoBehaviour
     public bool shouldHitTriggers;
 
     //the idea beind <T> is to be able to interact with many different posible objects. this could be IDamageable, or IInteractables.
-    public List<T> GetTargets<T>() {
+    public virtual List<T> GetTargets<T>() {
         List<T> targetsFound = new List<T>();
         Collider[] hits = Physics.OverlapSphere(transform.position, radius, layerMask, (shouldHitTriggers ? QueryTriggerInteraction.Collide : QueryTriggerInteraction.Ignore));
         foreach(Collider hit in hits) {
@@ -18,7 +18,6 @@ public class AreaOfEffect : MonoBehaviour
             if(comp != null) {
                 targetsFound.Add(comp);
             }
-
         }
         return targetsFound;
     }
