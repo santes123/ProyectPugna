@@ -13,10 +13,6 @@ public abstract class EnemyBehavior : MonoBehaviour
         animator = GetComponentInChildren<AnimatorEvents>().GetComponent<Animator>();
     }
 
-    public virtual void Update() {
-        agent.SetDestination(currentDestination);
-    }
-
     public abstract void UpdateAnimator();
     public abstract void ExecuteBehavior();
 

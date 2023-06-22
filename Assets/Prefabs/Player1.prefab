@@ -594,6 +594,8 @@ GameObject:
   - component: {fileID: 1035388269}
   - component: {fileID: 1035388280}
   - component: {fileID: 1035388281}
+  - component: {fileID: -9157412108360670767}
+  - component: {fileID: -4038961097283971837}
   m_Layer: 11
   m_Name: Player1
   m_TagString: Player
@@ -904,6 +906,37 @@ MonoBehaviour:
   manaRegenOnHitAmount: 5
   manaRegenParticlesPrefab: {fileID: 1579168213340724, guid: 4d9fffb8ef3735f4ba49b86de2dc9243,
     type: 3}
+--- !u!114 &-9157412108360670767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685503827910932999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 670f8417d4db3c44baa49278efb835b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interaction:
+    source: 0
+--- !u!114 &-4038961097283971837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685503827910932999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f12179290b7a87479488d9c338f317c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 4
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2147483647
+  shouldHitTriggers: 1
 --- !u!1 &940640490467063562
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,43 +9,50 @@ public class PatrolBehavior : EnemyBehavior
     public Vector2 areaOfPatrol;
     public float accuracy = 0.25f;
     public float maxIdleTime = 3f;
-    float nextDestinationTime;
+    public float nextDestinationTime;
     // Start is called before the first frame update
     void Start() {
         spawnLocation = transform.position;
     }
 
-    public override void Update() {
-        base.Update();
+     void Update() {
         UpdateAnimator();
     }
 
-    
-    bool givenNextDestinationTime = false;
     public override void StartBehavior() {
         agent.speed = 2f;
-        givenNextDestinationTime = false;
         animator.SetBool(inCombat, false);
         SetNewDestination();
     }
-   
+    float currentWaitedTime = 0f;
+    float currentMaxWaitTime = 0f;
     public override void ExecuteBehavior() {
-        if(!agent.hasPath || agent.remainingDistance <= accuracy) {
-            if(!givenNextDestinationTime) {
-                nextDestinationTime = Time.time + Random.Range(0f, maxIdleTime);
-                givenNextDestinationTime = true;
-            } else {
-                if(Time.time > nextDestinationTime) {
-                    SetNewDestination();
-                }
+        
+        if(!agent.hasPath) {
+            
+            SetNewDestination();
+            
+
+        } else if(agent.remainingDistance <= accuracy) {
+
+            currentWaitedTime += Time.deltaTime;
+
+            if(currentWaitedTime > currentMaxWaitTime) {
+
+                SetNewDestination();
+                currentWaitedTime = 0f;
+                currentMaxWaitTime = Random.Range(0, maxIdleTime);
+
             }
+
         }
+        
     }
     void SetNewDestination() {
         float posX = Random.Range(-areaOfPatrol.x, areaOfPatrol.x);
         float posZ = Random.Range(-areaOfPatrol.y, areaOfPatrol.y);
         currentDestination = spawnLocation + new Vector3(posX, 0f, posZ);
-        givenNextDestinationTime = false;
+        agent.SetDestination(currentDestination);
     }
     void OnDrawGizmos() {
         //Area of patrol

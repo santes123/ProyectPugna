@@ -7,6 +7,13 @@ public class InteractorExample : MonoBehaviour, IInteractor
 {
     public Interaction interaction;
 
+
+    void Update() {
+        if(Input.GetKeyDown(KeyCode.F)) {
+            Interact();
+        }
+    }
+
     //simple interact
     [ContextMenu("Interact")]
     public void Interact() {

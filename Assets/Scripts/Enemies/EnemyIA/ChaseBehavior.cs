@@ -12,9 +12,8 @@ public class ChaseBehavior : EnemyBehavior
     }
 
     // Update is called once per frame
-    public override void Update()
+    void Update()
     {
-        base.Update();
         UpdateAnimator();
     }
     

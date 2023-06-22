@@ -9,13 +9,14 @@ public class AttackBehavior : EnemyBehavior, IDamager
 
     PlayerStats target;
     int attack = Animator.StringToHash("Attack");
-    
+
     public override void StartBehavior() {
         agent.speed = 0;
         target = FindObjectOfType<PlayerStats>();
     }
     public override void ExecuteBehavior() {
         currentDestination = target.transform.position;
+        agent.SetDestination(currentDestination);
         transform.LookAt(new Vector3(target.transform.position.x, transform.position.y, target.transform.position.z));
         if(nextAttack < Time.time) {
             animator.SetTrigger(attack);

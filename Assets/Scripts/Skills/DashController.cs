@@ -43,7 +43,7 @@ public class DashController : MonoBehaviour
             PerformDash();
         }
         RegenerateCharges();
-        Debug.Log("cargas actuales : " + currentCharges);
+        //Debug.Log("cargas actuales : " + currentCharges);
     }
     private bool CanDash()
     {
