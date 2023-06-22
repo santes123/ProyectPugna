@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1.7
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 142397bd25cf70c4a9fe0c954934f343, type: 2}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.019136017, g: 0.009631307, b: 0.039147314, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -39307,7 +39307,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.4136154, y: 0.53800005}
   m_AnchorMax: {x: 0.614872, y: 0.6484722}
-  m_AnchoredPosition: {x: -5.307231, y: 46.559612}
+  m_AnchoredPosition: {x: -5.307232, y: 46.55957}
   m_SizeDelta: {x: 51.94232, y: -13.442917}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &908956557
@@ -46561,6 +46561,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5372266155816737306, guid: 40a2e3b5531703a439939290c57fdd75,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.1425781
       objectReference: {fileID: 0}
     - target: {fileID: 5372266155869649817, guid: 40a2e3b5531703a439939290c57fdd75,
         type: 3}
@@ -75788,8 +75793,8 @@ Camera:
   m_GameObject: {fileID: 1807862620}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -84390,8 +84395,7 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 64522215438127986, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ceddc97abfdd06647918f15b13cfac6c, type: 3}
 --- !u!4 &1994620241 stripped
 Transform:
