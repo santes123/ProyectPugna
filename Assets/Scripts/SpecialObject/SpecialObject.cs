@@ -291,4 +291,7 @@ public class SpecialObject : MonoBehaviour, IDamager
     {
         target.ReceiveDamage(damage);
     }
+
+    public void Attack() {
+    }
 }

@@ -13,6 +13,6 @@ public class AnimatorEvents : MonoBehaviour
     }
 
     void Hit() {
-    
+        GetComponentInParent<IDamager>().Attack();
     }
 }

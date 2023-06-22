@@ -286,4 +286,7 @@ public class Enemy : LivingEntity, IDamager
     {
         target.ReceiveDamage(damage);
     }
+
+    void IDamager.Attack() {
+    }
 }
