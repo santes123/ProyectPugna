@@ -23492,6 +23492,11 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: 0.043929514
       objectReference: {fileID: 0}
+    - target: {fileID: 6425302582542126146, guid: 8333b7168b916f6499042719b22336d3,
+        type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: db9bc54fa21264e438535d4088474efa, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8333b7168b916f6499042719b22336d3, type: 3}
 --- !u!1001 &529541065
@@ -47861,7 +47866,7 @@ PrefabInstance:
     - target: {fileID: 5372266155144137211, guid: 40a2e3b5531703a439939290c57fdd75,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1.7641602
+      value: -1.7640381
       objectReference: {fileID: 0}
     - target: {fileID: 5372266155691691152, guid: 40a2e3b5531703a439939290c57fdd75,
         type: 3}
@@ -47881,7 +47886,7 @@ PrefabInstance:
     - target: {fileID: 5372266155869649817, guid: 40a2e3b5531703a439939290c57fdd75,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -14.948914
+      value: -14.948975
       objectReference: {fileID: 0}
     - target: {fileID: 5372266155984536632, guid: 40a2e3b5531703a439939290c57fdd75,
         type: 3}
