@@ -73,4 +73,5 @@ public class PatrolBehavior : EnemyBehavior
     public override void EndBehavior() {
         animator.SetBool(inCombat, true);
     }
+
 }

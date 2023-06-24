@@ -13,6 +13,19 @@ public abstract class EnemyBehavior : MonoBehaviour
         animator = GetComponentInChildren<AnimatorEvents>().GetComponent<Animator>();
     }
 
+    public virtual void GotDamaged(Damage damage) {
+
+        if(!GetComponent<Rigidbody>()) {
+            Rigidbody temporalRb = gameObject.AddComponent<Rigidbody>();
+            temporalRb.useGravity = false;
+
+            // Obtener la dirección opuesta a la normal de la colisión
+
+            temporalRb.AddForce(damage.forceImpulse * 2.5f, ForceMode.Impulse);
+            Destroy(temporalRb, 0.5f);
+        }
+    }
+
     public abstract void UpdateAnimator();
     public abstract void ExecuteBehavior();
 

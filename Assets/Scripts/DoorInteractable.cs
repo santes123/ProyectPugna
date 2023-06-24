@@ -12,7 +12,7 @@ public class DoorInteractable : MonoBehaviour
     public void AccionarPuerta() {
         
         if(cerrada) {
-            animator.SetTrigger("Abrir");
+            animator.SetTrigger("Cerrar");
         } else {
             animator.SetTrigger("Abrir");
         }

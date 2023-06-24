@@ -12,8 +12,6 @@ public class InteractionReceiverExample : MonoBehaviour, IInteractable
     // GetComponent<IInteractable>.Interact(new Interaction(UnitType.player));
     //
 
-    
-
     public void Interact(Interaction interaction) {
         //Este metodo recibira la informacion de la interaccion y hara lo necesario segun esta informacion.
         UnitType unitType = interaction.source;

@@ -583,7 +583,6 @@ GameObject:
   - component: {fileID: 685503827910933019}
   - component: {fileID: 685503827910933021}
   - component: {fileID: 1035388279}
-  - component: {fileID: 685503827910933023}
   - component: {fileID: 685503827910933020}
   - component: {fileID: 1035388272}
   - component: {fileID: 1035388276}
@@ -594,8 +593,8 @@ GameObject:
   - component: {fileID: 1035388269}
   - component: {fileID: 1035388280}
   - component: {fileID: 1035388281}
-  - component: {fileID: -9157412108360670767}
   - component: {fileID: -4038961097283971837}
+  - component: {fileID: -7189729820995990493}
   m_Layer: 11
   m_Name: Player1
   m_TagString: Player
@@ -652,24 +651,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3, y: 2, z: 1}
   m_Center: {x: 0, y: 1.3, z: 0}
---- !u!114 &685503827910933023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 685503827910932999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df97e322b9ea83c4580ff3fcb2540874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  guns:
-  - {fileID: -1808990355760509555, guid: 7f2bdd1320a8acf4e9ddf8b0d0586850, type: 3}
-  - {fileID: 1650435551399097971, guid: c0c090533ad556349a3efc6352d9603b, type: 3}
-  weaponHold: {fileID: 685503827793138419}
-  startingGun: {fileID: -1808990355760509555, guid: 7f2bdd1320a8acf4e9ddf8b0d0586850,
-    type: 3}
 --- !u!114 &685503827910933020
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -682,7 +663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f70231168d467347989e743edd944d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 3.5
   crosshairs: {fileID: 0}
   boomerangController: {fileID: 6448492643328486304}
   invincible: 0
@@ -906,20 +887,6 @@ MonoBehaviour:
   manaRegenOnHitAmount: 5
   manaRegenParticlesPrefab: {fileID: 1579168213340724, guid: 4d9fffb8ef3735f4ba49b86de2dc9243,
     type: 3}
---- !u!114 &-9157412108360670767
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 685503827910932999}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670f8417d4db3c44baa49278efb835b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interaction:
-    source: 0
 --- !u!114 &-4038961097283971837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -937,6 +904,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2147483647
   shouldHitTriggers: 1
+--- !u!114 &-7189729820995990493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685503827910932999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb0b29ac6e9db834dbf93a0aa20c331f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interaction:
+    source: 0
+  areaOfEffect: {fileID: -4038961097283971837}
 --- !u!1 &940640490467063562
 GameObject:
   m_ObjectHideFlags: 0

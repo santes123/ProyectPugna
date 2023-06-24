@@ -34,4 +34,5 @@ public class ChaseBehavior : EnemyBehavior
     public override void UpdateAnimator() {
         animator.SetFloat(speed, agent.velocity.magnitude);
     }
+
 }

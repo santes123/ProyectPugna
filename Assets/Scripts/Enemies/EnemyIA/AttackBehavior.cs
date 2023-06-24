@@ -51,4 +51,9 @@ public class AttackBehavior : EnemyBehavior, IDamager
     public void DoDamage(IDamageable target, Damage damage) {
         target.ReceiveDamage(damage);
     }
+
+    public override void GotDamaged(Damage damage) {
+        nextAttack = Time.time + timeBetweenAttacks;
+        base.GotDamaged(damage);
+    }
 }

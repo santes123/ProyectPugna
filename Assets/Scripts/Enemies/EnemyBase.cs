@@ -13,6 +13,7 @@ public class EnemyBase : LivingEntity
         behaviorTree = GetComponent<Animator>();
         player = FindObjectOfType<PlayerStats>();
         OnDeath += Death;
+        
     }
 
     // Update is called once per frame
@@ -31,6 +32,13 @@ public class EnemyBase : LivingEntity
             behaviorTree.SetFloat(distanceToPlayer, Vector3.Distance(transform.position, player.transform.position));
         } else {
             behaviorTree.SetFloat(distanceToPlayer, 1000f);
+        }
+    }
+
+    public override void ReceiveDamage(Damage damage) {
+        base.ReceiveDamage(damage);
+        if(currentHealth > 0) {
+            GetComponent<EnemyBehavior>().GotDamaged(damage);
         }
     }
 

@@ -98,7 +98,14 @@ public class PlayerController : MonoBehaviour
     void Move(Vector3 movement)
     {
         player.SimpleMove(movement * speed);
-        animator.SetFloat("Speed", movement.magnitude);
+
+        Quaternion rotation = Quaternion.AngleAxis(Vector3.SignedAngle(transform.forward, Vector3.forward, Vector3.up) , Vector3.up);
+        Vector3 movementDirection = rotation * movement;
+        float vertical = movementDirection.z;
+        float horizontal = movementDirection.x;
+
+        animator.SetFloat("Vertical", vertical);
+        animator.SetFloat("Horizontal", horizontal);
     }
 
     void Point(Vector2 mousePosition)
