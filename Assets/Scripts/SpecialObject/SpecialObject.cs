@@ -50,7 +50,9 @@ public class SpecialObject : MonoBehaviour, IDamager
         rb = GetComponent<Rigidbody>();
         velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
         enemiesHited = new List<string>();
-        handPlace = GameObject.Find("hand_right").transform;
+        //cambiar por un metodo con mejor accesibilidad (usando algun script que tenga guardado la referencia)
+        handPlace = FindObjectOfType<UseAttractThrowSkill>().handPlace;
+        //handPlace = GameObject.Find("hand_right").transform;
         //fuerzaLanzamiento = fuerzaBase;
 
         //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
@@ -82,7 +84,8 @@ public class SpecialObject : MonoBehaviour, IDamager
             float rotacionZ = rotacionesActuales.z + velocidadRotacion * Time.deltaTime;
 
             // Actualizar las rotaciones del objeto
-            transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
+            //transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
+            transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionesActuales.z);
         }/*
         //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
         if (Input.GetMouseButtonDown(1))
@@ -110,6 +113,7 @@ public class SpecialObject : MonoBehaviour, IDamager
                 useSkil.onHand = true;
                 onHand = true;
                 GetComponent<BoxCollider>().enabled = false;
+                //GetComponent<MeshCollider>().enabled = false;
                 rb.useGravity = false;
                 //consumimos mana fijo por ahora
                 if (useSkil.finalManaCost > useSkil.maxManaCost)
