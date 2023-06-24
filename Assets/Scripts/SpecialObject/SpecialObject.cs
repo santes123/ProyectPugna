@@ -50,7 +50,9 @@ public class SpecialObject : MonoBehaviour, IDamager
         rb = GetComponent<Rigidbody>();
         velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
         enemiesHited = new List<string>();
-        handPlace = GameObject.Find("hand_right").transform;
+        //cambiar por un metodo con mejor accesibilidad (usando algun script que tenga guardado la referencia)
+        handPlace = FindObjectOfType<UseAttractThrowSkill>().handPlace;
+        //handPlace = GameObject.Find("hand_right").transform;
         //fuerzaLanzamiento = fuerzaBase;
 
         //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();

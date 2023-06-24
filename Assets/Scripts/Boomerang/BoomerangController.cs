@@ -85,7 +85,8 @@ public class BoomerangController : MonoBehaviour, IDamager
         //boomerangPlayer = GameObject.Find("Player").GetComponent<UseBoomerang>();
         boomerangPlayer = FindObjectOfType<UseBoomerang>();
         damageBoomerang = boomerangPlayer.damage;
-        handPlace = GameObject.Find("hand_right").transform;
+        //handPlace = GameObject.Find("hand_right").transform;
+        handPlace = FindObjectOfType<UseBoomerang>().handPlace;
     }
 
     // Actualización por fotograma
