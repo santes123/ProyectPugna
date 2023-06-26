@@ -415,7 +415,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             Destroy(temporalRb, 0.5f);
         }*/
     }
-    void DealDamageToEnemy(float damage)
+    public void DealDamageToEnemy(float damage)
     {
         // Calcula el daño infligido al enemigo y realiza las acciones necesarias
         if (floatingDamageTextPrefab != null)

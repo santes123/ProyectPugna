@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyBase : LivingEntity
 {
     PlayerStats player;
     Animator behaviorTree;
     // Start is called before the first frame update
+
+    //nuevas funcionalidades
+    private bool freeze = false;
+    private float freezeDuration;
     protected override void Start()
     {
         base.Start();
@@ -19,10 +24,26 @@ public class EnemyBase : LivingEntity
     // Update is called once per frame
     void Update()
     {
-        if(!(player != null)) {
-            player = FindObjectOfType<PlayerStats>();
+        if (freeze)
+        {
+            freezeDuration -= Time.deltaTime;
+            //debuffColdown.GetComponent<TextMeshPro>().text = freezeDuration.ToString("F1");
+            if (freezeDuration <= 0f)
+            {
+                freeze = false;
+                //debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
+                GetComponent<NavMeshAgent>().enabled = true;
+            }
         }
-        UpdateBehaviorTree();
+        //else
+        //{
+            if (!(player != null))
+            {
+                player = FindObjectOfType<PlayerStats>();
+            }
+            UpdateBehaviorTree();
+        //}
+
     }
 
     int distanceToPlayer = Animator.StringToHash("DistanceToPlayer");
@@ -44,5 +65,13 @@ public class EnemyBase : LivingEntity
 
     void Death() {
         behaviorTree.SetTrigger(isDead);
+    }
+
+    //nuevas funcionalidades
+    public void Freeze(float timeToFreeze)
+    {
+        freeze = true;
+        freezeDuration = timeToFreeze;
+        //debuffColdown.gameObject.transform.parent.gameObject.SetActive(true);
     }
 }

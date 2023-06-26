@@ -24,7 +24,7 @@ public class DashController : MonoBehaviour
 
     public float remainingTime = 0f;
     private List<float> cooldownTimers = new List<float>();
-
+    bool dashCanceled = false;
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -77,6 +77,7 @@ public class DashController : MonoBehaviour
         float elapsed = Time.time - dashStartTime;
         float t = Mathf.Clamp01(elapsed / dashDuration);
 
+        //raycast para evitar poder pasar muros muy anchos (CAMBIAR EL LAYER EN EL FUTURO)
         RaycastHit hit;
         if (Physics.Raycast(transform.position, transform.forward, out hit, dashDistance, obstacleLayer))
         {
@@ -88,13 +89,23 @@ public class DashController : MonoBehaviour
                 return;
             }
         }
-
-
+        //raycast para evitar que atraveise muros y puertas
+        RaycastHit hit2;
+        if (Physics.Raycast(transform.position, transform.forward, out hit2, dashDistance, obstacleLayer))
+        {
+            Debug.Log("collision con obstaculo");
+            isDashing = false;
+            dashCanceled = true;
+            //return;
+            //dashTargetPosition = transform.position;
+            //transform.position = dashStartPosition;
+            //dashTargetPosition = hit2.point;
+        }
         transform.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, t);
         //characterController.Move((dashTargetPosition - dashStartPosition) * t);
 
         //SUSTITUIR T POR "FLASHFURATION"
-        if (t >= 1f)
+        if (t >= 1f || dashCanceled)
         {
             isDashing = false;
             
@@ -114,8 +125,13 @@ public class DashController : MonoBehaviour
                 /*isDashing = false;
                 return;*/
             }
+            if (dashCanceled)
+            {
+                transform.position = dashStartPosition;
+            }
             // Eliminar el BoxCollider temporal
             Destroy(temporaryCollider);
+            dashCanceled = false;
         }
     }
     private void RegenerateCharges()

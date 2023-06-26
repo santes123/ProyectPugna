@@ -37,6 +37,7 @@ public class Enemy : LivingEntity, IDamager
     private Image debuggImage;
     [HideInInspector]
     public bool bounceOnEnemies = false;
+
     protected override void Start()
     {
         base.Start();

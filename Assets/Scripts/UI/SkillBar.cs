@@ -206,6 +206,8 @@ public class SkillBar : MonoBehaviour
             imageSkill[2].gameObject.SetActive(false);
 
             imageSkill[3].gameObject.SetActive(false);
+            //mostramos como activas las skills del boomerang escondiendo el hide
+            //habilidades.
         }
         else if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
         {

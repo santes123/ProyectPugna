@@ -166,7 +166,8 @@ public class BoomerangUpgradeController : MonoBehaviour
                 if (other.CompareTag("Enemy"))
                 {
                     Debug.Log("enemy" + damageable.gameObject.name + "freezed");
-                    damageable.gameObject.GetComponent<Enemy>().Freeze(freezeDuration);
+                    //damageable.gameObject.GetComponent<Enemy>().Freeze(freezeDuration);
+                    damageable.gameObject.GetComponent<EnemyBase>().Freeze(freezeDuration);
                     damageable.gameObject.GetComponent<NavMeshAgent>().enabled = false;
 
                     if (damageable != null)
@@ -195,6 +196,7 @@ public class BoomerangUpgradeController : MonoBehaviour
         normal.Normalize();
         damageObj.forceImpulse = normal * boomerangController.impulseForceWhenHit;
         boomerangController.DoDamage(damageable, damageObj);
+        boomerangController.DealDamageToEnemy(damageObj.amount);
     }
     private void DisableMode()
     {
