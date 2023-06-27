@@ -55,21 +55,42 @@ public class DashController : MonoBehaviour
         isDashing = true;
         dashStartPosition = transform.position;
         dashTargetPosition = transform.position + transform.forward * dashDistance;
-        dashStartTime = Time.time;
+        //dashStartTime = Time.time;
 
         // Desactivar los colliders u otras lógicas de colisión aquí.
         transform.GetComponent<CharacterController>().enabled = false;
         transform.GetComponent<PlayerController>().enabled = false;
-        currentCharges--;
-        lastDashTime = Time.time;
+        //currentCharges--;
+        //lastDashTime = Time.time;
         cooldownTimers.Add(lastDashTime);
 
         // Crear el BoxCollider temporal
         temporaryCollider = gameObject.AddComponent<BoxCollider>();
         temporaryCollider.isTrigger = true;
         temporaryCollider.size = characterController.bounds.size;
+
+        //verificamos si es posible hacer el dash
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.forward, out hit, dashDistance, obstacleLayer))
+        {
+            Debug.Log("collision con obstaculo");
+            //isDashing = false;
+            dashCanceled = true;
+            //return;
+            //dashTargetPosition = transform.position;
+            //transform.position = dashStartPosition;
+            //dashTargetPosition = hit2.point;
+        }
+        else
+        {
+            dashStartTime = Time.time;
+            currentCharges--;
+            lastDashTime = Time.time;
+            //instanciamos el prefab del dash
+            DashInstantiated = Instantiate(dashPrefabParticle, transform.position, transform.rotation);
+        }
         //instanciamos el prefab del dash
-        DashInstantiated = Instantiate(dashPrefabParticle, transform.position, transform.rotation);
+        //DashInstantiated = Instantiate(dashPrefabParticle, transform.position, transform.rotation);
     }
 
     private void PerformDash()
@@ -90,7 +111,7 @@ public class DashController : MonoBehaviour
             }
         }
         //raycast para evitar que atraveise muros y puertas
-        RaycastHit hit2;
+        /*RaycastHit hit2;
         if (Physics.Raycast(transform.position, transform.forward, out hit2, dashDistance, obstacleLayer))
         {
             Debug.Log("collision con obstaculo");
@@ -100,7 +121,7 @@ public class DashController : MonoBehaviour
             //dashTargetPosition = transform.position;
             //transform.position = dashStartPosition;
             //dashTargetPosition = hit2.point;
-        }
+        }*/
         transform.position = Vector3.Lerp(dashStartPosition, dashTargetPosition, t);
         //characterController.Move((dashTargetPosition - dashStartPosition) * t);
 
