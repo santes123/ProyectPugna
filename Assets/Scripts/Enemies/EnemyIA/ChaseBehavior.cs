@@ -30,9 +30,13 @@ public class ChaseBehavior : EnemyBehavior
         agent.SetDestination(transform.position);
     }
 
-
     public override void UpdateAnimator() {
         animator.SetFloat(speed, agent.velocity.magnitude);
+    }
+    //getter para el target
+    public Vector3 GetTarget()
+    {
+        return target.transform.position;
     }
 
 }

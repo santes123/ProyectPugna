@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,13 +13,23 @@ public class EnemyBase : LivingEntity
     //nuevas funcionalidades
     private bool freeze = false;
     private float freezeDuration;
+    private GameObject debuffColdown;
     protected override void Start()
     {
         base.Start();
         behaviorTree = GetComponent<Animator>();
         player = FindObjectOfType<PlayerStats>();
         OnDeath += Death;
-        
+
+        //buscamos el icono de debuff en la UI del enemigo
+        debuffColdown = FindChildObjectWithImageComponent(gameObject.transform, "Coldown");
+        if (debuffColdown != null)
+        {
+            //Debug.Log("OBJETO COLDOWN ENCONTRADO!");
+            //buff.gameObject.transform.parent.gameObject;
+            debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
+            //Debug.Log("icono coldown = " + debuffColdown.gameObject.name);
+        }
     }
 
     // Update is called once per frame
@@ -27,17 +38,19 @@ public class EnemyBase : LivingEntity
         if (freeze)
         {
             freezeDuration -= Time.deltaTime;
-            //debuffColdown.GetComponent<TextMeshPro>().text = freezeDuration.ToString("F1");
+            debuffColdown.GetComponent<TextMeshPro>().text = freezeDuration.ToString("F1");
+            //GetComponent<ChaseBehavior>().EndBehavior();
             if (freezeDuration <= 0f)
             {
                 freeze = false;
-                //debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
+                debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
                 GetComponent<NavMeshAgent>().enabled = true;
+                //GetComponent<ChaseBehavior>().StartBehavior();
             }
         }
         //else
         //{
-            if (!(player != null))
+            if (!(player != null) && GetComponent<NavMeshAgent>().isActiveAndEnabled)
             {
                 player = FindObjectOfType<PlayerStats>();
             }
@@ -72,6 +85,35 @@ public class EnemyBase : LivingEntity
     {
         freeze = true;
         freezeDuration = timeToFreeze;
-        //debuffColdown.gameObject.transform.parent.gameObject.SetActive(true);
+        debuffColdown.gameObject.transform.parent.gameObject.SetActive(true);
+        GetComponent<NavMeshAgent>().enabled = false;
+        //GetComponent<ChaseBehavior>().EndBehavior();
+    }
+    private GameObject FindChildObjectWithImageComponent(Transform parent, string childObjectName)
+    {
+        // Buscar en los hijos directos del objeto
+        foreach (Transform child in parent)
+        {
+            //Debug.Log("NOMBRE DEL GAMEOBJECT = " + child.gameObject.name);
+            TextMeshPro imageComponent = child.gameObject.GetComponent<TextMeshPro>();
+            if (imageComponent != null && child.gameObject.name == childObjectName)
+            {
+                //Debug.Log("NOMBRE DEL GAMEOBJECT ENCONTRADO = " + child.gameObject.name);
+                // Se encontró el objeto hijo con el componente Image y el nombre deseado
+                // Devolver el objeto padre en lugar del hijo
+                return child.gameObject/*.transform.parent.gameObject*/;
+            }
+
+            // Realizar una búsqueda recursiva en los hijos del objeto actual
+            GameObject foundObject = FindChildObjectWithImageComponent(child, childObjectName);
+            if (foundObject != null)
+            {
+                // Se encontró el objeto deseado en uno de los hijos
+                return foundObject;
+            }
+        }
+
+        // No se encontró ningún objeto hijo con el nombre y componente Image deseado
+        return null;
     }
 }

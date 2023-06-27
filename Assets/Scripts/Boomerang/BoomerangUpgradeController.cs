@@ -18,7 +18,7 @@ public class BoomerangUpgradeController : MonoBehaviour
     ManageBoomerangParticles boomerangParticlesManager;
 
     //Gameobject para manejar la particula cuando se activa un efecto
-    GameObject managerOfEffectGO;
+    public GameObject managerOfEffectGO;
 
     private bool effectActivated = false;
     private AreaOfEffect aoe;
@@ -36,7 +36,7 @@ public class BoomerangUpgradeController : MonoBehaviour
         //EVITAR QUE SE ACTIVEN LOS 2 A LA VEZ
         // Activa el modo de daño en área al presionar la tecla Q
         if (Input.GetKeyDown(KeyCode.Q) && currentChargesAreaDamage > 0 && !effectActivated)
-        {
+        {//si activas el efecto de daño en area
             currentChargesAreaDamage--;
             areaDamageMode = !areaDamageMode;
 
@@ -44,11 +44,22 @@ public class BoomerangUpgradeController : MonoBehaviour
             managerOfEffectGO = boomerangParticlesManager.InstantiateExplosionEffect();
             Debug.Log("Modo de daño en área: " + areaDamageMode);
             effectActivated = true;
+        }else if (Input.GetKeyDown(KeyCode.Q) && currentChargesAreaDamage > 0 && effectActivated && freezeMode)
+        {//si tienes activado el freeze, pero quieres cambiar a daño en area en su lugar
+            freezeMode = !freezeMode;
+            areaDamageMode = !areaDamageMode;
+            currentChargesFreeze++;
+            currentChargesAreaDamage--;
+
+            GameObject copy = managerOfEffectGO;
+            Destroy(copy, 0.2f);
+            managerOfEffectGO = null;
+            managerOfEffectGO = boomerangParticlesManager.InstantiateExplosionEffect();
         }
 
         // Activa el modo de congelamiento en área al presionar la tecla Z
         if (Input.GetKeyDown(KeyCode.Z) && currentChargesFreeze > 0 && !effectActivated)
-        {
+        {//si activas el modo freeze
             currentChargesFreeze--;
             freezeMode = !freezeMode;
 
@@ -56,6 +67,18 @@ public class BoomerangUpgradeController : MonoBehaviour
             managerOfEffectGO = boomerangParticlesManager.InstantiateFreezeEffect();
             Debug.Log("Modo de congelamiento en área: " + freezeMode);
             effectActivated = true;
+        }//si tienes activado el daño en area y quieres activar el freeze en su lugar
+        else if (Input.GetKeyDown(KeyCode.Z) && currentChargesFreeze > 0 && effectActivated && areaDamageMode)
+        {
+            freezeMode = !freezeMode;
+            areaDamageMode = !areaDamageMode;
+            currentChargesAreaDamage++;
+            currentChargesFreeze--;
+
+            GameObject copy = managerOfEffectGO;
+            Destroy(copy, 0.2f);
+            managerOfEffectGO = null;
+            managerOfEffectGO = boomerangParticlesManager.InstantiateFreezeEffect();
         }
         //verificamos si el efecto de particulas es diferente de null, y en el caso correcto, lo movemos a la posicion del boomerang
         if (managerOfEffectGO != null)
@@ -168,7 +191,8 @@ public class BoomerangUpgradeController : MonoBehaviour
                     Debug.Log("enemy" + damageable.gameObject.name + "freezed");
                     //damageable.gameObject.GetComponent<Enemy>().Freeze(freezeDuration);
                     damageable.gameObject.GetComponent<EnemyBase>().Freeze(freezeDuration);
-                    damageable.gameObject.GetComponent<NavMeshAgent>().enabled = false;
+                    //preguntarle a mauricio como hacer para detener el chasing del enemigo temporalmente
+                    //damageable.gameObject.GetComponent<NavMeshAgent>().enabled = false;
 
                     if (damageable != null)
                     {
@@ -181,8 +205,9 @@ public class BoomerangUpgradeController : MonoBehaviour
             Destroy(copy, 0.2f);
             managerOfEffectGO = null;
             effectActivated = false;
+            freezeMode = false;
         }
-        freezeMode = false;
+        
     }
     private void ApplyDamageToEnemy(LivingEntity damageable, int damage)
     {

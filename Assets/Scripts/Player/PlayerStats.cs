@@ -15,6 +15,7 @@ public class PlayerStats : LivingEntity, IInteractor
     UseAttractThrowSkill skillAttractThrow;
     BoomerangController boomerang;
     UseBoomerang playerBoomerang;
+    BoomerangUpgradeController boomerangUpgrades;
 
     [HideInInspector] public GameMode selectedMode;
     //[HideInInspector] public GameObject targetObject;
@@ -36,6 +37,7 @@ public class PlayerStats : LivingEntity, IInteractor
         boomerang = FindObjectOfType<BoomerangController>();
         //playerBoomerang = GameObject.Find("Player").GetComponent<UseBoomerang>();
         playerBoomerang = FindObjectOfType<UseBoomerang>();
+        boomerangUpgrades = FindObjectOfType<BoomerangUpgradeController>();
         mode = GameObject.Find("Mode").GetComponent<Text>();
 
         //inicializamos el mana
@@ -94,6 +96,10 @@ public class PlayerStats : LivingEntity, IInteractor
     }
     private void UseBoomerang()
     {
+        if (boomerangUpgrades.managerOfEffectGO != null)
+        {
+            boomerangUpgrades.managerOfEffectGO.SetActive(true);
+        }
         boomerangGO.SetActive(true);
         //para que no vuelva cuando acabe el specialThrow
         boomerangGO.GetComponent<BoomerangController>().isReturning = false;
@@ -122,6 +128,10 @@ public class PlayerStats : LivingEntity, IInteractor
     {
         if (boomerang.onHand)
         {
+            if (boomerangUpgrades.managerOfEffectGO != null)
+            {
+                boomerangUpgrades.managerOfEffectGO.SetActive(false);
+            }
             boomerangGO.SetActive(false);
         }/*else if ()
         {
@@ -148,6 +158,10 @@ public class PlayerStats : LivingEntity, IInteractor
     {
         if (boomerang.onHand)
         {
+            if (boomerangUpgrades.managerOfEffectGO != null)
+            {
+                boomerangUpgrades.managerOfEffectGO.SetActive(false);
+            }
             boomerangGO.SetActive(false);
         }
         else

@@ -310,6 +310,7 @@ public class BoomerangController : MonoBehaviour, IDamager
         if (other.CompareTag("Obstacle") && !isReturning && isFlying || other.CompareTag("Obstacle") && specialThrow ||
             other.CompareTag("Obstacle") && !isReturning && !isFlying && bouncing) // controlamos los rebotes multiples
         {
+            Debug.Log("obstaculo colisionado = " + other.gameObject.name);
             Debug.Log("collision con un obstaculo");
             onColdown = false;
             if (specialThrow)
@@ -327,7 +328,8 @@ public class BoomerangController : MonoBehaviour, IDamager
             Debug.Log("Obstacle");
             isFlying = false;
 
-            if (!bouncing)
+            //añadir condicion para evitar que atraviese el muro (usando el localTargetPosition, y que en el caso se quede en el suelo)
+            if (!bouncing && boomerangPlayer.localTargetPosition != Vector3.zero)
             {
                 Debug.Log("BOUNCING POR PRIMERA VEZ");
                 bouncing = true;

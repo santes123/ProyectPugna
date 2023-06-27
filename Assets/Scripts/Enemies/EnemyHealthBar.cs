@@ -11,25 +11,47 @@ public class EnemyHealthBar : MonoBehaviour
     public TextMeshProUGUI healthText;
     private float currentHealth;
     private float maxHealth;
-    private Enemy enemy;
-
+    //private Enemy enemy;
+    private EnemyBase enemy;
+    public Canvas canvas;
     private void Start()
     {
         //enemy = GameObject.Find("Player").GetComponent<PlayerStats>();
-        enemy = GetLastParent(this.gameObject).GetComponent<Enemy>();
-        //Debug.Log(GetLastParent(this.gameObject).name);
+        //enemy = GetLastParent(this.gameObject).GetComponent<Enemy>();
+        enemy = GetLastParent(gameObject).GetComponent<EnemyBase>();
+        //Debug.Log("lastparent = " + GetLastParent(this.gameObject).name);
+        Debug.Log("enemy name = " + enemy.gameObject.name);
         maxHealth = enemy.startingHealth;
         currentHealth = enemy.currentHealth;
     }
     void Update()
     {
-        healthText.text = enemy.currentHealth.ToString();
-        currentHealth = enemy.currentHealth;
-        healthBar.fillAmount = currentHealth / maxHealth;
+        if (enemy != null)
+        { 
+            Debug.Log("enemy = " + enemy.gameObject.name);
+            healthText.text = enemy.currentHealth.ToString();
+            currentHealth = enemy.currentHealth;
+            healthBar.fillAmount = currentHealth / maxHealth;
+        }
     }
-    public GameObject GetLastParent(GameObject go)
+    private void LateUpdate()
+    {
+        canvas.transform.LookAt(canvas.transform.position + Camera.main.transform.position);
+    }
+    /*public GameObject GetLastParent(GameObject go)
     {
         if (go.transform.parent == null)
+        {
+            return go;
+        }
+        else
+        {
+            return GetLastParent(go.transform.parent.gameObject);
+        }
+    }*/
+    public GameObject GetLastParent(GameObject go)
+    {
+        if (go.transform.parent == null || go.transform.parent.name == "_Enemies")
         {
             return go;
         }
