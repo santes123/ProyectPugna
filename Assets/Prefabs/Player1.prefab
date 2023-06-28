@@ -812,7 +812,7 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   chargeBar: {fileID: 0}
   distanceToEnd: 0
-  distancePerSecond: 8
+  distancePerSecond: 7
   expectedColdownTime: 2.5
   timing: {fileID: 0}
   startedTimeThrow: 0

@@ -61,6 +61,10 @@ public class UseBoomerang : MonoBehaviour
     [HideInInspector]
     public BoomerangController boomerangController;
     Animator animator;
+    private Vector3 lastEndPoint;
+    private bool variant = false;
+    Vector3 deflection = Vector3.zero;
+    float timeAcumulated = 0f;
     private void Awake()
     {
         playerStats = gameObject.GetComponent<PlayerStats>();
@@ -127,7 +131,7 @@ public class UseBoomerang : MonoBehaviour
             if (isButtonPressed)
             {
                 Debug.Log("BOOM = BUTTON PRESSED");
-                endPoint = CalculateEndPoint();
+                endPoint = CalculateEndPoint()/* + deflection.normalized*/;
                 timePressed = Time.time - startedTimePress;
                 if (timePressed <= 1.5f)
                 {
@@ -243,9 +247,20 @@ public class UseBoomerang : MonoBehaviour
                 lr.enabled = true;
                 //Vector3 mousePosition = GetMouseWorldPosition();
                 Vector3 targetPositionLine = boomerangController.gameObject.transform.position;
-
+                //actualizamos el startPoint para que la linea se dibuje correctamente (por culpa de que empieza a una distancia minima, el
+                //calculo se hace mal y hay que recalcular el startPoint)
+                if (Vector3.Distance(lr.GetPosition(1), GetMouseWorldPosition()) > 1)
+                {
+                    Debug.Log("superada la distancia");
+                    lr.positionCount = 0;
+                    lr.positionCount = 2;
+                    Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPointOriginal);
+                    startPoint = boomerangController.gameObject.transform.position + direction * minDistanceToLaunch;
+                    //endPoint = CalculateEndPoint();
+                }
                 lr.SetPosition(0, targetPositionLine);
                 lr.SetPosition(1, new Vector3(endPoint.x, 1f, endPoint.z));
+                Debug.Log("DISTANCIA ENTRE ENDPOINT LR Y ENDPOINT REAL = " + Vector3.Distance(lr.GetPosition(1), GetMouseWorldPosition()));
                 Debug.Log("posicion 0 lr = " + lr.GetPosition(0));
                 Debug.Log("posicion 1 lr = " + lr.GetPosition(1));
 
@@ -376,8 +391,10 @@ public class UseBoomerang : MonoBehaviour
     // Lanzar el Boomerang
     void Launch()
     {
-        targetPosition = CalculateEndPoint();
+        targetPosition = endPoint;
+        //targetPosition = CalculateEndPoint();
         boomerangController.isFlying = true;
+        timeAcumulated = 0f;
     }
     private Vector3 GetMouseWorldPosition()
     {
@@ -404,7 +421,16 @@ public class UseBoomerang : MonoBehaviour
     //calcular punto final de trayectoria
     private Vector3 CalculateEndPoint()
     {
-
+        //Vector3 endPointDirection = Vector3.Normalize(GetMouseWorldPosition() - endPoint);
+        /*Vector3 direction;
+        if (variant)
+        {
+            direction = Vector3.Normalize(GetMouseWorldPosition() - startPointOriginal);
+        }
+        else
+        {
+            direction = Vector3.Normalize(endPointDirection - startPointOriginal);
+        }*/
         Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPointOriginal);
         if (Vector3.Distance(startPointOriginal, endPoint) >= maxDistance)
         {
@@ -419,9 +445,22 @@ public class UseBoomerang : MonoBehaviour
             Vector3 displacement = direction * distancePerSecond;
             float pressDuration = Time.time - pressStartTime;
             Vector3 totalDisplacement = displacement * pressDuration;
-
+            //timeAcumulated += distancePerSecond;
             Vector3 finalPoint = startPoint + totalDisplacement;
             return finalPoint;
         }
     }
+    //funcion para arreglar el lineRenderer
+    /*private void RepaintLinerendereOnMaxDistanceSurpass(Vector3 currentEndPoint)
+    {
+        deflection = GetMouseWorldPosition();
+        Vector3 newDirection = Vector3.Normalize(deflection - boomerangController.transform.position);
+        Vector3 newDisplacement = newDirection * timeAcumulated;
+        lr.positionCount = 0;
+        lr.positionCount = 2;
+        lr.SetPosition(0, boomerangController.transform.position);
+        lr.SetPosition(1, startPointOriginal + newDisplacement);
+        lastEndPoint = currentEndPoint;
+        //deflection = Vector3.zero;
+    }*/
 }

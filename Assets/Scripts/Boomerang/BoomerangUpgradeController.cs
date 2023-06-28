@@ -33,7 +33,7 @@ public class BoomerangUpgradeController : MonoBehaviour
     }
     void Update()
     {
-        //EVITAR QUE SE ACTIVEN LOS 2 A LA VEZ
+        //SE PUEDE CAMBIAR ENTRE UNO Y OTRO, PERO SOLO SE MANTIENE UNO ACTIVO A LA VEZ
         // Activa el modo de daño en área al presionar la tecla Q
         if (Input.GetKeyDown(KeyCode.Q) && currentChargesAreaDamage > 0 && !effectActivated)
         {//si activas el efecto de daño en area

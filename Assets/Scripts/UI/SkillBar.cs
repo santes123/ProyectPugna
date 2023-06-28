@@ -34,6 +34,7 @@ public class SkillBar : MonoBehaviour
 
     float remainingColdownTime = 0f;
     float expectedBoomerangColdownTime;
+    //public GameObject skillBar;
 
     private void Start()
     {
@@ -53,11 +54,11 @@ public class SkillBar : MonoBehaviour
         {
             // Crear una instancia del prefab del cuadrado
             GameObject cuadrado = Instantiate(cuadradoPrefab, contenedor);
+            /*cuadrado.GetComponent<RectTransform>().sizeDelta = 
+                new Vector2(skillBar.GetComponent<RectTransform>().sizeDelta.x, skillBar.GetComponent<RectTransform>().sizeDelta.y);*/
             GameObject vertical_bar = Instantiate(barPrefab, contenedor);
             cuadrado.name = "Skill" + i;
 
-            
-            
             // Obtener la referencia a la imagen del cuadrado
             Image[] images = cuadrado.GetComponentsInChildren<Image>();
             Image imagenHabilidad = images[0];
