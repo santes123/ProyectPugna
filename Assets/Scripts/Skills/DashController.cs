@@ -51,8 +51,8 @@ public class DashController : MonoBehaviour
     }   
     private void StartDash()
     {
-        Debug.Log("Dashing...");
-        isDashing = true;
+        /*Debug.Log("Dashing...");
+        //isDashing = true;
         dashStartPosition = transform.position;
         dashTargetPosition = transform.position + transform.forward * dashDistance;
         //dashStartTime = Time.time;
@@ -67,7 +67,7 @@ public class DashController : MonoBehaviour
         // Crear el BoxCollider temporal
         temporaryCollider = gameObject.AddComponent<BoxCollider>();
         temporaryCollider.isTrigger = true;
-        temporaryCollider.size = characterController.bounds.size;
+        temporaryCollider.size = characterController.bounds.size;*/
 
         //verificamos si es posible hacer el dash
         RaycastHit hit;
@@ -75,7 +75,8 @@ public class DashController : MonoBehaviour
         {
             Debug.Log("collision con obstaculo");
             //isDashing = false;
-            dashCanceled = true;
+            //dashCanceled = true;
+
             //return;
             //dashTargetPosition = transform.position;
             //transform.position = dashStartPosition;
@@ -83,6 +84,24 @@ public class DashController : MonoBehaviour
         }
         else
         {
+            Debug.Log("Dashing...");
+            isDashing = true;
+            dashStartPosition = transform.position;
+            dashTargetPosition = transform.position + transform.forward * dashDistance;
+            //dashStartTime = Time.time;
+
+            // Desactivar los colliders u otras lógicas de colisión aquí.
+            transform.GetComponent<CharacterController>().enabled = false;
+            transform.GetComponent<PlayerController>().enabled = false;
+            //currentCharges--;
+            //lastDashTime = Time.time;
+            cooldownTimers.Add(lastDashTime);
+
+            // Crear el BoxCollider temporal
+            temporaryCollider = gameObject.AddComponent<BoxCollider>();
+            temporaryCollider.isTrigger = true;
+            temporaryCollider.size = characterController.bounds.size;
+
             dashStartTime = Time.time;
             currentCharges--;
             lastDashTime = Time.time;
