@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LivingEntity : MonoBehaviour, IDamageable
 {
@@ -82,6 +83,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
             gameManager.enemiesKilled.Add(gameObject.name);
             
         }
+        //GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
         GameObject.Destroy(gameObject);
     }
 

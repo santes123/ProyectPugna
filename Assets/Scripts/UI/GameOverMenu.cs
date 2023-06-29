@@ -16,7 +16,13 @@ public class GameOverMenu : MonoBehaviour
     }
     public void ResetGame()
     {
-        SceneManager.LoadScene("CameraScene");
+        //SceneManager.LoadScene("CameraScene");
+        //guardamos la escena anterior
+        GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
+        //usamos el menu manager para cambiar de escena y guardar la escena en una pila
+        //FindObjectOfType<MenuManager>().CambiarEscena(SceneManager.GetActiveScene().name);
+        MenuManager.CambiarEscena(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(GlobalVars.lastSceneBeforeDeadOrSave);
         //cargar desde el ultimo savepoint
         Debug.Log("cargando en el ultimo savepoint...");
     }

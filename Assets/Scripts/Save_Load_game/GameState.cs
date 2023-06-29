@@ -14,5 +14,6 @@ public class GameState
     public int score;
     public List<string> enemiesEliminated;
     public GameMode lastSelectedMode;
+    public string lastScenePlayed;
     //public List<string> collectedItems;
 }

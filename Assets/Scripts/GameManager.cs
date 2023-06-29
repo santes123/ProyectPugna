@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
             {
                 print("YOU ARE DEAD");
                 Cursor.visible = true;
+                GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
                 SceneManager.LoadScene("GameOverMenu");
             }
             //controlamos la tecla Escape para cuando el jugador quiere pausar
