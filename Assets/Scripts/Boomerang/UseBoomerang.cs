@@ -266,9 +266,10 @@ public class UseBoomerang : MonoBehaviour
 
                 //si colisiona con un muro el raycast, añadimos un tercer punto
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                Ray rayLR = new Ray(new Vector3(endPoint.x, 1f, endPoint.z), endPoint.normalized);
                 //PRIMER REBOTE
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
+                if (Physics.Raycast(ray, out RaycastHit hit)/* && Physics.Raycast(rayLR, out RaycastHit hit3, 0.5f)*/)
+                {//ADAPTAR EL SEGUNDO RAYCAST PARA QUE CAMBIE POSICION AL HITPOINT DEL PRIMERO CUANDO COLISIONE O ALGO ASI
                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
                     if (hit.collider.gameObject.CompareTag("Obstacle"))
                     {
