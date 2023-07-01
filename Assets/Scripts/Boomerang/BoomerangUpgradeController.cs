@@ -12,8 +12,10 @@ public class BoomerangUpgradeController : MonoBehaviour
     public bool freezeMode = false;
     public int damageOnAreaDamage = 3;
     public int damageOnFreeze = 1;
-    private int currentChargesAreaDamage;
-    private int currentChargesFreeze;
+    public int currentChargesAreaDamage;
+    public int maxChargesAreaDamage = 2;
+    public int currentChargesFreeze;
+    public int maxChargesFreeze = 2;
     BoomerangController boomerangController;
     ManageBoomerangParticles boomerangParticlesManager;
 
@@ -28,8 +30,8 @@ public class BoomerangUpgradeController : MonoBehaviour
         aoe = GetComponent<AreaOfEffect>();
         boomerangParticlesManager = GetComponent<ManageBoomerangParticles>();
         boomerangController = GetComponent<BoomerangController>();
-        currentChargesAreaDamage = 2;
-        currentChargesFreeze = 2;
+        currentChargesAreaDamage = maxChargesAreaDamage;
+        currentChargesFreeze = maxChargesFreeze;
     }
     void Update()
     {

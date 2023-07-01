@@ -86,6 +86,8 @@ public class PsychicBall : MonoBehaviour, IDamager
             damageObj.forceImpulse = normal * impulseForce;
             //usamos el metodo DoDamage de IDamager
             DoDamage(damageableObject, damageObj);
+            //destruimos la bola despues de golpear al enemigo
+            //Destroy(gameObject);
             //dejamos que rebote con otros enemigos
             other.GetComponent<Enemy>().bounceOnEnemies = true;
             enemyHitedReference = other.gameObject;

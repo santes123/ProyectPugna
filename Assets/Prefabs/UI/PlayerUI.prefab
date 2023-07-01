@@ -319,7 +319,6 @@ MonoBehaviour:
   barPrefab: {fileID: 8384819534793241605, guid: e6eef3ecf94aeda41bf0e2367103065e,
     type: 3}
   contenedor: {fileID: 5372266155691691152}
-  skillBar: {fileID: 5372266155691691375}
 --- !u!1 &5372266155108008882
 GameObject:
   m_ObjectHideFlags: 0
@@ -949,12 +948,6 @@ PrefabInstance:
 --- !u!224 &5372266155691691152 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7393673764226638575, guid: 6b9476439ef606f4793a82340e2aed13,
-    type: 3}
-  m_PrefabInstance: {fileID: 3176590830035136127}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5372266155691691375 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7393673764226638608, guid: 6b9476439ef606f4793a82340e2aed13,
     type: 3}
   m_PrefabInstance: {fileID: 3176590830035136127}
   m_PrefabAsset: {fileID: 0}

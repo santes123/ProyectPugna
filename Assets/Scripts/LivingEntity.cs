@@ -46,6 +46,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     }
     public virtual void ReceiveDamage(Damage damage)
     {
+        Debug.Log("damage recieved = " + damage.amount);
         health -= damage.amount;
         currentHealth = health;
         if (this.gameObject.GetComponent<PlayerController>())
