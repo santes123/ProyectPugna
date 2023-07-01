@@ -5,6 +5,7 @@ public struct Damage
     public UnitType source;
     public int amount;
     public TargetType targetType;
+    public Vector3 point;
     public Vector3 forceImpulse;
 }
 

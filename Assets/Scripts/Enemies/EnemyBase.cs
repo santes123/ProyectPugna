@@ -14,13 +14,13 @@ public class EnemyBase : LivingEntity
     private bool freeze = false;
     private float freezeDuration;
     private GameObject debuffColdown;
+    public GameObject damageVFX;
     protected override void Start()
     {
         base.Start();
         behaviorTree = GetComponent<Animator>();
         player = FindObjectOfType<PlayerStats>();
         OnDeath += Death;
-
         //buscamos el icono de debuff en la UI del enemigo
         debuffColdown = FindChildObjectWithImageComponent(gameObject.transform, "Coldown");
         if (debuffColdown != null)
@@ -73,6 +73,7 @@ public class EnemyBase : LivingEntity
         base.ReceiveDamage(damage);
         if(currentHealth > 0) {
             GetComponent<EnemyBehavior>().GotDamaged(damage);
+            Instantiate(damageVFX, transform.position + ((damage.point-transform.position) * 0.5f) ,Quaternion.identity);
         }
     }
 

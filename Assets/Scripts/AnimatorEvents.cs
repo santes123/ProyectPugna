@@ -4,18 +4,36 @@ using UnityEngine;
 
 public class AnimatorEvents : MonoBehaviour
 {
-    public AudioSource steps;
+    public AudioSource step1, step2;
     public AudioSource gotHit;
     public AudioSource dead;
+
+    bool leftStep;
+    float stepSoundInternalCooldown = 0.2f;
+    float lastStep; 
+    private void Start() {
+        lastStep = Time.time;
+    }
     void FootR() {
-        if(steps != null) {
-            steps.Play();
-        }
+        PlayStep();
     }
 
     void FootL() {
-        if(steps != null) {
-            steps.Play();
+        PlayStep();
+    }
+
+    void PlayStep() {
+        if(step1 != null && step2 != null) {
+            if(lastStep + stepSoundInternalCooldown < Time.time) {
+                Debug.Log("Step");
+                if(leftStep) {
+                    step1.Play();
+                } else {
+                    step2.Play();
+                }
+                lastStep = Time.time;
+                leftStep = !leftStep;
+            }
         }
     }
 

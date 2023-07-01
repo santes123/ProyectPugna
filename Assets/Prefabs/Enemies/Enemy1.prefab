@@ -4303,9 +4303,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 509fee9ea36a1c6468f37c2e2dbf7716, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steps: {fileID: 0}
+  step1: {fileID: 0}
+  step2: {fileID: 0}
   gotHit: {fileID: 0}
-  dead: {fileID: 6425302582542126146}
+  dead: {fileID: 0}
 --- !u!1 &4856287308558933048
 GameObject:
   m_ObjectHideFlags: 0
@@ -4355,7 +4356,7 @@ GameObject:
   - component: {fileID: 4856948748028598982}
   - component: {fileID: 4856948748028598981}
   - component: {fileID: 4856948748028598980}
-  - component: {fileID: 6425302582542126146}
+  - component: {fileID: 736466272743722025}
   m_Layer: 7
   m_Name: Enemy1
   m_TagString: Enemy
@@ -4417,6 +4418,8 @@ MonoBehaviour:
   startingMana: 0
   currentHealth: 0
   currentMana: 0
+  damageVFX: {fileID: 8031699067492803896, guid: 9c9b72b339e1fde4ea4f9b7a86ef7546,
+    type: 3}
 --- !u!195 &4856948748028598989
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4479,10 +4482,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87df371f3a5eae147a482d45d2bdc124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitToPlayer: {fileID: 736466272743722025}
   damage:
     source: 0
     amount: 2
     targetType: 0
+    point: {x: 0, y: 0, z: 0}
     forceImpulse: {x: 0, y: 0, z: 0}
 --- !u!114 &4856948748028598982
 MonoBehaviour:
@@ -4496,6 +4501,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf90fcdf1ddc7241bcc08171121887b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DeathVFX: {fileID: 6143467867895953418, guid: f4b7c079001efc34f9f041422b0e3212,
+    type: 3}
 --- !u!114 &4856948748028598981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4528,7 +4535,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!82 &6425302582542126146
+--- !u!82 &736466272743722025
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4538,7 +4545,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: db9bc54fa21264e438535d4088474efa, type: 3}
+  m_audioClip: {fileID: 8300000, guid: e9e50631517d4e447ab3637e0edb3ab8, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

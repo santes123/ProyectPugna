@@ -19,7 +19,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     {
         if (currentHealth == 0 && currentMana == 0)
         {
-            Debug.Log("actualizando stats...");
+            //Debug.Log("actualizando stats...");
             health = startingHealth;
             currentHealth = health;
 
@@ -82,7 +82,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
             gameManager.enemiesKilled.Add(gameObject.name);
             
         }
-        GameObject.Destroy(gameObject);
+        //GameObject.Destroy(gameObject);
     }
 
     public virtual void UseSkill(float manaCost)

@@ -84,8 +84,8 @@ public class CameraController : MonoBehaviour
                 player = FindObjectOfType<PlayerController>().GetComponent<Transform>();
                 targets.Add(player.GetComponent<Transform>());
                 targets.Add(FindObjectOfType<BoomerangController>().GetComponent<Transform>());
-                Debug.Log("player = " + player.name);
-                Debug.Log("targets count = " + targets.Count);
+                //Debug.Log("player = " + player.name);
+                //Debug.Log("targets count = " + targets.Count);
                 if (player != null) yield return null;
             }
         }

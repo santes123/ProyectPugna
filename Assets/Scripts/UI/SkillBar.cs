@@ -64,7 +64,7 @@ public class SkillBar : MonoBehaviour
             Image imagenHabilidad = images[0];
             imagenHabilidad.sprite = habilidades[i].imagen;
             imageSkill[i] = images[2];
-            Debug.Log("nombre del objetivo = " + imageSkill[i].gameObject.name);
+            //Debug.Log("nombre del objetivo = " + imageSkill[i].gameObject.name);
             coldownImages[i] = cuadrado.GetComponentsInChildren<Image>()[1];
             //imagen del coldown
             images[1].sprite = habilidades[i].imagen;
@@ -201,7 +201,7 @@ public class SkillBar : MonoBehaviour
     {
         if (player.selectedMode == PlayerStats.GameMode.Boomerang)
         {
-            Debug.Log("boomerang mode");
+            //Debug.Log("boomerang mode");
             imageSkill[0].gameObject.SetActive(true);
             imageSkill[1].gameObject.SetActive(false);
             imageSkill[2].gameObject.SetActive(false);
@@ -212,7 +212,7 @@ public class SkillBar : MonoBehaviour
         }
         else if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
         {
-            Debug.Log("ATRAACT MODE");
+            //Debug.Log("ATRAACT MODE");
             imageSkill[1].gameObject.SetActive(true);
             imageSkill[0].gameObject.SetActive(false);
             imageSkill[2].gameObject.SetActive(false);
@@ -221,7 +221,7 @@ public class SkillBar : MonoBehaviour
         }
         else if (player.selectedMode == PlayerStats.GameMode.PyshicShot)
         {
-            Debug.Log("PSYQUIC MODE");
+            //Debug.Log("PSYQUIC MODE");
             imageSkill[2].gameObject.SetActive(true);
             imageSkill[0].gameObject.SetActive(false);
             imageSkill[1].gameObject.SetActive(false);
@@ -230,7 +230,7 @@ public class SkillBar : MonoBehaviour
         }
         else
         {
-            Debug.Log("nada de nada");
+            //Debug.Log("nada de nada");
             imageSkill[0].gameObject.SetActive(false);
             imageSkill[1].gameObject.SetActive(false);
             imageSkill[2].gameObject.SetActive(false);
