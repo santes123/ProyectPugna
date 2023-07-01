@@ -86,8 +86,8 @@ public class UseBoomerang : MonoBehaviour
         lr.useWorldSpace = true;
 
         mainCamera = FindObjectOfType<CameraController>().GetComponent<Camera>();
-        timing = GameObject.Find("TimeToComeBack").GetComponent<Text>();
-        timePressedText = GameObject.Find("TimePressed").GetComponent<Text>();
+        //timing = GameObject.Find("TimeToComeBack").GetComponent<Text>();
+        //timePressedText = GameObject.Find("TimePressed").GetComponent<Text>();
     }
     // Actualización por fotograma
     void Update()
@@ -98,7 +98,7 @@ public class UseBoomerang : MonoBehaviour
         {
             if (boomerangController.onColdown)
             {
-                timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
+                //timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
             }
             Debug.Log("onHand = " + boomerangController.onHand);
             Debug.Log("isFlying = " + boomerangController.isFlying);
@@ -133,10 +133,10 @@ public class UseBoomerang : MonoBehaviour
                 Debug.Log("BOOM = BUTTON PRESSED");
                 endPoint = CalculateEndPoint()/* + deflection.normalized*/;
                 timePressed = Time.time - startedTimePress;
-                if (timePressed <= 1.5f)
+                /*if (timePressed <= 1.5f)
                 {
                     timePressedText.text = "TimePressed = " + timePressed.ToString();
-                }
+                }*/
 
             }
             //atraer boomerang con poder mental

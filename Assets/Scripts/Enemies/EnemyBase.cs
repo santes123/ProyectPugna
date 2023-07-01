@@ -14,6 +14,7 @@ public class EnemyBase : LivingEntity
     private bool freeze = false;
     private float freezeDuration;
     private GameObject debuffColdown;
+    public bool bounceOnEnemies = false;
     protected override void Start()
     {
         base.Start();
@@ -115,5 +116,38 @@ public class EnemyBase : LivingEntity
 
         // No se encontró ningún objeto hijo con el nombre y componente Image deseado
         return null;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy") && bounceOnEnemies)
+        {
+            MakeDamageAndPushEnemy(other);
+        }
+    }
+    public void MakeDamageAndPushEnemy(Collider other)
+    {
+        //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
+        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            print("collision con el enemigo");
+            Damage damageObj = new Damage();
+            damageObj.amount = 0;
+            damageObj.source = UnitType.Player;
+            damageObj.targetType = TargetType.Single;
+
+            // Obtener la direccion opuesta a la normal de la colision
+            Vector3 normal = other.transform.position - transform.position;
+            normal.y = 0;
+            normal.Normalize();
+            damageObj.forceImpulse = normal * 5f;
+            //llamamos al metodo de la interfaz
+            DoDamage(damageableObject, damageObj);
+            //damageableObject.ReceiveDamage(damageObj);
+        }
+    }
+    public void DoDamage(IDamageable target, Damage damage)
+    {
+        target.ReceiveDamage(damage);
     }
 }

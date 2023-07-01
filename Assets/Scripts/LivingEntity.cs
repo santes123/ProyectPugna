@@ -46,13 +46,28 @@ public class LivingEntity : MonoBehaviour, IDamageable
     }
     public virtual void ReceiveDamage(Damage damage)
     {
-        Debug.Log("damage recieved = " + damage.amount);
-        health -= damage.amount;
-        currentHealth = health;
-        if (this.gameObject.GetComponent<PlayerController>())
+        //verificamos si el jugador es invencible
+        if (gameObject.GetComponent<PlayerController>())
+        {
+            if (!gameObject.GetComponent<PlayerController>().invincible) {
+                Debug.Log("damage recieved = " + damage.amount);
+                health -= damage.amount;
+                currentHealth = health;
+                gameManager.hpText.text = currentHealth.ToString();
+            }
+
+        }
+        else
+        {
+            Debug.Log("damage recieved = " + damage.amount);
+            health -= damage.amount;
+            currentHealth = health;
+        }
+
+        /*if (this.gameObject.GetComponent<PlayerController>())
         {
             gameManager.hpText.text = currentHealth.ToString();
-        }
+        }*/
         if (health <= 0 && !dead)
         {
             Die();
