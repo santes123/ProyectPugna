@@ -15,13 +15,13 @@ public class EnemyBase : LivingEntity
     private float freezeDuration;
     private GameObject debuffColdown;
     public bool bounceOnEnemies = false;
+    public GameObject damageVFX;
     protected override void Start()
     {
         base.Start();
         behaviorTree = GetComponent<Animator>();
         player = FindObjectOfType<PlayerStats>();
         OnDeath += Death;
-
         //buscamos el icono de debuff en la UI del enemigo
         debuffColdown = FindChildObjectWithImageComponent(gameObject.transform, "Coldown");
         if (debuffColdown != null)
@@ -74,6 +74,7 @@ public class EnemyBase : LivingEntity
         base.ReceiveDamage(damage);
         if(currentHealth > 0) {
             GetComponent<EnemyBehavior>().GotDamaged(damage);
+            Instantiate(damageVFX, transform.position + ((damage.point-transform.position) * 0.5f) ,Quaternion.identity);
         }
     }
 
@@ -100,21 +101,21 @@ public class EnemyBase : LivingEntity
             if (imageComponent != null && child.gameObject.name == childObjectName)
             {
                 //Debug.Log("NOMBRE DEL GAMEOBJECT ENCONTRADO = " + child.gameObject.name);
-                // Se encontró el objeto hijo con el componente Image y el nombre deseado
+                // Se encontrï¿½ el objeto hijo con el componente Image y el nombre deseado
                 // Devolver el objeto padre en lugar del hijo
                 return child.gameObject/*.transform.parent.gameObject*/;
             }
 
-            // Realizar una búsqueda recursiva en los hijos del objeto actual
+            // Realizar una bï¿½squeda recursiva en los hijos del objeto actual
             GameObject foundObject = FindChildObjectWithImageComponent(child, childObjectName);
             if (foundObject != null)
             {
-                // Se encontró el objeto deseado en uno de los hijos
+                // Se encontrï¿½ el objeto deseado en uno de los hijos
                 return foundObject;
             }
         }
 
-        // No se encontró ningún objeto hijo con el nombre y componente Image deseado
+        // No se encontrï¿½ ningï¿½n objeto hijo con el nombre y componente Image deseado
         return null;
     }
     private void OnTriggerEnter(Collider other)
@@ -126,7 +127,7 @@ public class EnemyBase : LivingEntity
     }
     public void MakeDamageAndPushEnemy(Collider other)
     {
-        //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
+        //HACEMOS DAï¿½O AL ENEMIGO MEDIANTE LA INTERFAZ
         IDamageable damageableObject = other.GetComponent<IDamageable>();
         if (damageableObject != null)
         {

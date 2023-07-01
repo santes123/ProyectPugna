@@ -133,7 +133,7 @@ public class SpecialObject : MonoBehaviour, IDamager
         }
         else
         {
-            Debug.Log("No tienes suficiente mana para seguir!");
+            //Debug.Log("No tienes suficiente mana para seguir!");
         }
         //LANZAMIENTO
         /*if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)

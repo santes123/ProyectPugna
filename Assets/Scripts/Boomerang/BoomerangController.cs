@@ -263,10 +263,10 @@ public class BoomerangController : MonoBehaviour, IDamager
     // Detectar colisiones
     void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("EL BOOMERANG COLISIONO CON = " + collision.gameObject.name);
+       // Debug.Log("EL BOOMERANG COLISIONO CON = " + collision.gameObject.name);
         if (collision.gameObject.CompareTag("Player") && !isFlying || collision.gameObject.CompareTag("Player") && isFlying && isReturning)
         {
-            Debug.Log("Player");
+         //   Debug.Log("Player");
             rb.useGravity = false;
             GetComponent<Collider>().isTrigger = true;
             onHand = true;
@@ -274,7 +274,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("EL BOOMERANG HIZO TRIGGER CON = " + other.gameObject.name);
+       // Debug.Log("EL BOOMERANG HIZO TRIGGER CON = " + other.gameObject.name);
         if (other.CompareTag("Enemy") && !onHand && isFlying && !boomerangUpgradeController.areaDamageMode 
             || other.CompareTag("Enemy") && !onHand && bouncing && !boomerangUpgradeController.areaDamageMode ||
             other.CompareTag("Enemy") && !onHand && specialThrow)
@@ -310,8 +310,8 @@ public class BoomerangController : MonoBehaviour, IDamager
         if (other.CompareTag("Obstacle") && !isReturning && isFlying || other.CompareTag("Obstacle") && specialThrow ||
             other.CompareTag("Obstacle") && !isReturning && !isFlying && bouncing) // controlamos los rebotes multiples
         {
-            Debug.Log("obstaculo colisionado = " + other.gameObject.name);
-            Debug.Log("collision con un obstaculo");
+            //Debug.Log("obstaculo colisionado = " + other.gameObject.name);
+            //Debug.Log("collision con un obstaculo");
             onColdown = false;
             if (specialThrow)
             {
@@ -325,7 +325,7 @@ public class BoomerangController : MonoBehaviour, IDamager
                 GetComponent<Rigidbody>().useGravity = true;
 
             }
-            Debug.Log("Obstacle");
+            //Debug.Log("Obstacle");
             isFlying = false;
 
             //añadir condicion para evitar que atraviese el muro (usando el localTargetPosition, y que en el caso se quede en el suelo)
@@ -391,6 +391,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             normal.y = 0;
             normal.Normalize();
             damageObj.forceImpulse = normal * impulseForceWhenHit;
+            damageObj.point = transform.position;
             //llamamos al metodo de la interfaz
             DoDamage(damageableObject, damageObj);
             //damageableObject.ReceiveDamage(damageObj);

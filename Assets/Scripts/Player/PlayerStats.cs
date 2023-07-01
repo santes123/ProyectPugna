@@ -80,7 +80,7 @@ public class PlayerStats : LivingEntity, IInteractor
 
     void Update()
     {
-        Debug.Log("onhand specialobject = " + skillAttractThrow.onHand);
+        //Debug.Log("onhand specialobject = " + skillAttractThrow.onHand);
         if (Input.GetKeyDown(boomerangMode))
         {
             UseBoomerang();

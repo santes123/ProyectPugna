@@ -9,7 +9,7 @@ public class AttackBehavior : EnemyBehavior, IDamager
 
     PlayerStats target;
     int attack = Animator.StringToHash("Attack");
-
+    public AudioSource hitToPlayer;
     public override void StartBehavior() {
         agent.speed = 0;
         target = FindObjectOfType<PlayerStats>();
@@ -49,6 +49,7 @@ public class AttackBehavior : EnemyBehavior, IDamager
     }
 
     public void DoDamage(IDamageable target, Damage damage) {
+        hitToPlayer.Play();
         target.ReceiveDamage(damage);
     }
 

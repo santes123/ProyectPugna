@@ -92,19 +92,21 @@ public class UseBoomerang : MonoBehaviour
     // Actualización por fotograma
     void Update()
     {
-        Debug.Log(playerStats.selectedMode);
-        Debug.Log(PlayerStats.GameMode.Boomerang);
+        //Debug.Log(playerStats.selectedMode);
+        //Debug.Log(PlayerStats.GameMode.Boomerang);
         if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
         {
             if (boomerangController.onColdown)
             {
                 //timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
             }
+            /*
             Debug.Log("onHand = " + boomerangController.onHand);
             Debug.Log("isFlying = " + boomerangController.isFlying);
             Debug.Log("specialThrow = " + boomerangController.specialThrow);
             //SE CALCULA MAL EL ISRETURNING Y ESTA A TRUE, POR ESO NO LANZA
             Debug.Log("isReturning = " + boomerangController.isReturning);
+            */
             //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
             if (Input.GetMouseButtonDown(0) && boomerangController.onHand && !boomerangController.isFlying && !boomerangController.specialThrow && 
                 !boomerangController.isReturning)

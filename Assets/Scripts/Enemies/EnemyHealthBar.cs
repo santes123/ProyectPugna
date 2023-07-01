@@ -20,7 +20,7 @@ public class EnemyHealthBar : MonoBehaviour
         //enemy = GetLastParent(this.gameObject).GetComponent<Enemy>();
         enemy = GetLastParent(gameObject).GetComponent<EnemyBase>();
         //Debug.Log("lastparent = " + GetLastParent(this.gameObject).name);
-        Debug.Log("enemy name = " + enemy.gameObject.name);
+        //Debug.Log("enemy name = " + enemy.gameObject.name);
         maxHealth = enemy.startingHealth;
         currentHealth = enemy.currentHealth;
     }
@@ -28,7 +28,7 @@ public class EnemyHealthBar : MonoBehaviour
     {
         if (enemy != null)
         { 
-            Debug.Log("enemy = " + enemy.gameObject.name);
+            //Debug.Log("enemy = " + enemy.gameObject.name);
             healthText.text = enemy.currentHealth.ToString();
             currentHealth = enemy.currentHealth;
             healthBar.fillAmount = currentHealth / maxHealth;

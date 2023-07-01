@@ -20,7 +20,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     {
         if (currentHealth == 0 && currentMana == 0)
         {
-            Debug.Log("actualizando stats...");
+            //Debug.Log("actualizando stats...");
             health = startingHealth;
             currentHealth = health;
 
@@ -71,7 +71,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
         if (health <= 0 && !dead)
         {
             Die();
-            //añadir enemigos a la lista de muertos
+            //aï¿½adir enemigos a la lista de muertos
             if (this.GetComponent<Enemy>())
             {
                 string name = this.GetComponent<Enemy>().name;
@@ -100,7 +100,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
             
         }
         //GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
-        GameObject.Destroy(gameObject);
+        //GameObject.Destroy(gameObject);
     }
 
     public virtual void UseSkill(float manaCost)

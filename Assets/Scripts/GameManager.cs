@@ -143,9 +143,9 @@ public class GameManager : MonoBehaviour
     }*/
     public void _LoadData()
     {
-        Debug.Log("loading data...");
+        //Debug.Log("loading data...");
         //GameData.Init();
-        Debug.Log("GAMEDATA = " + GameData.Data.PlayerData.currentPlayerHealth);
+        //Debug.Log("GAMEDATA = " + GameData.Data.PlayerData.currentPlayerHealth);
         playerData = GameData.Data.PlayerData;
         if (playerData.currentPlayerHealth > 0)
         {
@@ -200,7 +200,7 @@ public class GameManager : MonoBehaviour
  
                 if (player != null) yield return new WaitForSeconds(0.5f);
                 _LoadData();
-                Debug.Log("player = " + player.name);
+                //Debug.Log("player = " + player.name);
                 playable = true;
             }
         }

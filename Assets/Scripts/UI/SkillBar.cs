@@ -59,7 +59,7 @@ public class SkillBar : MonoBehaviour
         coldowns = new Text[habilidades.Length];
         imageSkillSelector = new Image[habilidades.Length];
         hideSkillImage = new Image[habilidades.Length];
-        // Crear los cuadrados de habilidad dinámicamente
+        // Crear los cuadrados de habilidad dinï¿½micamente
         for (int i = 0; i < habilidades.Length; i++)
         {
             // Crear una instancia del prefab del cuadrado
@@ -75,6 +75,8 @@ public class SkillBar : MonoBehaviour
             imagenHabilidad.sprite = habilidades[i].imagen;
             imageSkillSelector[i] = images[2];
             Debug.Log("nombre del objetivo = " + imageSkillSelector[i].gameObject.name);
+            imageSkillSelector[i] = images[2];
+            //Debug.Log("nombre del objetivo = " + imageSkill[i].gameObject.name);
             coldownImages[i] = cuadrado.GetComponentsInChildren<Image>()[1];
             //imagen del coldown
             images[1].sprite = habilidades[i].imagen;
@@ -219,7 +221,7 @@ public class SkillBar : MonoBehaviour
     {
         if (player.selectedMode == PlayerStats.GameMode.Boomerang)
         {
-            Debug.Log("boomerang mode");
+            //Debug.Log("boomerang mode");
             imageSkillSelector[0].gameObject.SetActive(true);
             imageSkillSelector[1].gameObject.SetActive(false);
             imageSkillSelector[2].gameObject.SetActive(false);
@@ -300,7 +302,7 @@ public class SkillBar : MonoBehaviour
         }
         else
         {
-            Debug.Log("nada de nada");
+            //Debug.Log("nada de nada");
             imageSkillSelector[0].gameObject.SetActive(false);
             imageSkillSelector[1].gameObject.SetActive(false);
             imageSkillSelector[2].gameObject.SetActive(false);
