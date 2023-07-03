@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PLAYABLE_LEVELS/Level 2 City.unity
     guid: ce64ae9dd9f60e448ad3a70521a910ab
+  - enabled: 1
+    path: Assets/Scenes/MENUS/MainMenu.unity
+    guid: 44046943b49f202459ea82ed6e066478
   - enabled: 0
     path: Assets/Polygon Arsenal/Demo/Scenes/Combat/PolyAura.unity
     guid: 5dcf687eb68d33740bf535209c33ef71
