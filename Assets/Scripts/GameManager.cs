@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
             {
                 print("YOU ARE DEAD");
                 Cursor.visible = true;
+                GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
                 SceneManager.LoadScene("GameOverMenu");
             }
             //controlamos la tecla Escape para cuando el jugador quiere pausar
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log("PAUSE ON");
                 Time.timeScale = 0f;
                 onPause = true;
+                Cursor.visible = true;
                 pauseMenuUI.SetActive(true);
                 //deshabilitamos los scripts que molestan
                 FindObjectOfType<Crosshairs>().enabled = false;
@@ -108,8 +110,13 @@ public class GameManager : MonoBehaviour
                     FindObjectOfType<BoomerangUpgradeController>().enabled = true;
                 }
                 Time.timeScale = 1f;
-                onPause = false;
+                Cursor.visible = false;
+                //DESACTIVAMOS LOS PANELES SETTINGS Y CONTROLS
+                GeneralUIFunctions[] elementos = pauseMenuUI.GetComponentsInChildren<GeneralUIFunctions>(true);
+                elementos[0].gameObject.SetActive(false);
+                elementos[1].gameObject.SetActive(false);
                 pauseMenuUI.SetActive(false);
+                onPause = false;
             }
         }
 

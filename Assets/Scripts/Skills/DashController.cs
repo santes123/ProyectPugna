@@ -13,7 +13,7 @@ public class DashController : MonoBehaviour
     private Vector3 dashStartPosition;
     private Vector3 dashTargetPosition;
     private float dashStartTime;
-    private int currentCharges;
+    public int currentCharges;
     private float lastDashTime;
 
     public LayerMask obstacleLayer;

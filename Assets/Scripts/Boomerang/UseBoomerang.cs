@@ -86,8 +86,8 @@ public class UseBoomerang : MonoBehaviour
         lr.useWorldSpace = true;
 
         mainCamera = FindObjectOfType<CameraController>().GetComponent<Camera>();
-        timing = GameObject.Find("TimeToComeBack").GetComponent<Text>();
-        timePressedText = GameObject.Find("TimePressed").GetComponent<Text>();
+        //timing = GameObject.Find("TimeToComeBack").GetComponent<Text>();
+        //timePressedText = GameObject.Find("TimePressed").GetComponent<Text>();
     }
     // Actualización por fotograma
     void Update()
@@ -98,7 +98,7 @@ public class UseBoomerang : MonoBehaviour
         {
             if (boomerangController.onColdown)
             {
-                timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
+                //timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
             }
             /*
             Debug.Log("onHand = " + boomerangController.onHand);
@@ -135,10 +135,10 @@ public class UseBoomerang : MonoBehaviour
                 Debug.Log("BOOM = BUTTON PRESSED");
                 endPoint = CalculateEndPoint()/* + deflection.normalized*/;
                 timePressed = Time.time - startedTimePress;
-                if (timePressed <= 1.5f)
+                /*if (timePressed <= 1.5f)
                 {
                     timePressedText.text = "TimePressed = " + timePressed.ToString();
-                }
+                }*/
 
             }
             //atraer boomerang con poder mental
@@ -268,9 +268,10 @@ public class UseBoomerang : MonoBehaviour
 
                 //si colisiona con un muro el raycast, añadimos un tercer punto
                 Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                Ray rayLR = new Ray(new Vector3(endPoint.x, 1f, endPoint.z), endPoint.normalized);
                 //PRIMER REBOTE
-                if (Physics.Raycast(ray, out RaycastHit hit))
-                {
+                if (Physics.Raycast(ray, out RaycastHit hit)/* && Physics.Raycast(rayLR, out RaycastHit hit3, 0.5f)*/)
+                {//ADAPTAR EL SEGUNDO RAYCAST PARA QUE CAMBIE POSICION AL HITPOINT DEL PRIMERO CUANDO COLISIONE O ALGO ASI
                     Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
                     if (hit.collider.gameObject.CompareTag("Obstacle"))
                     {

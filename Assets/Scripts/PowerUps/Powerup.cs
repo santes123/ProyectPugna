@@ -56,9 +56,12 @@ public class Powerup : MonoBehaviour
 
             Collider collider = GetComponent<Collider>();
             Renderer render = GetComponentInChildren<Renderer>();
+            ParticleSystem[] particles = GetComponentsInChildren<ParticleSystem>();
             //Destroy(gameObject);
             Destroy(collider);
             Destroy(render);
+            Destroy(particles[0]);
+            Destroy(particles[1]);
         }
     }
 

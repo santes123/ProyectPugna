@@ -9,14 +9,29 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/MainMenu.unity
+    path: Assets/Scenes/MENUS/SettingsMenu.unity
     guid: 0a5afc0c24650134499283a76100ec8c
   - enabled: 1
-    path: Assets/Scenes/CameraScene.unity
+    path: Assets/Scenes/PLAYABLE_LEVELS/CameraScene.unity
     guid: 7e373925c863919458d059fd0da42637
   - enabled: 1
-    path: Assets/Scenes/GameOverMenu.unity
+    path: Assets/Scenes/MENUS/GameOverMenu.unity
     guid: 9016f10d0961a2144a0b8ce36213e454
+  - enabled: 1
+    path: Assets/Scenes/MENUS/CreditsScene.unity
+    guid: 7dbc1f61bbd3cf342af040708d29278c
+  - enabled: 1
+    path: Assets/Scenes/MENUS/KeybindingsScene.unity
+    guid: b09052c295e2678499abb5d475eb91d1
+  - enabled: 1
+    path: Assets/Scenes/PLAYABLE_LEVELS/Level 1 Laboratory.unity
+    guid: edeacd817d6918246a2634da1ffb8c59
+  - enabled: 1
+    path: Assets/Scenes/PLAYABLE_LEVELS/Level 2 City.unity
+    guid: ce64ae9dd9f60e448ad3a70521a910ab
+  - enabled: 1
+    path: Assets/Scenes/MENUS/MainMenu.unity
+    guid: 44046943b49f202459ea82ed6e066478
   - enabled: 0
     path: Assets/Polygon Arsenal/Demo/Scenes/Combat/PolyAura.unity
     guid: 5dcf687eb68d33740bf535209c33ef71

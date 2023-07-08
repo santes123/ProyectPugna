@@ -37,11 +37,14 @@ public class PsychicBall : MonoBehaviour, IDamager
             Debug.Log("Enemy name = " + other.gameObject.name);
             for (int i = 0; i < enemiesHited.Count; i++)
             {
+                Debug.Log("enemyHitedName = " + enemiesHited[i].name);
+                Debug.Log("enemyHitedNameCollision = " + other.gameObject.name);
                 if (enemiesHited[i].name == other.gameObject.name)
                 {
                     enemyHited = true;
                 }
             }
+            Debug.Log("enemyHited = " + enemyHited);
             if (!enemyHited)
             {
                 MakeDamageToEnemyAndPush(other, damage);
@@ -58,13 +61,13 @@ public class PsychicBall : MonoBehaviour, IDamager
             Destroy(this.gameObject);
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    /*private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Enemy name = " + collision.gameObject.name);
         }
-    }
+    }*/
     void MakeDamageToEnemyAndPush(Collider other, int damage)
     {
         //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
@@ -86,8 +89,10 @@ public class PsychicBall : MonoBehaviour, IDamager
             damageObj.forceImpulse = normal * impulseForce;
             //usamos el metodo DoDamage de IDamager
             DoDamage(damageableObject, damageObj);
+            //destruimos la bola despues de golpear al enemigo
+            //Destroy(gameObject);
             //dejamos que rebote con otros enemigos
-            other.GetComponent<Enemy>().bounceOnEnemies = true;
+            other.GetComponent<EnemyBase>().bounceOnEnemies = true;
             enemyHitedReference = other.gameObject;
             StartCoroutine(EnemyPushEnemy());
             //damageableObject.ReceiveDamage(damageObj);

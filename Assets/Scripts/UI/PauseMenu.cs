@@ -2,21 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
     public GameObject pauseMenuUI;
     GameManager gameManager;
-    public Canvas targetCanvas; // El Canvas en el que se encuentran los elementos
-    public RectTransform targetElement; // El elemento del Canvas que deseas verificar
+    //public Canvas targetCanvas; // El Canvas en el que se encuentran los elementos
+    //public RectTransform targetElement; // El elemento del Canvas que deseas verificar
+    public GameObject settingsPanel;
+    public GameObject controlsPanel;
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
     }
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        /*if (Input.GetMouseButtonDown(0))
         {
             GraphicRaycaster raycaster = targetCanvas.GetComponent<GraphicRaycaster>();
             EventSystem eventSystem = EventSystem.current;
@@ -37,8 +40,9 @@ public class PauseMenu : MonoBehaviour
                     break;
                 }
             }
-        }
+        }*/
     }
+    //FUNCIONES BOTONES DEL MENU DE PAUSE Y SUBMENUS
     //volver a la partida
     public void _ResumeGame()
     {
@@ -54,9 +58,10 @@ public class PauseMenu : MonoBehaviour
         FindObjectOfType<BoomerangController>().enabled = true;
         FindObjectOfType<DrawLine>().enabled = true;
         FindObjectOfType<BoomerangUpgradeController>().enabled = true;
+        gameObject.SetActive(false);
         Time.timeScale = 1f;
         gameManager.onPause = false;
-        pauseMenuUI.SetActive(false);
+        
     }
     //cerrar el juego
     public void _ExitGame()
@@ -66,11 +71,31 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         gameManager.onPause = false;
         pauseMenuUI.SetActive(false);
+        GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
+        GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
+        MenuManager.CambiarEscena("MainMenu");
+        /*
         #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
         #else
                 Application.Quit();
-        #endif
+        #endif*/
         //Application.Quit();
+    }
+    public void OpenControlsPanel()
+    {
+        controlsPanel.SetActive(true);
+    }
+    public void CloseControlsPanel()
+    {
+        controlsPanel.SetActive(false);
+    }
+    public void OpenSettingsPanel()
+    {
+        settingsPanel.SetActive(true);
+    }
+    public void CloseSettingsPanel()
+    {
+        settingsPanel.SetActive(false);
     }
 }

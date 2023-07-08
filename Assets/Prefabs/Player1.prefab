@@ -708,6 +708,7 @@ MonoBehaviour:
   dashKey: 101
   maxCharges: 3
   chargeRegenTime: 5
+  currentCharges: 0
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
@@ -773,8 +774,8 @@ MonoBehaviour:
   initialImpulseForce: 5
   maxImpulseForce: 15
   maxSpeed: 15
-  initialScale: 0.5
-  maxScale: 1.5
+  initialScale: 0.8
+  maxScale: 1.1
   initialDamage: 1
   maxDamage: 5
   initialManaCost: 5
@@ -813,7 +814,7 @@ MonoBehaviour:
   mainCamera: {fileID: 0}
   chargeBar: {fileID: 0}
   distanceToEnd: 0
-  distancePerSecond: 7
+  distancePerSecond: 8
   expectedColdownTime: 2.5
   timing: {fileID: 0}
   startedTimeThrow: 0

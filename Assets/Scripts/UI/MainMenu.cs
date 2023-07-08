@@ -9,7 +9,7 @@ public class MainMenu : MonoBehaviour
     public GameObject loadButton;
     GameState saveInfo;
     public string fileName = "/GameData";
-
+    private string sceneToLoad;
     private void Start()
     {
         /*if (File.Exists("savegame.bin"))
@@ -20,6 +20,7 @@ public class MainMenu : MonoBehaviour
         {
             Debug.Log("Archivo de guardado encontrado...");
             loadButton.gameObject.SetActive(true);
+            //_LoadData();
         }
         else
         {
@@ -47,15 +48,54 @@ public class MainMenu : MonoBehaviour
         {
             Debug.Log("No se ha encontrado el archivo de guardado...");
         }
-        SceneManager.LoadScene("CameraScene");
+        //SceneManager.LoadScene("CameraScene");
+        //cargar la informacion del persistanceData para cargar el mapa
+        GlobalVars.lastSceneBeforeDeadOrSave = "Level 1 Laboratory";
+        //guardamos la escena anterior
+        GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
+        //usamos el menu manager para cambiar de escena y guardar la escena en una pila
+        //FindObjectOfType<MenuManager>().CambiarEscena(SceneManager.GetActiveScene().name);
+        MenuManager.CambiarEscena("Level 1 Laboratory");
+        //SceneManager.LoadScene("Level 1 Laboratory");
     }
     public void Settings()
     {
-
+        //guardamos la escena anterior
+        GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
+        //usamos el menu manager para cambiar de escena y guardar la escena en una pila
+        //FindObjectOfType<MenuManager>().CambiarEscena(SceneManager.GetActiveScene().name);
+        MenuManager.CambiarEscena("SettingsMenu");
+        //SceneManager.LoadScene("SettingsMenu");
+    }
+    public void Credits()
+    {
+        //guardamos la escena anterior
+        GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
+        //usamos el menu manager para cambiar de escena y guardar la escena en una pila
+        //FindObjectOfType<MenuManager>().CambiarEscena(SceneManager.GetActiveScene().name);
+        MenuManager.CambiarEscena("CreditsScene");
+        //SceneManager.LoadScene("CreditsScene");
     }
     public void LoadGame()
     {
-        SceneManager.LoadScene("CameraScene");
+        //guardamos la escena anterior
+        GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
+
+        _LoadData();
+        //SceneManager.LoadScene("CameraScene");
+        if (sceneToLoad != "" && sceneToLoad != null)
+        {
+            //usamos el menu manager para cambiar de escena y guardar la escena en una pila
+            MenuManager.CambiarEscena(sceneToLoad);
+            //SceneManager.LoadScene(sceneToLoad);
+        }
+        else
+        {
+            //usamos el menu manager para cambiar de escena y guardar la escena en una pila
+            MenuManager.CambiarEscena("Level 1 Laboratory");
+            //SceneManager.LoadScene("Level 1 Laboratory");
+        }
+
     }
 
     public void CloseGame()
@@ -69,7 +109,42 @@ public class MainMenu : MonoBehaviour
     }
 
     //CARGADO DE DATOS
+    public void _LoadData()
+    {
+        GameData.Init();
+        sceneToLoad = GameData.Data.PlayerData.lastScenePlayed;
+        //luego cargar toda la data de la partida aqui
+        /*
+        Debug.Log("loading data...");
+        //GameData.Init();
+        Debug.Log("GAMEDATA = " + GameData.Data.PlayerData.currentPlayerHealth);
+        playerData = GameData.Data.PlayerData;
+        if (playerData.currentPlayerHealth > 0)
+        {
+            //Debug.Log("CURRENT HEALTH = " + playerData.currentPlayerHealth);
+            //asignar valores
+            //player = GameObject.Find("Player").GetComponent<PlayerStats>();
+            player.SetCurrentHeath(playerData.currentPlayerHealth);
+            //player.currentHealth = playerData.currentPlayerHealth;
+            player.SetCurrentMana(playerData.currentPlayerMana);
+            //player.currentMana = playerData.currentPlayerMana;
+            Vector3 LastPosition = new Vector3(playerData.playerPositionX, playerData.playerPositionY, playerData.playerPositionZ);
+            player.transform.position = LastPosition;
+            enemiesKilled = playerData.enemiesEliminated;
+            player.selectedMode = playerData.lastSelectedMode;
 
+            //Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
+            //Debug.Log("mana cargado = " + playerData.currentPlayerMana);
+            //Debug.Log("selected mode cargado = " + playerData.lastSelectedMode);
+
+            if (enemiesKilled != null)
+            {
+                EliminateEnemiesKilledBefore(enemiesKilled);
+            }
+
+        }
+        */
+    }
 
 }
 //rezise de los componentes de UI cuando se modifica el tamaño de la ventana

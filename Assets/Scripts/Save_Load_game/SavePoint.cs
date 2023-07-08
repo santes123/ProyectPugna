@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System;
 using System.Runtime.Serialization;
+using UnityEngine.SceneManagement;
 
 public class SavePoint : MonoBehaviour
 {
@@ -97,6 +98,9 @@ public class SavePoint : MonoBehaviour
         GameData.Data.PlayerData.playerPositionZ = player.transform.position.z;
         GameData.Data.PlayerData.enemiesEliminated = gameManager.enemiesKilled;
         GameData.Data.PlayerData.lastSelectedMode = playerstats.selectedMode;
+        //guardamos el ultimo mapa jugado
+        GameData.Data.PlayerData.lastScenePlayed = SceneManager.GetActiveScene().name;
+        GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
 
         Debug.Log("mana guardado = " + GameData.Data.PlayerData.currentPlayerMana);
         Debug.Log("selected mode guardado = " + GameData.Data.PlayerData.lastSelectedMode);

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +24,8 @@ public class SkillBar : MonoBehaviour
     public Transform contenedor;
     private Text [] coldowns;
     private Image[] coldownImages;
-    private Image[] imageSkill;
+    private Image[] imageSkillSelector;
+    private Image[] hideSkillImage;
     private PlayerStats player;
 
     //booleanos para los coldowns
@@ -35,7 +37,12 @@ public class SkillBar : MonoBehaviour
     float remainingColdownTime = 0f;
     float expectedBoomerangColdownTime;
     //public GameObject skillBar;
-
+    private BoomerangUpgradeController upgradeBoomerang;
+    private DashController dashController;
+    //text que controla las cargas del dash
+    private Text dashChargesCounter;
+    private Text AreaDamageCounter;
+    private Text FreezeCounter;
     private void Start()
     {
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
@@ -45,11 +52,14 @@ public class SkillBar : MonoBehaviour
         habilidades[2].container = FindObjectOfType<PsychicPunchController>().gameObject;
         habilidades[3].container = FindObjectOfType<DashController>().gameObject;
         contenedor = GameObject.FindGameObjectWithTag("SkillBar").transform;
+        upgradeBoomerang = FindObjectOfType<BoomerangUpgradeController>();
+        dashController = FindObjectOfType<DashController>();
 
         coldownImages = new Image[habilidades.Length];
         coldowns = new Text[habilidades.Length];
-        imageSkill = new Image[habilidades.Length];
-        // Crear los cuadrados de habilidad dinámicamente
+        imageSkillSelector = new Image[habilidades.Length];
+        hideSkillImage = new Image[habilidades.Length];
+        // Crear los cuadrados de habilidad dinï¿½micamente
         for (int i = 0; i < habilidades.Length; i++)
         {
             // Crear una instancia del prefab del cuadrado
@@ -63,12 +73,17 @@ public class SkillBar : MonoBehaviour
             Image[] images = cuadrado.GetComponentsInChildren<Image>();
             Image imagenHabilidad = images[0];
             imagenHabilidad.sprite = habilidades[i].imagen;
-            imageSkill[i] = images[2];
+            imageSkillSelector[i] = images[2];
+            Debug.Log("nombre del objetivo = " + imageSkillSelector[i].gameObject.name);
+            imageSkillSelector[i] = images[2];
             //Debug.Log("nombre del objetivo = " + imageSkill[i].gameObject.name);
             coldownImages[i] = cuadrado.GetComponentsInChildren<Image>()[1];
             //imagen del coldown
             images[1].sprite = habilidades[i].imagen;
             cuadrado.GetComponentsInChildren<Image>()[1].gameObject.SetActive(false);
+            //imagen hide para esconder la habilidad
+            hideSkillImage[i] = cuadrado.GetComponentsInChildren<Image>(true)[3];
+            Debug.Log("nombre imagen = " + hideSkillImage[i].gameObject.name);
 
             // Obtener la referencia a la imagen del cuadrado usado para el coldown visual
             /*Image imagenColdown= images[1];
@@ -86,6 +101,8 @@ public class SkillBar : MonoBehaviour
             Text textoCooldown = textos[1];
             textoCooldown.text = habilidades[i].cooldown.ToString();
             coldowns[i] = textoCooldown;
+            //asignamos los contadores de habilidades que tienen cargas
+            AssignChargesTexts(i, cuadrado);
         }
     }
     private void Update()
@@ -194,48 +211,148 @@ public class SkillBar : MonoBehaviour
                 coldowns[2].text = habilidades[1].container.GetComponent<PsychicPunchController>().coldown.ToString("F0");
                 coldown3 = false;
             }
-
+            
         }
+
+        //controlar las cargas del dash y upgrades del boomerang
+        UpdateSkillsChargesUI();
     }
     private void FixedUpdate()
     {
         if (player.selectedMode == PlayerStats.GameMode.Boomerang)
         {
             //Debug.Log("boomerang mode");
-            imageSkill[0].gameObject.SetActive(true);
-            imageSkill[1].gameObject.SetActive(false);
-            imageSkill[2].gameObject.SetActive(false);
+            imageSkillSelector[0].gameObject.SetActive(true);
+            imageSkillSelector[1].gameObject.SetActive(false);
+            imageSkillSelector[2].gameObject.SetActive(false);
 
-            imageSkill[3].gameObject.SetActive(false);
+            //area push
+            imageSkillSelector[3].gameObject.SetActive(false);
+            //dash
+            imageSkillSelector[4].gameObject.SetActive(false);
             //mostramos como activas las skills del boomerang escondiendo el hide
+            //mejoras del boomerang
+            imageSkillSelector[5].gameObject.SetActive(false);
+            imageSkillSelector[6].gameObject.SetActive(false);
             //habilidades.
+            if (upgradeBoomerang.areaDamageMode)
+            {
+                imageSkillSelector[5].gameObject.SetActive(true);
+            }
+            else if (upgradeBoomerang.freezeMode)
+            {
+                imageSkillSelector[6].gameObject.SetActive(true);
+            }
+            //hide imagenes para ocultar el resto de habilidades
+            hideSkillImage[0].gameObject.SetActive(false);
+            hideSkillImage[1].gameObject.SetActive(true);
+            hideSkillImage[2].gameObject.SetActive(true);
+            hideSkillImage[3].gameObject.SetActive(false);
+            hideSkillImage[4].gameObject.SetActive(false);
+            hideSkillImage[5].gameObject.SetActive(false);
+            hideSkillImage[6].gameObject.SetActive(false);
         }
         else if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
         {
-            //Debug.Log("ATRAACT MODE");
-            imageSkill[1].gameObject.SetActive(true);
-            imageSkill[0].gameObject.SetActive(false);
-            imageSkill[2].gameObject.SetActive(false);
+            Debug.Log("ATRAACT MODE");
+            imageSkillSelector[1].gameObject.SetActive(true);
+            imageSkillSelector[0].gameObject.SetActive(false);
+            imageSkillSelector[2].gameObject.SetActive(false);
 
-            imageSkill[3].gameObject.SetActive(false);
+            //area push
+            imageSkillSelector[3].gameObject.SetActive(false);
+            //dash
+            imageSkillSelector[4].gameObject.SetActive(false);
+            //mejoras boomerang
+            imageSkillSelector[5].gameObject.SetActive(false);
+            imageSkillSelector[6].gameObject.SetActive(false);
+
+            //hide imagenes para ocultar el resto de habilidades
+            hideSkillImage[0].gameObject.SetActive(true);
+            hideSkillImage[1].gameObject.SetActive(false);
+            hideSkillImage[2].gameObject.SetActive(true);
+            hideSkillImage[3].gameObject.SetActive(false);
+            hideSkillImage[4].gameObject.SetActive(false);
+            hideSkillImage[5].gameObject.SetActive(true);
+            hideSkillImage[6].gameObject.SetActive(true);
         }
         else if (player.selectedMode == PlayerStats.GameMode.PyshicShot)
         {
-            //Debug.Log("PSYQUIC MODE");
-            imageSkill[2].gameObject.SetActive(true);
-            imageSkill[0].gameObject.SetActive(false);
-            imageSkill[1].gameObject.SetActive(false);
+            Debug.Log("PSYQUIC MODE");
+            imageSkillSelector[2].gameObject.SetActive(true);
+            imageSkillSelector[0].gameObject.SetActive(false);
+            imageSkillSelector[1].gameObject.SetActive(false);
 
-            imageSkill[3].gameObject.SetActive(false);
+            //area push
+            imageSkillSelector[3].gameObject.SetActive(false);
+            //dash
+            imageSkillSelector[4].gameObject.SetActive(false);
+            //mejoras boomerang
+            imageSkillSelector[5].gameObject.SetActive(false);
+            imageSkillSelector[6].gameObject.SetActive(false);
+
+            //hide imagenes para ocultar el resto de habilidades
+            hideSkillImage[0].gameObject.SetActive(true);
+            hideSkillImage[1].gameObject.SetActive(true);
+            hideSkillImage[2].gameObject.SetActive(false);
+            hideSkillImage[3].gameObject.SetActive(false);
+            hideSkillImage[4].gameObject.SetActive(false);
+            hideSkillImage[5].gameObject.SetActive(true);
+            hideSkillImage[6].gameObject.SetActive(true);
         }
         else
         {
             //Debug.Log("nada de nada");
-            imageSkill[0].gameObject.SetActive(false);
-            imageSkill[1].gameObject.SetActive(false);
-            imageSkill[2].gameObject.SetActive(false);
-
-            imageSkill[3].gameObject.SetActive(false);
+            imageSkillSelector[0].gameObject.SetActive(false);
+            imageSkillSelector[1].gameObject.SetActive(false);
+            imageSkillSelector[2].gameObject.SetActive(false);
+            //area push
+            imageSkillSelector[3].gameObject.SetActive(false);
+            //dash
+            imageSkillSelector[4].gameObject.SetActive(false);
+            //mejoras boomerang
+            imageSkillSelector[5].gameObject.SetActive(false);
+            imageSkillSelector[6].gameObject.SetActive(false);
+        }
+    }
+    //metodos de asignacion y update de variables
+    private void UpdateSkillsChargesUI()
+    {
+        if (dashController.currentCharges >= 0)
+        {
+            string chargesUIText = dashController.currentCharges + "/" + dashController.maxCharges;
+            dashChargesCounter.text = chargesUIText;
+        }
+        if (upgradeBoomerang.currentChargesAreaDamage >= 0)
+        {
+            string chargesUIText = upgradeBoomerang.currentChargesAreaDamage + "/" + upgradeBoomerang.maxChargesAreaDamage;
+            AreaDamageCounter.text = chargesUIText;
+        }
+        if (upgradeBoomerang.currentChargesFreeze >= 0)
+        {
+            string chargesUIText = upgradeBoomerang.currentChargesFreeze + "/" + upgradeBoomerang.maxChargesFreeze;
+            FreezeCounter.text = chargesUIText;
+        }
+    }
+    private void AssignChargesTexts(int i, GameObject cuadrado)
+    {
+        if (i == 3)
+        {
+            dashChargesCounter = cuadrado.GetComponentsInChildren<Text>(true)[2];
+            Debug.Log("nombre del GO counter = " + dashChargesCounter.gameObject.name);
+            dashChargesCounter.gameObject.SetActive(true);
+        }
+        if (i == 5)
+        {
+            AreaDamageCounter = cuadrado.GetComponentsInChildren<Text>(true)[2];
+            Debug.Log("nombre del GO counter = " + AreaDamageCounter.gameObject.name);
+            AreaDamageCounter.gameObject.SetActive(true);
+        }
+        if (i == 6)
+        {
+            FreezeCounter = cuadrado.GetComponentsInChildren<Text>(true)[2];
+            Debug.Log("nombre del GO counter = " + FreezeCounter.gameObject.name);
+            FreezeCounter.gameObject.SetActive(true);
         }
     }
     private void AssignValuesOfKey(Habilidad habilidad, Text textoTecla)

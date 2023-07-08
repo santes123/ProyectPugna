@@ -14,6 +14,7 @@ public class EnemyBase : LivingEntity
     private bool freeze = false;
     private float freezeDuration;
     private GameObject debuffColdown;
+    public bool bounceOnEnemies = false;
     public GameObject damageVFX;
     protected override void Start()
     {
@@ -100,21 +101,54 @@ public class EnemyBase : LivingEntity
             if (imageComponent != null && child.gameObject.name == childObjectName)
             {
                 //Debug.Log("NOMBRE DEL GAMEOBJECT ENCONTRADO = " + child.gameObject.name);
-                // Se encontró el objeto hijo con el componente Image y el nombre deseado
+                // Se encontrï¿½ el objeto hijo con el componente Image y el nombre deseado
                 // Devolver el objeto padre en lugar del hijo
                 return child.gameObject/*.transform.parent.gameObject*/;
             }
 
-            // Realizar una búsqueda recursiva en los hijos del objeto actual
+            // Realizar una bï¿½squeda recursiva en los hijos del objeto actual
             GameObject foundObject = FindChildObjectWithImageComponent(child, childObjectName);
             if (foundObject != null)
             {
-                // Se encontró el objeto deseado en uno de los hijos
+                // Se encontrï¿½ el objeto deseado en uno de los hijos
                 return foundObject;
             }
         }
 
-        // No se encontró ningún objeto hijo con el nombre y componente Image deseado
+        // No se encontrï¿½ ningï¿½n objeto hijo con el nombre y componente Image deseado
         return null;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy") && bounceOnEnemies)
+        {
+            MakeDamageAndPushEnemy(other);
+        }
+    }
+    public void MakeDamageAndPushEnemy(Collider other)
+    {
+        //HACEMOS DAï¿½O AL ENEMIGO MEDIANTE LA INTERFAZ
+        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            print("collision con el enemigo");
+            Damage damageObj = new Damage();
+            damageObj.amount = 0;
+            damageObj.source = UnitType.Player;
+            damageObj.targetType = TargetType.Single;
+
+            // Obtener la direccion opuesta a la normal de la colision
+            Vector3 normal = other.transform.position - transform.position;
+            normal.y = 0;
+            normal.Normalize();
+            damageObj.forceImpulse = normal * 5f;
+            //llamamos al metodo de la interfaz
+            DoDamage(damageableObject, damageObj);
+            //damageableObject.ReceiveDamage(damageObj);
+        }
+    }
+    public void DoDamage(IDamageable target, Damage damage)
+    {
+        target.ReceiveDamage(damage);
     }
 }
