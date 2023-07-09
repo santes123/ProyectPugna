@@ -9,6 +9,7 @@ public class WallHider : MonoBehaviour
     public LayerMask wallLayer;
 
     private GameObject lastObjectHide = null;
+    private GameObject lastBeforeLastObjectHide = null;
     private void Awake()
     {
         StartCoroutine(FindPlayer());

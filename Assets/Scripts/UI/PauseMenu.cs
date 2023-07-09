@@ -98,4 +98,14 @@ public class PauseMenu : MonoBehaviour
     {
         settingsPanel.SetActive(false);
     }
+    public void OpenMapButton()
+    {
+        pauseMenuUI.SetActive(false);
+        FindObjectOfType<MapDisplay>().ActiveDisableMapFromMenu();
+    }
+    public void CloseMapButton()
+    {
+        FindObjectOfType<MapDisplay>().ActiveDisableMapFromMenu();
+        pauseMenuUI.SetActive(false);
+    }
 }

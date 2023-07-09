@@ -98,7 +98,7 @@ public class UseBoomerang : SkillParent
         lr.useWorldSpace = true;
 
         mainCamera = FindObjectOfType<CameraController>().GetComponent<Camera>();
-        auxiliarCamera = FindObjectOfType<AuxiliarCamera>().GetComponent<Camera>();
+        //auxiliarCamera = FindObjectOfType<AuxiliarCamera>().GetComponent<Camera>();
         //timing = GameObject.Find("TimeToComeBack").GetComponent<Text>();
         //timePressedText = GameObject.Find("TimePressed").GetComponent<Text>();
     }
