@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PsychicPunchController : MonoBehaviour
+public class PsychicPunchController : SkillParent
 {
     public GameObject esferaPrefab;
     public float initialSpeed;
@@ -13,7 +13,6 @@ public class PsychicPunchController : MonoBehaviour
     public float maxDamage;
     public float initialManaCost;
     public float maxManaCost;
-    public float coldown;
 
     private GameObject currentSphere;
     public Transform spawnPoint;
@@ -23,7 +22,6 @@ public class PsychicPunchController : MonoBehaviour
     public float currentImpulseForce;
     private float currentManaCost;
     public bool onColdown;
-    public float remainingTime;
 
     PlayerStats playerStats;
     public bool onHand = false;
@@ -42,15 +40,15 @@ public class PsychicPunchController : MonoBehaviour
         //EL COLDOWN LO CALCULAMOS FUERA, PARA QUE CUANDO CAMBIE DE ARMA SE SIGA CALCULANDO
         if (onColdown)
         {
-            remainingTime -= Time.deltaTime;
+            current_coldown -= Time.deltaTime;
             //Debug.Log("remaining time = " + remainingTime);
-            if (remainingTime <= 0f)
+            if (current_coldown <= 0f)
             {
                 onColdown = false;
-                remainingTime = 0f;
+                current_coldown = 0f;
             }
         }
-        if (playerStats.selectedMode == PlayerStats.GameMode.PyshicShot/* && playerStats.currentMana >= initialManaCost*/)
+        if (playerStats.selectedMode == GameMode.PyshicShot/* && playerStats.currentMana >= initialManaCost*/)
         {
 
             if (!onColdown && Input.GetMouseButtonDown(0)/* && playerStats.currentMana >= initialManaCost*/)
@@ -117,7 +115,7 @@ public class PsychicPunchController : MonoBehaviour
                     currentSphere = null;
                     // Iniciar el cooldown
                     onColdown = true;
-                    remainingTime = coldown;
+                    current_coldown = coldown;
                     chargeBar.GetComponent<ChargeBar>().chargeBar.fillAmount = 0;
                     chargeBar.SetActive(false);
                 }
@@ -147,6 +145,18 @@ public class PsychicPunchController : MonoBehaviour
             currentSphere.transform.position = spawnPoint.position;
 
         }
+    }
+
+    public override void Activate()
+    {
+    }
+
+    public override void Disable()
+    {
+        Destroy(currentSphere);
+        currentSphere = null;
+        onHand = false;
+        
     }
 }
 

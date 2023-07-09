@@ -2,16 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PushAwaySkill : MonoBehaviour, IDamager
+public class PushAwaySkill : SkillParent, IDamager
 {
     //public float radius = 2.5f; // Radio de b�squeda de enemigos
     public AreaOfEffect aoe;
     public float damage = 10f; // Da�o infligido a los enemigos
     public float impulseForceWhenHit = 5f; // Fuerza de empuje hacia atr�s
-    public float cooldownTime = 3f; // Tiempo de enfriamiento de la habilidad
 
     private bool isCooldown = false;
-    private float cooldownTimer = 0f;
     public GameObject floatingDamageTextPrefab;
     public GameObject prefabAreaExplosion;
     private GameObject areaInstantiated;
@@ -25,8 +23,8 @@ public class PushAwaySkill : MonoBehaviour, IDamager
     {
         if (isCooldown)
         {
-            cooldownTimer -= Time.deltaTime;
-            if (cooldownTimer <= 0f)
+            current_coldown -= Time.deltaTime;
+            if (current_coldown <= 0f)
             {
                 GameObject auxiliar = areaInstantiated;
                 Destroy(auxiliar);
@@ -113,7 +111,7 @@ public class PushAwaySkill : MonoBehaviour, IDamager
 
         // Inicia el tiempo de enfriamiento
         isCooldown = true;
-        cooldownTimer = cooldownTime;
+        current_coldown = coldown;
     }
 
     private void Update()
@@ -156,5 +154,13 @@ public class PushAwaySkill : MonoBehaviour, IDamager
 
     public void Attack() {
         
+    }
+
+    public override void Activate()
+    {
+    }
+
+    public override void Disable()
+    {
     }
 }

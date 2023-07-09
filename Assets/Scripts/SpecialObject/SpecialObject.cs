@@ -192,7 +192,7 @@ public class SpecialObject : MonoBehaviour, IDamager
     }*/
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name))
+        if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
         {
             //añadimos el array a enemigos hiteados por este gameobject
             enemiesHited.Add(other.gameObject.name);
