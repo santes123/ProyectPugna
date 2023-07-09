@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DashController : MonoBehaviour
+public class DashController : SkillParent
 {
     public float dashDistance = 5f;
     public float dashDuration = 0.5f;
     public KeyCode dashKey = KeyCode.E;
     public int maxCharges = 3;
-    public float chargeRegenTime = 5f;
+
 
     private bool isDashing = false;
     private Vector3 dashStartPosition;
@@ -22,14 +22,18 @@ public class DashController : MonoBehaviour
     public GameObject dashPrefabParticle;
     private GameObject DashInstantiated;
 
-    public float remainingTime = 0f;
     private List<float> cooldownTimers = new List<float>();
     bool dashCanceled = false;
+    public event System.Action OnCurrentChargesUpdate;
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
         currentCharges = maxCharges;
-        lastDashTime = -chargeRegenTime;
+        if (OnCurrentChargesUpdate != null)
+        {
+            OnCurrentChargesUpdate();
+        }
+        lastDashTime = -coldown;
     }
     private void Update()
     {
@@ -104,9 +108,18 @@ public class DashController : MonoBehaviour
 
             dashStartTime = Time.time;
             currentCharges--;
-            lastDashTime = Time.time;
+            if (current_coldown == 0)//modify charges ui
+            {//modify charges ui
+                lastDashTime = Time.time;
+            }//modify charges ui
+
             //instanciamos el prefab del dash
             DashInstantiated = Instantiate(dashPrefabParticle, transform.position, transform.rotation);
+            //llamamos al evento para que actualice las cargas en la UI
+            if (OnCurrentChargesUpdate != null)
+            {
+                OnCurrentChargesUpdate();
+            }
         }
         //instanciamos el prefab del dash
         //DashInstantiated = Instantiate(dashPrefabParticle, transform.position, transform.rotation);
@@ -114,6 +127,13 @@ public class DashController : MonoBehaviour
 
     private void PerformDash()
     {
+        //modificado coldown
+        if (current_coldown == 0)//modify charges ui
+        {//modify charges ui
+            current_coldown = coldown;
+        }//modify charges ui
+
+
         float elapsed = Time.time - dashStartTime;
         float t = Mathf.Clamp01(elapsed / dashDuration);
 
@@ -178,19 +198,36 @@ public class DashController : MonoBehaviour
     {
         if (currentCharges >= maxCharges)
         {
-            remainingTime = 0;
+            current_coldown = 0;
             return;
         }
-
-        if (Time.time - lastDashTime > chargeRegenTime)
+        Debug.Log("time.time - lastdashtime" + (Time.time - lastDashTime));
+        if (Time.time - lastDashTime > coldown)
         {
+            //regeneramos una carga a la vez y en el caso de que haya mas en espera, ponemos a regenerar la siguiente
+            //se podria hacer con un array para que se regeneren todas simultaneamente (habrai que cambiaar cosas)
             Debug.Log("carga regenerada...");
             currentCharges++;
             lastDashTime = Time.time;
-            remainingTime = 0;
+            if (currentCharges < maxCharges)//modify charges ui
+            {//modify charges ui
+                current_coldown = coldown;//modify charges ui
+            }//modify charges ui
+            else//modify charges ui
+            {//modify charges ui
+                current_coldown = 0;
+            }//modify charges ui
+
+            //llamamos al evento para que actualice las cargas en la UI
+            if (OnCurrentChargesUpdate != null)
+            {
+                OnCurrentChargesUpdate();
+            }
         }
         //añadir los timers a un list y verificarlos todos en orden
-        remainingTime = Time.time - lastDashTime;
+        //current_coldown = Time.time - lastDashTime;
+        //modificado coldown
+        current_coldown -= Time.deltaTime;
     }
     private bool IsInsideGameObject()
     {
@@ -205,5 +242,28 @@ public class DashController : MonoBehaviour
 
         return false;
     }
+
+    public override void Activate()
+    {
+    }
+
+    public override void Disable()
+    {
+    }
+
+    //getters y setters
+    public int GetCurrentCharges()
+    {
+        return currentCharges;
+    }
+    public int GetMaxCharges()
+    {
+        return maxCharges;
+    }
+    public void SetCurrentCharges(int newValue)
+    {
+        currentCharges = newValue;
+    }
+
 }
 

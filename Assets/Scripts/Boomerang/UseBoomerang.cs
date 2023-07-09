@@ -1,13 +1,15 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 //LANZAMIENTO BOOMERANG FUNCIONAL CON AUMENTO DE FUERZA Y LINERENDERER ADAPTATIVO
-public class UseBoomerang : MonoBehaviour
+public class UseBoomerang : SkillParent
 {
     // Variables públicas
     public float followSpeed;
     public float maxDistance;
     public float minDistance;
+    public float minDistanceOnHit;
     public float minDistanceToLaunch;
     public float damage;
 
@@ -25,7 +27,10 @@ public class UseBoomerang : MonoBehaviour
     //public bool rotation = false;
     public float distanceToDisplacementOnBouncing = 5f;
 
+    //cameras
     public Camera mainCamera;
+    public Camera auxiliarCamera;
+    
 
     //UI damage dealt
 
@@ -49,7 +54,7 @@ public class UseBoomerang : MonoBehaviour
     bool clickPressed = false;
     int counterClicks = 0;
 
-    public float expectedColdownTime = 0f;
+    //public float current_coldown = 0f;
 
     public Text timing;
     [HideInInspector]
@@ -65,6 +70,10 @@ public class UseBoomerang : MonoBehaviour
     private bool variant = false;
     Vector3 deflection = Vector3.zero;
     float timeAcumulated = 0f;
+
+    Transform pointer;
+    Quaternion originalRotation;
+    public LayerMask wallLayer;
     private void Awake()
     {
         playerStats = gameObject.GetComponent<PlayerStats>();
@@ -72,6 +81,9 @@ public class UseBoomerang : MonoBehaviour
         boomerangController = FindObjectOfType<BoomerangController>();
         chargeBar = FindObjectOfType<ChargeBar>().gameObject;
         animator = GetComponentInChildren<Animator>();
+        coldown = 1f;
+        pointer = FindObjectOfType<Crosshairs>().gameObject.transform;
+        originalRotation = pointer.transform.rotation;
     }
     // Inicialización
     void Start()
@@ -86,6 +98,7 @@ public class UseBoomerang : MonoBehaviour
         lr.useWorldSpace = true;
 
         mainCamera = FindObjectOfType<CameraController>().GetComponent<Camera>();
+        auxiliarCamera = FindObjectOfType<AuxiliarCamera>().GetComponent<Camera>();
         //timing = GameObject.Find("TimeToComeBack").GetComponent<Text>();
         //timePressedText = GameObject.Find("TimePressed").GetComponent<Text>();
     }
@@ -94,12 +107,8 @@ public class UseBoomerang : MonoBehaviour
     {
         //Debug.Log(playerStats.selectedMode);
         //Debug.Log(PlayerStats.GameMode.Boomerang);
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
-            if (boomerangController.onColdown)
-            {
-                //timing.text = "go and comeback = " + (Time.time - startedTimeThrow).ToString();
-            }
             /*
             Debug.Log("onHand = " + boomerangController.onHand);
             Debug.Log("isFlying = " + boomerangController.isFlying);
@@ -107,114 +116,20 @@ public class UseBoomerang : MonoBehaviour
             //SE CALCULA MAL EL ISRETURNING Y ESTA A TRUE, POR ESO NO LANZA
             Debug.Log("isReturning = " + boomerangController.isReturning);
             */
-            //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
-            if (Input.GetMouseButtonDown(0) && boomerangController.onHand && !boomerangController.isFlying && !boomerangController.specialThrow && 
-                !boomerangController.isReturning)
-            {
-                Debug.Log("BOOM = CLICK IZQUIERDO PULSADO");
-                animator.SetTrigger("Charge");
-                //activamos la barra de progreso
-                chargeBar.SetActive(true);
-                chargeBar.GetComponent<ChargeBar>().target = boomerangController.gameObject;
-                chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
-                chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDistance);
-
-
-                isButtonPressed = true;
-                startedTimePress = Time.time;
-                //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
-                startPoint = boomerangController.gameObject.transform.position;
-                startPointOriginal = startPoint;
-                Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
-                startPoint = boomerangController.gameObject.transform.position + direction * minDistanceToLaunch;
-                pressStartTime = Time.time;
-            }
-
-            if (isButtonPressed)
-            {
-                Debug.Log("BOOM = BUTTON PRESSED");
-                endPoint = CalculateEndPoint()/* + deflection.normalized*/;
-                timePressed = Time.time - startedTimePress;
-                /*if (timePressed <= 1.5f)
-                {
-                    timePressedText.text = "TimePressed = " + timePressed.ToString();
-                }*/
-
-            }
-            //atraer boomerang con poder mental
-            if (Input.GetMouseButton(0) && !boomerangController.isFlying && !boomerangController.onHand && !boomerangController.attracting && 
-                playerStats.currentMana >= 5 && !boomerangController.isReturning && !boomerangController.specialThrow && !boomerangController.bouncing)
-            {
-                Debug.Log("BOOM = ATRAER BOOMERANG CON PODER MENTAL");
-                //revisar bien esto
-                startPoint = boomerangController.gameObject.transform.position;
-                startPointOriginal = startPoint;
-                //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
-                //Vector3 direction = GetMouseWorldPosition() - startPoint;
-                Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
-                startPoint = boomerangController.gameObject.transform.position + direction/* * minDistanceToLaunch*/;
-                boomerangController.isReturning = true;
-                boomerangController.attracting = true;
-                //asi vuelve en linea recta a la posicion inicial de lanzamiento
-                boomerangController.returnPosition = handPlace.transform.position;
-            }
-
-            // Lanzamiento
-            if (Input.GetMouseButtonUp(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow && 
-                !boomerangController.isReturning && isButtonPressed)
-            {
-                animator.SetTrigger("Attack");
-                Debug.Log("BOOM = CLICK IZQUIERDO SOLTADO");
-                //update del damage del boomerangController, por si pillamos un Powerup
-                boomerangController.damageBoomerang = damage;
-                Debug.Log("boomerang lanzado");
-                distanceToEnd = 0f;
-                chargeBar.SetActive(false);
-
-                clickPressed = false;
-                //reiniciamos el counter para empezar a generar el lineRenderer si el jugaodr tiene ya pulsado el click izquierdo
-                counterClicks = 0;
-
-                lr.positionCount = 0;
-                boomerangController.onHand = false;
-                //mantenemos su rotacion original
-                boomerangController.gameObject.transform.rotation = Quaternion.identity;
-                boomerangController.gameObject.transform.SetParent(null);
-                initialPosition = boomerangController.gameObject.transform.position;
-                boomerangController.rotation = true;
-                Launch();
-                lr.enabled = false;
-                boomerangController.onColdown = true;
-                isButtonPressed = false;
-
-                //calculamos el coldown estimado (FORMA CORRECTA, PERO EL T NO ES LINEAL)
-                Debug.Log("distancia entre inicio y fin = " + Vector3.Distance(transform.position, endPoint));
-                /*float distance = Vector3.Distance(transform.position, endPoint);
-                expectedColdownTime = (distance / followSpeed * Time.deltaTime);*/
-                if (timePressed > 0 && timePressed < 0.8f)
-                {
-                    expectedColdownTime = 0.7f;
-                }
-                else if (timePressed > 0.9 && timePressed < 1.5f)
-                {
-                    expectedColdownTime = 1.1f;
-                }
-                else
-                {
-                    expectedColdownTime = 1.1f;
-                }
-                Debug.Log("expected coldown = " + expectedColdownTime);
-                startedTimeThrow = Time.time;
-            }
+            PressLeftClick();
+            IsLeftClickPressed();
+            isLeftClickUp();
         }
 
     }
-    
+
+
+
     private void LateUpdate()
     {
         //AÑADIDO AL LATEUPDATE PARA UNA MEJOR ACTUALIZACION (AUN POR MEJORAR)
         //Carga
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             if (Input.GetMouseButton(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow 
                 && !boomerangController.isReturning && isButtonPressed)
@@ -262,20 +177,71 @@ public class UseBoomerang : MonoBehaviour
                 }
                 lr.SetPosition(0, targetPositionLine);
                 lr.SetPosition(1, new Vector3(endPoint.x, 1f, endPoint.z));
-                Debug.Log("DISTANCIA ENTRE ENDPOINT LR Y ENDPOINT REAL = " + Vector3.Distance(lr.GetPosition(1), GetMouseWorldPosition()));
-                Debug.Log("posicion 0 lr = " + lr.GetPosition(0));
-                Debug.Log("posicion 1 lr = " + lr.GetPosition(1));
+                //Debug.Log("DISTANCIA ENTRE ENDPOINT LR Y ENDPOINT REAL = " + Vector3.Distance(lr.GetPosition(1), GetMouseWorldPosition()));
+                //Debug.Log("posicion 0 lr = " + lr.GetPosition(0));
+                //Debug.Log("posicion 1 lr = " + lr.GetPosition(1));
 
                 //si colisiona con un muro el raycast, añadimos un tercer punto
-                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-                Ray rayLR = new Ray(new Vector3(endPoint.x, 1f, endPoint.z), endPoint.normalized);
+                //Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                float currentDistance = Vector3.Distance(transform.position, endPoint);
+                //Debug.Log("current distance = " + Vector3.Distance(transform.position, endPoint));
+                Ray ray = new Ray(transform.position, transform.forward * currentDistance);
+                //Debug.Log("mouse posicion = " + Input.mousePosition);
+                //Debug.Log("mouse posicion pointer = " + pointer.position);
+                //Debug.Log("mouse posicion GetMouseWorldPosition() = " + GetMouseWorldPosition());
+                /*pointer.transform.LookAt(GetMouseWorldPosition());
+                pointer.transform.rotation = Quaternion.Euler(originalRotation.eulerAngles.x, pointer.transform.rotation.eulerAngles.y, pointer.transform.rotation.eulerAngles.z);
+                Ray ray3 = new Ray(GetMouseWorldPosition(), transform.forward);
+                Debug.DrawRay(ray3.origin, ray3.direction, Color.blue);*/
+                Ray rayLR = new Ray(new Vector3(endPoint.x, 1f, endPoint.z), transform.forward);
+                //Debug.Log("CURRENT ENDPOINT = " + endPoint);
                 //PRIMER REBOTE
-                if (Physics.Raycast(ray, out RaycastHit hit)/* && Physics.Raycast(rayLR, out RaycastHit hit3, 0.5f)*/)
+                if (Physics.Raycast(ray, out RaycastHit hit, currentDistance, wallLayer)/* && Physics.Raycast(rayLR, out RaycastHit hit3, 0.5f, wallLayer)*/)
                 {//ADAPTAR EL SEGUNDO RAYCAST PARA QUE CAMBIE POSICION AL HITPOINT DEL PRIMERO CUANDO COLISIONE O ALGO ASI
-                    Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+                    //Debug.Log("EL LR HA CHOCADO CON EL MURO!");
+                    /*if (Physics.Raycast(rayLR, out RaycastHit hit3, 0.5f, wallLayer))
+                    {
+                        Debug.Log("EL LR HA CHOCADO CON EL MURO!");
+                    }*/
+                    //Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
                     if (hit.collider.gameObject.CompareTag("Obstacle"))
                     {
-                        
+                        //Debug.Log("hitpoint = " + hit.point);
+                        Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.blue);
+                        RaycastHit originalHit = hit;
+                        Debug.Log("altura del hitpoint = " + hit.point.y);
+                        //creamos la variable para sustituir el raycasthit
+                        GameObject hitObject = hit.collider.gameObject;
+                        Vector3 hitPoint = hit.point;
+                        Vector3 hitNormal = hit.normal;
+
+                        /*if (hit.point.y > 2f)
+                        {
+                            Ray rayAuxiliarCamera = auxiliarCamera.ScreenPointToRay(Input.mousePosition);
+                            if (Physics.Raycast(rayAuxiliarCamera, out RaycastHit hitAuxiliarCamera))
+                            {
+                                if (hitAuxiliarCamera.collider.gameObject.CompareTag("Obstacle"))
+                                {
+                                    Debug.Log("hitpoint camara auxiliar = " + hitAuxiliarCamera.collider.gameObject.name);
+                                    Debug.Log("hitpoint camara auxiliar point = " + hitAuxiliarCamera.point);
+                                    hitPoint = hitAuxiliarCamera.point;
+                                    hitNormal = hitAuxiliarCamera.normal;
+                                    //hit = hitAuxiliarCamera;
+                                    Debug.DrawRay(rayAuxiliarCamera.origin, rayAuxiliarCamera.direction * hit.distance, Color.blue);
+                                }
+                            }
+                            else
+                            {
+                                //Debug.DrawRay(rayAuxiliarCamera.origin, rayAuxiliarCamera.direction * 10f, Color.green);
+                            }
+                        }
+                        else
+                        {
+                            //hit = originalHit;
+                            hitPoint = hit.point;
+                            hitNormal = hit.normal;
+                        }*/
+
                         localTargetPosition2 = Vector3.zero;
                         //raycast innecesario
                         /*Ray rayLr = new Ray(lr.GetPosition(0), lr.GetPosition(1) - lr.GetPosition(0));
@@ -283,7 +249,9 @@ public class UseBoomerang : MonoBehaviour
                         if (Physics.Raycast(rayLr, out RaycastHit hit2, maxDistance))
                         {*/
                         lr.positionCount = 3;
-
+                        //Debug.Log("hitpoint camara point = " + hit.point);
+                        /*Vector3 point = hit.point;
+                        point.y = 1f;*/
                         Vector3 point = hit.point;
                         point.y = 1f;
 
@@ -292,7 +260,14 @@ public class UseBoomerang : MonoBehaviour
               
 
                         Vector3 direccionEntrante = hit.collider.gameObject.transform.position - boomerangController.gameObject.transform.position;
-                        Vector3 bounceDirection = Vector3.Reflect(direccionEntrante.normalized, hit.normal);
+                        Vector3 bounceDirection = Vector3.Reflect(ray.direction, hit.normal);
+                        //Debug.Log("ray reflect = " + bounceDirection);
+                        //Debug.Log("hit normal = " + hit.normal);
+
+                        /*Vector3 direccionEntrante = hitObject.transform.position - boomerangController.gameObject.transform.position;
+                        Vector3 bounceDirection = Vector3.Reflect(ray.direction, hitNormal);*/
+
+
                         /*Vector3 direccionNormalizada = direccionEntrante.normalized;
                         //Vector3 direccionRebote = Vector3.Reflect(direccionEntrante, hit.collider.gameObject.transform.forward.normalized);
                         //Vector3 direccionRebote = Vector3.Reflect(boomerangController.gameObject.transform.forward,
@@ -315,10 +290,11 @@ public class UseBoomerang : MonoBehaviour
                         Vector3 nuevaDireccion = rotacionRebote * direccionRebote;
                         nuevaDireccion.y = 1f;//boomerangController.gameObject.transform.position.y/;
                         */
-                        targetPosition = point + bounceDirection * distanceToDisplacementOnBouncing;
+                        targetPosition = hit.point + bounceDirection * distanceToDisplacementOnBouncing;
                         targetPosition.y = 1f;//boomerangController.gameObject.transform.position.y;
                         localTargetPosition = targetPosition;
-                        lr.SetPosition(1, point);
+                        Debug.Log("localTargetPosition = " + localTargetPosition);
+                        lr.SetPosition(1, hit.point);
                         lr.SetPosition(2, localTargetPosition);
                         //Debug.DrawRay(hit.collider.gameObject.transform.position, /*Vector3.Reflect(localTargetPosition, point)*/localTargetPosition, Color.blue);
                         //}
@@ -326,6 +302,8 @@ public class UseBoomerang : MonoBehaviour
                         //SEGUNDO REBOTE
                         if (Physics.Raycast(ray2, out RaycastHit hit2, distanceToDisplacementOnBouncing))
                         {
+                            /*lr.SetPosition(1, point);
+                            lr.SetPosition(2, localTargetPosition);*/
                             Vector3 point2 = hit2.point;
                             point2.y = 1f;
                             Debug.DrawRay(ray2.origin, ray2.direction * distanceToDisplacementOnBouncing, Color.green);
@@ -375,12 +353,17 @@ public class UseBoomerang : MonoBehaviour
                         else
                         {
                             Debug.DrawRay(ray2.origin, ray2.direction * distanceToDisplacementOnBouncing, Color.red);
+                            //localTargetPosition2 = Vector3.zero;
                         }
                     }
                     else
                     {
                         Debug.DrawRay(ray.origin, ray.direction * distanceToDisplacementOnBouncing, Color.yellow);
                     }
+                }
+                else
+                {
+                    //localTargetPosition = Vector3.zero;
                 }
 
             }
@@ -453,6 +436,68 @@ public class UseBoomerang : MonoBehaviour
             return finalPoint;
         }
     }
+    public override void Activate()
+    {
+        //Debug.Log("Activamos");
+        BoomerangUpgradeController boomerangUpgrades = FindObjectOfType<BoomerangUpgradeController>(true);
+        if (boomerangUpgrades != null)
+        {
+            if (boomerangUpgrades.managerOfEffectGO != null)
+            {
+                boomerangUpgrades.managerOfEffectGO.SetActive(true);
+                //Debug.Log("Activamos el efecto del upgrade boomerang");
+                if (boomerangUpgrades.areaDamageMode)
+                {
+                    boomerangUpgrades.SelectUpgrade2(UpgradeName.AreaDamage);
+                }
+                else if (boomerangUpgrades.freezeMode)
+                {
+                    boomerangUpgrades.SelectUpgrade2(UpgradeName.Freeze);
+                }
+                
+            }
+        }
+        boomerangController.gameObject.SetActive(true);
+        //para que no vuelva cuando acabe el specialThrow
+        boomerangController.gameObject.GetComponent<BoomerangController>().isReturning = false;
+        if (!boomerangController.specialThrow)
+        {
+            boomerangController.gameObject.GetComponent<FollowLine>().ClearWayPoints();
+            boomerangController.gameObject.GetComponent<LineRenderer>().enabled = false;
+        }
+
+        //mode.text = "BOOMERANG MODE";
+    }
+    public override void Disable()
+    {
+        BoomerangUpgradeController boomerangUpgrades = FindObjectOfType<BoomerangUpgradeController>();
+        if (boomerangController.onHand)
+        {
+            if (boomerangUpgrades != null)
+            {
+                if (boomerangUpgrades.managerOfEffectGO != null)
+                {
+                    boomerangUpgrades.managerOfEffectGO.SetActive(false);
+                    //Debug.Log("Desactivamos el efecto del upgrade boomerang");
+                }
+                
+            }
+            boomerangController.gameObject.SetActive(false);
+        }
+        else
+        {
+            boomerangController.gameObject.GetComponent<BoomerangController>().specialThrow = false;
+            boomerangController.gameObject.GetComponent<BoomerangController>().bouncing = false;
+            boomerangController.gameObject.GetComponent<Rigidbody>().useGravity = true;
+            boomerangController.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            boomerangController.gameObject.GetComponent<BoomerangController>().onGround = true;
+            boomerangController.gameObject.GetComponent<BoomerangController>().rotation = false;
+            boomerangController.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            boomerangController.gameObject.GetComponent<Collider>().isTrigger = false;
+            boomerangController.gameObject.GetComponent<BoomerangController>().isFlying = false;
+            boomerangController.gameObject.GetComponent<BoomerangController>().isReturning = false;
+        }
+    }
     //funcion para arreglar el lineRenderer
     /*private void RepaintLinerendereOnMaxDistanceSurpass(Vector3 currentEndPoint)
     {
@@ -466,4 +511,100 @@ public class UseBoomerang : MonoBehaviour
         lastEndPoint = currentEndPoint;
         //deflection = Vector3.zero;
     }*/
+    private void PressLeftClick()
+    {
+        //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
+        if (Input.GetMouseButtonDown(0) && boomerangController.onHand && !boomerangController.isFlying && !boomerangController.specialThrow &&
+            !boomerangController.isReturning)
+        {
+            Debug.Log("BOOM = CLICK IZQUIERDO PULSADO");
+            animator.SetTrigger("Charge");
+            //activamos la barra de progreso
+            chargeBar.SetActive(true);
+            chargeBar.GetComponent<ChargeBar>().target = boomerangController.gameObject;
+            chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
+            chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDistance);
+
+
+            isButtonPressed = true;
+            startedTimePress = Time.time;
+            //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
+            startPoint = boomerangController.gameObject.transform.position;
+            startPointOriginal = startPoint;
+            Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
+            startPoint = boomerangController.gameObject.transform.position + direction * minDistanceToLaunch;
+            pressStartTime = Time.time;
+        }
+    }
+    private void IsLeftClickPressed()
+    {
+        if (isButtonPressed)
+        {
+            Debug.Log("BOOM = BUTTON PRESSED");
+            endPoint = CalculateEndPoint()/* + deflection.normalized*/;
+            timePressed = Time.time - startedTimePress;
+            /*if (timePressed <= 1.5f)
+            {
+                timePressedText.text = "TimePressed = " + timePressed.ToString();
+            }*/
+
+        }
+        //atraer boomerang con poder mental
+        if (Input.GetMouseButton(0) && !boomerangController.isFlying && !boomerangController.onHand && !boomerangController.attracting &&
+            playerStats.currentMana >= 5 && !boomerangController.isReturning && !boomerangController.specialThrow && !boomerangController.bouncing)
+        {
+            Debug.Log("BOOM = ATRAER BOOMERANG CON PODER MENTAL");
+            //revisar bien esto
+            startPoint = boomerangController.gameObject.transform.position;
+            startPointOriginal = startPoint;
+            //modificamos el startpoint para que empiece a calcularse un poco mas delante y tenga una "fuerza minima"
+            //Vector3 direction = GetMouseWorldPosition() - startPoint;
+            Vector3 direction = Vector3.Normalize(GetMouseWorldPosition() - startPoint);
+            startPoint = boomerangController.gameObject.transform.position + direction/* * minDistanceToLaunch*/;
+            boomerangController.isReturning = true;
+            boomerangController.attracting = true;
+            //asi vuelve en linea recta a la posicion inicial de lanzamiento
+            boomerangController.returnPosition = handPlace.transform.position;
+        }
+    }
+    private void isLeftClickUp()
+    {
+        // Lanzamiento
+        if (Input.GetMouseButtonUp(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow &&
+            !boomerangController.isReturning && isButtonPressed)
+        {
+            animator.SetTrigger("Attack");
+            Debug.Log("BOOM = CLICK IZQUIERDO SOLTADO");
+            //update del damage del boomerangController, por si pillamos un Powerup
+            boomerangController.damageBoomerang = damage;
+            Debug.Log("boomerang lanzado");
+            distanceToEnd = 0f;
+            chargeBar.SetActive(false);
+
+            clickPressed = false;
+            //reiniciamos el counter para empezar a generar el lineRenderer si el jugaodr tiene ya pulsado el click izquierdo
+            counterClicks = 0;
+
+            lr.positionCount = 0;
+            boomerangController.onHand = false;
+            //mantenemos su rotacion original
+            boomerangController.gameObject.transform.rotation = Quaternion.identity;
+            boomerangController.gameObject.transform.SetParent(null);
+            initialPosition = boomerangController.gameObject.transform.position;
+            boomerangController.rotation = true;
+            Launch();
+            lr.enabled = false;
+            boomerangController.onColdown = true;
+            isButtonPressed = false;
+
+            //calculamos el coldown estimado (FORMA CORRECTA, PERO EL T NO ES LINEAL)
+            Debug.Log("distancia entre inicio y fin = " + Vector3.Distance(transform.position, endPoint));
+            /*float distance = Vector3.Distance(transform.position, endPoint);
+            expectedColdownTime = (distance / followSpeed * Time.deltaTime);*/
+
+            Debug.Log("expected coldown = " + current_coldown);
+            startedTimeThrow = Time.time;
+            current_coldown = coldown;
+        }
+    }
 }

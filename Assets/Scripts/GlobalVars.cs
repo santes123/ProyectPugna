@@ -8,4 +8,7 @@ public static class GlobalVars
     public static string lastSceneBeforeDeadOrSave = "";
     public static string lastSceneMovingOnMenus = "";
 
+    //audio
+    public static float generalVolume = 1f;
+    public static bool muteOn = false;
 }

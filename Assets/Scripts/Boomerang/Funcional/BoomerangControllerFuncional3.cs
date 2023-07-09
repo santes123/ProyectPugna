@@ -105,7 +105,7 @@ public class BoomerangControllerFuncional3 : MonoBehaviour
     void Update()
     {
 
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             if (onColdown)
             {
@@ -259,7 +259,7 @@ public class BoomerangControllerFuncional3 : MonoBehaviour
     {
         //AÑADIDO AL LATEUPDATE PARA UNA MEJOR ACTUALIZACION (AUN POR MEJORAR)
         //Carga
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             if (Input.GetMouseButton(0) && !isFlying && onHand && !specialThrow && !isReturning)
             {
@@ -362,7 +362,7 @@ public class BoomerangControllerFuncional3 : MonoBehaviour
     // Actualizar la posición del Boomerang mientras está en vuelo
     void FixedUpdate()
     {
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
             if (Vector3.Distance(transform.position, handPlace.position) <= minDistance + 1 && !isFlying && !specialThrow ||

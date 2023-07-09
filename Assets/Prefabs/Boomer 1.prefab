@@ -447,12 +447,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aac5bdb644579eb409666c391299540c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_coldown: 0
+  coldown: 0
   areaDamageRadius: 4
   freezeDuration: 3
   areaDamageMode: 0
   freezeMode: 0
   damageOnAreaDamage: 3
   damageOnFreeze: 1
+  areaDamageUpgrade:
+    currentCharges: 0
+    maxCharges: 2
+  freezeUpgrade:
+    currentCharges: 0
+    maxCharges: 2
+  managerOfEffectGO: {fileID: 0}
 --- !u!114 &950984781
 MonoBehaviour:
   m_ObjectHideFlags: 0

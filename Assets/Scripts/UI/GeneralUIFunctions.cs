@@ -24,4 +24,6 @@ public class GeneralUIFunctions : MonoBehaviour
         MenuManager.CambiarEscena("KeybindingsScene");
         //SceneManager.LoadScene("KeybindingsScene");
     }
+
+
 }

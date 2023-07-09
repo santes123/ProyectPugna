@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UseAttractThrowSkill : MonoBehaviour
+public class UseAttractThrowSkill : SkillParent
 {
     //variables locales
     [HideInInspector]
     public bool onColdown = false;
-    [HideInInspector]
-    public float remainingTime;
-    public float coldownTime = 2f;
     [HideInInspector]
     public GameObject target = null;
     SpecialObject selectedObjectScript;
@@ -75,20 +72,25 @@ public class UseAttractThrowSkill : MonoBehaviour
     {
         if (onColdown)
         {
-            remainingTime -= Time.deltaTime;
+            current_coldown -= Time.deltaTime;
             //Debug.Log("remaining time = " + remainingTime);
-            if (remainingTime <= 0f)
+            if (current_coldown <= 0f)
             {
                 onColdown = false;
-                remainingTime = 0f;
+                current_coldown = 0f;
                 //reiniciamos el target para poder seleccionar otro objetivo
                 target = null;
             }
         }
-        if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
+        if (player.selectedMode == GameMode.AttractThrow)
         {
 
             Debug.Log("MODO ATTRACT AND THROW ACTIVADO...");
+            /*Debug.Log("check raycast = " + CheckIfRayHitObject());
+            Debug.Log("coldown = " + onColdown);
+            Debug.Log("player.currentMana = " + player.currentMana);
+            Debug.Log("manaCost = " + manaCost);*/
+
             if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost)
             {
                 Debug.Log("ATRAYENDO...");
@@ -108,8 +110,27 @@ public class UseAttractThrowSkill : MonoBehaviour
                 if (finalManaCost > player.currentMana || player.currentMana == 0)
                 {
                     estaSiendoAtraido = false;
+                    selectedObjectScript.estaSiendoAtraido = false;
                     Debug.Log("NO TIENES SUFICIENTE MANA!");
+                    FindObjectOfType<GameManager>().ShowNoManaText();
                     //añadir variables para cancelar y poder volver a atraerlo
+
+                    if (finalManaCost <= player.currentMana)
+                    {
+                        player.UseSkill(finalManaCost);
+                    }
+                    else
+                    {
+                        player.UseSkill(player.currentMana);
+                    }
+                    finalManaCost = 0f;
+                    velocidadAtraccion = 0;
+                    //desactivamos la barra de progreso
+                    chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
+                    chargeBar.SetActive(false);
+                    target = null;
+
+
                 }
                 else
                 {
@@ -156,7 +177,7 @@ public class UseAttractThrowSkill : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        if (player.selectedMode == PlayerStats.GameMode.AttractThrow)
+        if (player.selectedMode == GameMode.AttractThrow)
         {
             //LANZAMIENTO
             if (Input.GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost)
@@ -165,7 +186,7 @@ public class UseAttractThrowSkill : MonoBehaviour
                 //target.GetComponent<Rigidbody>().Sleep();
                 chargeBar.SetActive(false);
                 onColdown = true;
-                remainingTime = coldownTime;
+                current_coldown = coldown;
                 botonPresionado = false;
                 print(tiempoPulsado);
                 if (tiempoPulsado <= 0.5f)
@@ -214,13 +235,31 @@ public class UseAttractThrowSkill : MonoBehaviour
                 Debug.Log("fuerza post lanzamiento = " + fuerzaLanzamiento);
                 tiempoPulsado = 0f;
 
-                //consumimos mana fijo por ahora
                 if (finalManaCost <= player.currentMana)
                 {
+                    Debug.Log("tienes suficiente mana");
                     player.UseSkill(finalManaCost);
                     target.GetComponent<Rigidbody>().AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
+                }//tienes el mana minimo pero no el necesario para lanzarlo actualmente
+                else
+                {
+                    Debug.Log("no tienes suficiente mana");
+                    FindObjectOfType<GameManager>().ShowNoManaText();
+                    Disable();
+                    selectedObjectScript.haSidoLanzado = true;
+                    target = null;
+                    selectedObjectScript = null;
                 }
                 finalManaCost = 0f;
+            }//no tienes el mana minimo
+            else if(Input.GetMouseButtonUp(1) && selectedObjectScript.estaSiendoAtraido == true && player.currentMana < manaCost)
+            {
+                Debug.Log("no tienes suficiente mana2");
+                FindObjectOfType<GameManager>().ShowNoManaText();
+                Disable();
+                selectedObjectScript.haSidoLanzado = true;
+                target = null;
+                selectedObjectScript = null;
             }
         }
 
@@ -233,11 +272,12 @@ public class UseAttractThrowSkill : MonoBehaviour
         //Debug.DrawRay(player.position, player.forward, Color.red, Mathf.Infinity);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, collisionMask, QueryTriggerInteraction.Collide))
         {
-
-            if (target == null)
+            target = hit.collider.gameObject;
+            //if (target == null)
+            if (target != null)
             {
-
-                target = hit.collider.gameObject;
+                //reahacerlo para que pueda cambiar de target
+                //target = hit.collider.gameObject;
                 Debug.Log("TARGET ENCONTRADO!");
                 Debug.Log("target = " + target.name);
                 maxDistanceFromTargetToPlayer = Vector3.Distance(target.transform.position, gameObject.transform.position);
@@ -245,10 +285,13 @@ public class UseAttractThrowSkill : MonoBehaviour
                 print(target.name);
                 Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.green);
                 print("collision con un objeto atraible");
+                Debug.Log("target ==null  = " + target.gameObject.name);
                 return true;
             }
             else
             {
+                Debug.Log("target != null = " + target.gameObject.name);
+                //return target;
                 return false;
             }
 
@@ -280,5 +323,25 @@ public class UseAttractThrowSkill : MonoBehaviour
                 return Vector3.zero;
             }
         }
+    }
+    public override void Disable()
+    {
+        if (onHand)
+        {
+            //eliminamos todas las variables que hacen que se vuelva a atraer hacia la mano
+            onHand = false;
+            target.GetComponent<SpecialObject>().onHand = false;
+            estaSiendoAtraido = false;
+            target.GetComponent<SpecialObject>().estaSiendoAtraido = false;
+            target.GetComponent<SpecialObject>().rb.useGravity = true;
+            target.GetComponent<BoxCollider>().enabled = true;
+            onColdown = false;
+        }
+        if (onHand) onHand = false;
+    }
+
+    public override void Activate()
+    {
+        
     }
 }

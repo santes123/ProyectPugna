@@ -93,7 +93,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     void Update()
     {
 
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             //Debug.Log("EL BOOMERANG HACE COSAS!");
 
@@ -132,14 +132,14 @@ public class BoomerangController : MonoBehaviour, IDamager
             }
             if (bouncing)
             {
-                boomerangPlayer.expectedColdownTime = 0f;
+                boomerangPlayer.current_coldown = 0f;
                 // Desplazar gradualmente hacia la posición de destino usando Lerp
                 Vector3 newPosition = Vector3.Lerp(transform.position, boomerangPlayer.targetPosition, boomerangPlayer.followSpeed * Time.deltaTime);
                 newPosition.y = transform.position.y; // Mantener la posición actual en el eje Y
                 transform.position = newPosition;
 
                 // Aplicar gravedad después de haberse desplazado a la posición de destino
-                if (Vector3.Distance(transform.position, boomerangPlayer.targetPosition) <= boomerangPlayer.minDistance)
+                if (Vector3.Distance(transform.position, boomerangPlayer.targetPosition) <= boomerangPlayer.minDistanceOnHit)
                 {
                     Debug.Log("llegue al destino Bouncing");
                     GetComponent<Rigidbody>().useGravity = true;
@@ -166,7 +166,7 @@ public class BoomerangController : MonoBehaviour, IDamager
     // Actualizar la posición del Boomerang mientras está en vuelo
     void FixedUpdate()
     {
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
             if (Vector3.Distance(transform.position, handPlace.position) <= boomerangPlayer.minDistance + 1 && !isFlying && !specialThrow ||
@@ -241,6 +241,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             if (onHand)
             {
                 onColdown = false;
+                boomerangPlayer.current_coldown = 0f;
                 onGround = false;
                 rotation = false;
                 bouncing = false;
@@ -355,6 +356,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             else //filtramos para que no atraviese muros, si ha superado el numero maximos de rebotes
             {
                 Debug.Log("llegue al destino");
+                Debug.Log("boomerangPlayer.localTargetPosition = " + boomerangPlayer.localTargetPosition);
                 GetComponent<Rigidbody>().useGravity = true;
                 GetComponent<Rigidbody>().velocity = Vector3.zero;
                 bouncing = false;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class BoomerangUpgradeController : MonoBehaviour
+public class BoomerangUpgradeController : SkillParent
 {
     public float areaDamageRadius = 1.5f;
     public float freezeDuration = 3f;
@@ -12,10 +12,10 @@ public class BoomerangUpgradeController : MonoBehaviour
     public bool freezeMode = false;
     public int damageOnAreaDamage = 3;
     public int damageOnFreeze = 1;
-    public int currentChargesAreaDamage;
-    public int maxChargesAreaDamage = 2;
-    public int currentChargesFreeze;
-    public int maxChargesFreeze = 2;
+    public BoomerangUpgrade areaDamageUpgrade;
+    public BoomerangUpgrade freezeUpgrade;
+
+
     BoomerangController boomerangController;
     ManageBoomerangParticles boomerangParticlesManager;
 
@@ -24,35 +24,38 @@ public class BoomerangUpgradeController : MonoBehaviour
 
     private bool effectActivated = false;
     private AreaOfEffect aoe;
+    public event System.Action OnCurrentChargesUpdate;
+    public delegate void Selector(UpgradeName uN);
+    public event Selector OnSelected, OnDeselected;
     private void Start()
     {
         //recuperamos el manager de particulas
         aoe = GetComponent<AreaOfEffect>();
         boomerangParticlesManager = GetComponent<ManageBoomerangParticles>();
         boomerangController = GetComponent<BoomerangController>();
-        currentChargesAreaDamage = maxChargesAreaDamage;
-        currentChargesFreeze = maxChargesFreeze;
+        SetCurrentCharges(areaDamageUpgrade.maxCharges, UpgradeName.AreaDamage);
+        SetCurrentCharges(freezeUpgrade.maxCharges, UpgradeName.Freeze);
     }
     void Update()
     {
         //SE PUEDE CAMBIAR ENTRE UNO Y OTRO, PERO SOLO SE MANTIENE UNO ACTIVO A LA VEZ
         // Activa el modo de daño en área al presionar la tecla Q
-        if (Input.GetKeyDown(KeyCode.Q) && currentChargesAreaDamage > 0 && !effectActivated)
+        if (Input.GetKeyDown(KeyCode.Q) && areaDamageUpgrade.currentCharges > 0 && !effectActivated)
         {//si activas el efecto de daño en area
-            currentChargesAreaDamage--;
+            SelectUpgrade(UpgradeName.AreaDamage);
             areaDamageMode = !areaDamageMode;
 
             //activamos el efecto en el boomerang
             managerOfEffectGO = boomerangParticlesManager.InstantiateExplosionEffect();
             Debug.Log("Modo de daño en área: " + areaDamageMode);
             effectActivated = true;
-        }else if (Input.GetKeyDown(KeyCode.Q) && currentChargesAreaDamage > 0 && effectActivated && freezeMode)
+        }else if (Input.GetKeyDown(KeyCode.Q) && areaDamageUpgrade.currentCharges > 0 && effectActivated && freezeMode)
         {//si tienes activado el freeze, pero quieres cambiar a daño en area en su lugar
             freezeMode = !freezeMode;
             areaDamageMode = !areaDamageMode;
-            currentChargesFreeze++;
-            currentChargesAreaDamage--;
 
+            DeselectUpgrade(UpgradeName.Freeze);
+            SelectUpgrade(UpgradeName.AreaDamage);
             GameObject copy = managerOfEffectGO;
             Destroy(copy, 0.2f);
             managerOfEffectGO = null;
@@ -60,9 +63,9 @@ public class BoomerangUpgradeController : MonoBehaviour
         }
 
         // Activa el modo de congelamiento en área al presionar la tecla Z
-        if (Input.GetKeyDown(KeyCode.Z) && currentChargesFreeze > 0 && !effectActivated)
+        if (Input.GetKeyDown(KeyCode.Z) && freezeUpgrade.currentCharges > 0 && !effectActivated)
         {//si activas el modo freeze
-            currentChargesFreeze--;
+            SelectUpgrade(UpgradeName.Freeze);
             freezeMode = !freezeMode;
 
             //activamos el efecto en el boomerang
@@ -70,12 +73,12 @@ public class BoomerangUpgradeController : MonoBehaviour
             Debug.Log("Modo de congelamiento en área: " + freezeMode);
             effectActivated = true;
         }//si tienes activado el daño en area y quieres activar el freeze en su lugar
-        else if (Input.GetKeyDown(KeyCode.Z) && currentChargesFreeze > 0 && effectActivated && areaDamageMode)
+        else if (Input.GetKeyDown(KeyCode.Z) && freezeUpgrade.currentCharges > 0 && effectActivated && areaDamageMode)
         {
             freezeMode = !freezeMode;
             areaDamageMode = !areaDamageMode;
-            currentChargesAreaDamage++;
-            currentChargesFreeze--;
+            SelectUpgrade(UpgradeName.Freeze);
+            DeselectUpgrade(UpgradeName.AreaDamage);
 
             GameObject copy = managerOfEffectGO;
             Destroy(copy, 0.2f);
@@ -172,6 +175,7 @@ public class BoomerangUpgradeController : MonoBehaviour
             boomerangController.lastHitTime = Time.time;
             //Invoke(nameof(DisableMode), 0.5f);
             effectActivated = false;
+            DeselectUpgrade2(UpgradeName.AreaDamage);
         }
 
         if (freezeMode && other.CompareTag("Enemy"))
@@ -208,6 +212,7 @@ public class BoomerangUpgradeController : MonoBehaviour
             managerOfEffectGO = null;
             effectActivated = false;
             freezeMode = false;
+            DeselectUpgrade2(UpgradeName.Freeze);
         }
         
     }
@@ -230,4 +235,125 @@ public class BoomerangUpgradeController : MonoBehaviour
         areaDamageMode = false;
         freezeMode = false;
     }
+
+    public override void Activate()
+    {
+        
+    }
+
+    public override void Disable()
+    {
+        
+    }
+    public int GetCurrentCharges(UpgradeName upgradeName)
+    {
+        switch (upgradeName)
+        {
+            case UpgradeName.AreaDamage:
+                return areaDamageUpgrade.currentCharges;
+                break;
+            case UpgradeName.Freeze:
+                return freezeUpgrade.currentCharges;
+                break;
+            default:
+                return 0;
+                break;
+        }
+        
+    }
+    public int GetMaxCharges(UpgradeName upgradeName)
+    {
+        switch (upgradeName)
+        {
+            case UpgradeName.AreaDamage:
+                return areaDamageUpgrade.maxCharges;
+                break;
+            case UpgradeName.Freeze:
+                return freezeUpgrade.maxCharges;
+                break;
+            default:
+                return 0;
+                break;
+        }
+    }
+    public void SetCurrentCharges(int value, UpgradeName upgradeName)
+    {
+        switch (upgradeName)
+        {
+            case UpgradeName.AreaDamage:
+                areaDamageUpgrade.currentCharges = value;
+                break;
+            case UpgradeName.Freeze:
+                freezeUpgrade.currentCharges = value;
+                break;
+            default:
+                break;
+        }
+        if (OnCurrentChargesUpdate != null)
+        {
+            OnCurrentChargesUpdate();
+        }
+        
+    }
+    public void SelectUpgrade(UpgradeName upgradeName)
+    {
+        switch (upgradeName)
+        {
+            case UpgradeName.AreaDamage:
+                SetCurrentCharges(areaDamageUpgrade.currentCharges - 1, UpgradeName.AreaDamage);
+                break;
+            case UpgradeName.Freeze:
+                SetCurrentCharges(freezeUpgrade.currentCharges - 1, UpgradeName.Freeze);
+                break;
+            default:
+                break;
+        }
+        if (OnSelected != null)
+        {
+            OnSelected(upgradeName);
+        }
+    }
+    public void SelectUpgrade2(UpgradeName upgradeName)
+    {
+        if (OnSelected != null)
+        {
+            OnSelected(upgradeName);
+        }
+    }
+    public void DeselectUpgrade(UpgradeName upgradeName)
+    {
+        switch (upgradeName)
+        {
+            case UpgradeName.AreaDamage:
+                SetCurrentCharges(areaDamageUpgrade.currentCharges + 1, UpgradeName.AreaDamage);
+                break;
+            case UpgradeName.Freeze:
+                SetCurrentCharges(freezeUpgrade.currentCharges + 1, UpgradeName.Freeze);
+                break;
+            default:
+                break;
+        }
+        if (OnDeselected != null)
+        {
+            OnDeselected(upgradeName);
+        }
+
+    }
+    public void DeselectUpgrade2(UpgradeName upgradeName)
+    {
+        if (OnDeselected != null)
+        {
+            OnDeselected(upgradeName);
+        }
+    }
+}
+[System.Serializable]
+public class BoomerangUpgrade{
+    public int currentCharges;
+    public int maxCharges;
+}
+public enum UpgradeName
+{
+    AreaDamage,
+    Freeze
 }

@@ -202,6 +202,8 @@ public class GameManager : MonoBehaviour
                 _LoadData();
                 //Debug.Log("player = " + player.name);
                 playable = true;
+                //buscamos todos los audiosource y les seteamos el volumen /mute
+                SetAudioSourcesVolume();
             }
         }
     }
@@ -221,6 +223,21 @@ public class GameManager : MonoBehaviour
             {
                 floatingDamageText.SetText("NO TIENES SUFICIENTE MANA!", Color.red);
             }
+        }
+    }
+    public void SetAudioSourcesVolume()
+    {
+        // Obtener todos los componentes AudioSource en la escena
+        AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
+
+        // Iterar sobre cada componente AudioSource encontrado
+        foreach (AudioSource audioSource in audioSources)
+        {
+            // Hacer algo con cada AudioSource encontrado
+            Debug.Log("AudioSource encontrado: " + audioSource.gameObject.name);
+            audioSource.volume = GlobalVars.generalVolume;
+            audioSource.mute = GlobalVars.muteOn;
+
         }
     }
 

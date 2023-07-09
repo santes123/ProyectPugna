@@ -69,7 +69,7 @@ public class BoomerangControllerFuncional2 : MonoBehaviour
     // Actualización por fotograma
     void Update()
     {
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
             if (Input.GetMouseButtonDown(0))
@@ -210,7 +210,7 @@ public class BoomerangControllerFuncional2 : MonoBehaviour
     // Actualizar la posición del Boomerang mientras está en vuelo
     void FixedUpdate()
     {
-        if (playerStats.selectedMode == PlayerStats.GameMode.Boomerang)
+        if (playerStats.selectedMode == GameMode.Boomerang)
         {
             //APAÑO PORQUE NO DETECTA BIEN LA COLISION ENTRE EL CHARACTER CONTROLLER Y EL BOX COLLIDER
             if (Vector3.Distance(transform.position, handPlace.position) <= minDistance + 1 && !isFlying && !specialThrow ||

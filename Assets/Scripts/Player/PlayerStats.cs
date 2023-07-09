@@ -1,8 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum GameMode
+{
+    Boomerang,
+    AttractThrow,
+    PyshicShot,
+    Other
+}
 public class PlayerStats : LivingEntity, IInteractor
 {
     PlayerController controller;
@@ -12,19 +20,12 @@ public class PlayerStats : LivingEntity, IInteractor
     public KeyCode PsyquicShot = KeyCode.Alpha3;
 
     public GameObject boomerangGO;
-    UseAttractThrowSkill skillAttractThrow;
-    BoomerangController boomerang;
-    UseBoomerang playerBoomerang;
-    BoomerangUpgradeController boomerangUpgrades;
+    public List<SkillParent> skillList;
 
     [HideInInspector] public GameMode selectedMode;
     //[HideInInspector] public GameObject targetObject;
-    public enum GameMode
-    {
-        Boomerang,
-        AttractThrow,
-        PyshicShot
-    }
+    public event System.Action OnGameModeChanges;
+
 
     protected override void Start()
     {
@@ -32,13 +33,9 @@ public class PlayerStats : LivingEntity, IInteractor
         //base.currentMana = currentMana;
         boomerangGO = FindObjectOfType<BoomerangController>().gameObject;
         controller = GetComponent<PlayerController>();
-        skillAttractThrow = GetComponent<UseAttractThrowSkill>();
-        //boomerang = GameObject.Find("Boomer").GetComponent<BoomerangController>();
-        boomerang = FindObjectOfType<BoomerangController>();
-        //playerBoomerang = GameObject.Find("Player").GetComponent<UseBoomerang>();
-        playerBoomerang = FindObjectOfType<UseBoomerang>();
-        boomerangUpgrades = FindObjectOfType<BoomerangUpgradeController>();
         mode = GameObject.Find("Mode").GetComponent<Text>();
+        skillList.Add(FindObjectOfType<BoomerangUpgradeController>());
+        skillList.Add(FindObjectOfType<BoomerangUpgradeController>());
 
         //inicializamos el mana
         if (currentMana <= 0)
@@ -56,7 +53,8 @@ public class PlayerStats : LivingEntity, IInteractor
         {
             //POR DEFECTO BOOMERANG MODE
             mode.text = "BOOMERANG MODE";
-            selectedMode = GameMode.Boomerang;
+            //selectedMode = GameMode.Boomerang;
+            UseBoomerang();
 
         }
         else
@@ -83,103 +81,49 @@ public class PlayerStats : LivingEntity, IInteractor
         //Debug.Log("onhand specialobject = " + skillAttractThrow.onHand);
         if (Input.GetKeyDown(boomerangMode))
         {
+            DisableAllSKills();
             UseBoomerang();
         }
         else if (Input.GetKeyDown(attractThrowMode))
         {
+            DisableAllSKills();
             UseAttractThrow();
         }
         else if (Input.GetKeyDown(PsyquicShot))
         {
+            DisableAllSKills();
             UsePyshicShot();
         }
     }
+
     private void UseBoomerang()
     {
-        if (boomerangUpgrades.managerOfEffectGO != null)
-        {
-            boomerangUpgrades.managerOfEffectGO.SetActive(true);
-        }
-        boomerangGO.SetActive(true);
-        //para que no vuelva cuando acabe el specialThrow
-        boomerangGO.GetComponent<BoomerangController>().isReturning = false;
-        if (!boomerang.specialThrow)
-        {
-            boomerangGO.GetComponent<FollowLine>().ClearWayPoints();
-            boomerangGO.GetComponent<LineRenderer>().enabled = false;
-        }
 
-        mode.text = "BOOMERANG MODE";
         selectedMode = GameMode.Boomerang;
-        if (skillAttractThrow.onHand)
+        skillList[0].Activate();
+        if (OnGameModeChanges != null)
         {
-            //eliminamos todas las variables que hacen que se vuelva a atraer hacia la mano
-            Debug.Log("onhand specialobject = true");
-            skillAttractThrow.onHand = false;
-            skillAttractThrow.target.GetComponent<SpecialObject>().onHand = false;
-            skillAttractThrow.estaSiendoAtraido = false;
-            skillAttractThrow.target.GetComponent<SpecialObject>().estaSiendoAtraido = false;
-            skillAttractThrow.target.GetComponent<SpecialObject>().rb.useGravity = true;
-            skillAttractThrow.target.GetComponent<BoxCollider>().enabled = true;
-            skillAttractThrow.onColdown = false;
+            OnGameModeChanges();
         }
     }
     private void UseAttractThrow()
     {
-        if (boomerang.onHand)
-        {
-            if (boomerangUpgrades.managerOfEffectGO != null)
-            {
-                boomerangUpgrades.managerOfEffectGO.SetActive(false);
-            }
-            boomerangGO.SetActive(false);
-        }/*else if ()
-        {
-
-        }*/
-        else
-        {
-            boomerang.specialThrow = false;
-            boomerang.bouncing = false;
-            boomerangGO.GetComponent<Rigidbody>().useGravity = true;
-            boomerangGO.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            boomerang.onGround = true;
-            boomerang.rotation = false;
-            boomerangGO.GetComponent<Rigidbody>().isKinematic = false;
-            boomerangGO.GetComponent<Collider>().isTrigger = false;
-            boomerang.isFlying = false;
-            boomerang.isReturning = false;
-            playerBoomerang.expectedColdownTime = 0f;
-        }
         mode.text = "ATTRACT-THROW MODE";
         selectedMode = GameMode.AttractThrow;
+        if (OnGameModeChanges != null)
+        {
+            OnGameModeChanges();
+        }
     }
     private void UsePyshicShot()
     {
-        if (boomerang.onHand)
-        {
-            if (boomerangUpgrades.managerOfEffectGO != null)
-            {
-                boomerangUpgrades.managerOfEffectGO.SetActive(false);
-            }
-            boomerangGO.SetActive(false);
-        }
-        else
-        {
-            boomerangGO.GetComponent<BoomerangController>().specialThrow = false;
-            boomerangGO.GetComponent<BoomerangController>().bouncing = false;
-            boomerangGO.GetComponent<Rigidbody>().useGravity = true;
-            boomerangGO.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            boomerangGO.GetComponent<BoomerangController>().onGround = true;
-            boomerangGO.GetComponent<BoomerangController>().rotation = false;
-            boomerangGO.GetComponent<Rigidbody>().isKinematic = false;
-            boomerangGO.GetComponent<Collider>().isTrigger = false;
-            boomerangGO.GetComponent<BoomerangController>().isFlying = false;
-            boomerangGO.GetComponent<BoomerangController>().isReturning = false;
-        }
+
         mode.text = "PSYQUIC SHOT MODE";
         selectedMode = GameMode.PyshicShot;
-        if (skillAttractThrow.onHand) skillAttractThrow.onHand = false;
+        if (OnGameModeChanges != null)
+        {
+            OnGameModeChanges();
+        }
     }
     private void OnTriggerStay(Collider other)
     {
@@ -212,5 +156,12 @@ public class PlayerStats : LivingEntity, IInteractor
 
         base.UseSkill(manaCost);
         Debug.Log("currentmanaPlayerStats = " + currentMana);
+    }
+    private void DisableAllSKills()
+    {
+        foreach (SkillParent item in skillList)
+        {
+            item.Disable();
+        }
     }
 }

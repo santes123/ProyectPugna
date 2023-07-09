@@ -690,6 +690,12 @@ MonoBehaviour:
   attractThrowMode: 50
   PsyquicShot: 51
   boomerangGO: {fileID: 6788211113882554637}
+  skillList:
+  - {fileID: 1035388283}
+  - {fileID: 1035388277}
+  - {fileID: 1035388278}
+  - {fileID: 1035388276}
+  - {fileID: 1035388284}
   selectedMode: 0
 --- !u!114 &1035388276
 MonoBehaviour:
@@ -703,18 +709,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8748ecf2302db240ada89c3f5f2a367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_coldown: 0
+  coldown: 5
   dashDistance: 5
   dashDuration: 0.1
   dashKey: 101
   maxCharges: 3
-  chargeRegenTime: 5
   currentCharges: 0
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 1024
   dashPrefabParticle: {fileID: 1854854489728914, guid: 4d656fc300120a647a9b0eb5c27ca882,
     type: 3}
-  remainingTime: 0
 --- !u!114 &1035388277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -727,9 +733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 290ab5c6305dd2444ab74680ae63e9ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_coldown: 0
+  coldown: 2
   onColdown: 0
-  remainingTime: 0
-  coldownTime: 2
   target: {fileID: 0}
   estaSiendoAtraido: 0
   haSidoLanzado: 0
@@ -753,7 +759,7 @@ MonoBehaviour:
   maxDistanceFromTargetToPlayer: 0
   currentDistanceFromTargetToPlayer: 0
   manaCost: 5
-  incrementoDeCosteManaPorSegundo: 2.5
+  incrementoDeCosteManaPorSegundo: 1.5
   maxManaCost: 15
   finalManaCost: 0
 --- !u!114 &1035388278
@@ -768,6 +774,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26ec6c60daf44804abcbb71660e8b20b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_coldown: 0
+  coldown: 3
   esferaPrefab: {fileID: 5572282687115576243, guid: 64c873f7735ff8d44bb9343063cb342b,
     type: 3}
   initialSpeed: 10
@@ -780,13 +788,11 @@ MonoBehaviour:
   maxDamage: 5
   initialManaCost: 5
   maxManaCost: 15
-  coldown: 3
   spawnPoint: {fileID: 6373747219582029140}
   currentSpeed: 0
   currentDamage: 0
   currentImpulseForce: 0
   onColdown: 0
-  remainingTime: 0
   onHand: 0
   chargeBar: {fileID: 0}
 --- !u!114 &1035388283
@@ -801,9 +807,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 424f2ea9bb0c1294d8dc396981d541cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_coldown: 0
+  coldown: 1
   followSpeed: 4
   maxDistance: 10
   minDistance: 0.5
+  minDistanceOnHit: 0.2
   minDistanceToLaunch: 4
   damage: 2.5
   targetPosition: {x: 0, y: 0, z: 0}
@@ -812,14 +821,17 @@ MonoBehaviour:
   handPlace: {fileID: 6373747219582029140}
   distanceToDisplacementOnBouncing: 5
   mainCamera: {fileID: 0}
+  auxiliarCamera: {fileID: 0}
   chargeBar: {fileID: 0}
   distanceToEnd: 0
-  distancePerSecond: 8
-  expectedColdownTime: 2.5
+  distancePerSecond: 7
   timing: {fileID: 0}
   startedTimeThrow: 0
   timePressedText: {fileID: 0}
   boomerangController: {fileID: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 1024
 --- !u!114 &1035388284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -832,10 +844,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72143fb1a86127f46b642670bc6c0534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  current_coldown: 0
+  coldown: 3
   aoe: {fileID: 1035388269}
   damage: 2.5
   impulseForceWhenHit: 5
-  cooldownTime: 3
   floatingDamageTextPrefab: {fileID: 0}
   prefabAreaExplosion: {fileID: 1432708584439554, guid: 7af1b7c5bfeeee5499b866157ad2057e,
     type: 3}
@@ -3998,6 +4011,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6373747219582029140}
     m_Modifications:
+    - target: {fileID: 950984780, guid: 018d9428bc90dce40a2c5148032799a2, type: 3}
+      propertyPath: freezeUpgrade.maxCharges
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 950984780, guid: 018d9428bc90dce40a2c5148032799a2, type: 3}
+      propertyPath: areaDamageUpgrade.maxCharges
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5483760284801292177, guid: 018d9428bc90dce40a2c5148032799a2,
         type: 3}
       propertyPath: destination

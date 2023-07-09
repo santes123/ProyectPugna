@@ -45,7 +45,8 @@ public class EnemyBase : LivingEntity
             {
                 freeze = false;
                 debuffColdown.gameObject.transform.parent.gameObject.SetActive(false);
-                GetComponent<NavMeshAgent>().enabled = true;
+                //GetComponent<NavMeshAgent>().enabled = true;
+                GetComponent<NavMeshAgent>().isStopped = false;
                 //GetComponent<ChaseBehavior>().StartBehavior();
             }
         }
@@ -88,7 +89,8 @@ public class EnemyBase : LivingEntity
         freeze = true;
         freezeDuration = timeToFreeze;
         debuffColdown.gameObject.transform.parent.gameObject.SetActive(true);
-        GetComponent<NavMeshAgent>().enabled = false;
+        //GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<NavMeshAgent>().isStopped = true;
         //GetComponent<ChaseBehavior>().EndBehavior();
     }
     private GameObject FindChildObjectWithImageComponent(Transform parent, string childObjectName)
