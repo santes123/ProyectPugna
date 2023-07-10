@@ -14,13 +14,18 @@ public class PlayerSpawner : MonoBehaviour
         camera.enabled = false;
         gameManager = FindObjectOfType<GameManager>();
         gameManager.enabled = false;*/
-        GameData.Init();
+        //GameData.Init();
         /*Debug.Log("last position = " + GameData.Data.PlayerData.playerPositionX);
         Debug.Log("last position = " + GameData.Data.PlayerData.playerPositionY);
         Debug.Log("last position = " + GameData.Data.PlayerData.playerPositionZ);*/
         //verificamos si tiene una posicion de savepoint guardada, sino lo spawneamos en el spawnpoint
+        Debug.Log("posicion x jugador = " + GameData.Data.PlayerData.playerPositionX);
+        Debug.Log("posicion y jugador = " + GameData.Data.PlayerData.playerPositionY);
+        Debug.Log("posicion z jugador = " + GameData.Data.PlayerData.playerPositionZ);
+        Debug.Log("current health jugador = " + GameData.Data.PlayerData.currentPlayerHealth);
         if (GameData.Data.PlayerData.playerPositionX != 0)
         {
+            Debug.Log("hay datos del jugador...");
             GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
             GameObject player = Instantiate(playerPrefab, new Vector3(GameData.Data.PlayerData.playerPositionX,
                 GameData.Data.PlayerData.playerPositionY, GameData.Data.PlayerData.playerPositionZ), Quaternion.identity);
@@ -28,6 +33,7 @@ public class PlayerSpawner : MonoBehaviour
         }
         else
         {
+            Debug.Log("No hay datos del jugador...");
             GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
             GameObject player = Instantiate(playerPrefab, transform.position + new Vector3(2.5f, 0f, 2.5f), Quaternion.identity);
             player.name = "Player";

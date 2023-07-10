@@ -10,17 +10,25 @@ public class MainMenu : MonoBehaviour
     GameState saveInfo;
     public string fileName = "/GameData";
     private string sceneToLoad;
+    GameState playerData;
     private void Start()
     {
         /*if (File.Exists("savegame.bin"))
         {
             loadButton.gameObject.SetActive(true);
         }*/
+        //verificar si el archivo existe y tiene informacion de la ubicacion del jugador
         if (File.Exists(Application.persistentDataPath + fileName))
         {
             Debug.Log("Archivo de guardado encontrado...");
-            loadButton.gameObject.SetActive(true);
-            //_LoadData();
+
+            _LoadData();
+            playerData = GameData.Data.PlayerData;
+            if (playerData.currentPlayerHealth > 0)
+            {
+                Debug.Log("Archivo de guardado encontrado...y hay datos");
+                loadButton.gameObject.SetActive(true);
+            }
         }
         else
         {
@@ -39,10 +47,21 @@ public class MainMenu : MonoBehaviour
         {
             Debug.Log("No se encontró el archivo a eliminar");
         }*/
+        Debug.Log("ruta de guardado = " + Application.persistentDataPath);
         if (File.Exists(Application.persistentDataPath + fileName))
         {
             File.Delete(Application.persistentDataPath + fileName);
-            Debug.Log("Archivo eliminado correctamente");
+            //Debug.Log("Archivo eliminado correctamente");
+            // Verificar si el archivo ha sido eliminado
+            
+            if (!File.Exists(Application.persistentDataPath + fileName))
+            {
+                Debug.Log("El archivo se eliminó correctamente.");
+            }
+            else
+            {
+                Debug.Log("No se pudo eliminar el archivo.");
+            }
         }
         else
         {
@@ -55,6 +74,8 @@ public class MainMenu : MonoBehaviour
         GlobalVars.lastSceneMovingOnMenus = SceneManager.GetActiveScene().name;
         //usamos el menu manager para cambiar de escena y guardar la escena en una pila
         //FindObjectOfType<MenuManager>().CambiarEscena(SceneManager.GetActiveScene().name);
+        _LoadData();
+        GameData.ResetData();
         MenuManager.CambiarEscena("Level 1 Laboratory");
         //SceneManager.LoadScene("Level 1 Laboratory");
     }
