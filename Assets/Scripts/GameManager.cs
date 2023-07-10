@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     public bool playable = false;
     //public Button button;
     public GameObject noManaTextGO;
+
+    //public GameObject buffBar;
     private void Awake()
     {
         //asignacion de variables necesarias
@@ -35,7 +37,7 @@ public class GameManager : MonoBehaviour
         //pointsText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
         noManaTextGO = FindObjectOfType<FloatingText>().gameObject;
         enemiesKilled = new List<string>();
-
+        //buffBar = FindObjectOfType<PowerupUIBar>().gameObject;
         //StartCoroutine(FindPlayer());
         //_LoadData();
         /*if (File.Exists("savegame.bin"))

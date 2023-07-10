@@ -25,7 +25,7 @@ public class Powerup : MonoBehaviour
     private GameObject particlesObject;
     private void Start()
     {
-        powerupTimer = FindObjectOfType<PowerupUIBar>();
+        powerupTimer = FindObjectOfType<PowerupUIBar>(true);
         //instanciamos lel prafab de particles
         particlesObject = Instantiate(particlesPrefab, transform.position, particlesPrefab.transform.rotation);
         particlesObject.transform.SetParent(gameObject.transform);
@@ -67,6 +67,8 @@ public class Powerup : MonoBehaviour
 
     private void ApplyPowerup(GameObject player)
     {
+        //activamos la barra de powerups
+        //powerupTimer.gameObject.SetActive(true);
         switch (powerupType)
         {
             case PowerupType.Damage:
@@ -113,6 +115,7 @@ public class Powerup : MonoBehaviour
                 // Aquí puedes poner tu código específico para desactivar el power-up de daño
                 Debug.Log("Power-up de daño desactivado");
                 playerReference.GetComponent<UseBoomerang>().damage = originalDamage;
+                
                 break;
             case PowerupType.Speed:
                 // Desactiva el power-up de velocidad
@@ -127,7 +130,32 @@ public class Powerup : MonoBehaviour
                 playerReference.GetComponent<PlayerController>().invincible = false;
                 break;
         }
+        //desactivamos la barra de buffos si no hay buffos activos
+        if (!VerifyIfGameOjectHaveChildren(FindObjectOfType<PowerupUIBar>().gameObject))
+        {
+            FindObjectOfType<PowerupUIBar>().gameObject.SetActive(false);
+        }
+
         Destroy(gameObject);
         Destroy(buffUI);
+    }
+    private bool VerifyIfGameOjectHaveChildren(GameObject GO)
+    {
+        //FindObjectOfType<PowerupUIBar>().gameObject
+        if (GO.transform.childCount == 1)
+        {
+            //Debug.Log("tiene 1 hijo, por tanto se puede borrar");
+            return false;
+        }else if (GO.transform.childCount == 0)
+        {
+            //Debug.Log("no tiene hijos");
+            return false;
+        }
+        else
+        {
+            //Debug.Log("mas de un hijo");
+            return true;
+        }
+
     }
 }

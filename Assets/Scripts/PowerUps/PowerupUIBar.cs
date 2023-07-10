@@ -12,11 +12,13 @@ public class PowerupUIBar : MonoBehaviour
     private void Awake()
     {
         buffBar = gameObject;
+        buffBar.SetActive(false);
     }
     //funcion que instancia el gameobject en el BuffBar y lo devuelve al script Powerup, donde se borrara cuando sea necesario
     public GameObject AddBuffToBar(string nameOfBuff)
     {
         GameObject newBuff;
+        buffBar.SetActive(true);
         switch (nameOfBuff)
         {
             case "DamageBuff":
