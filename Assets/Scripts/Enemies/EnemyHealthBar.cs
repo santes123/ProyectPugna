@@ -27,7 +27,7 @@ public class EnemyHealthBar : MonoBehaviour
     void Update()
     {
         if (enemy != null)
-        { 
+        {
             //Debug.Log("enemy = " + enemy.gameObject.name);
             healthText.text = enemy.currentHealth.ToString();
             currentHealth = enemy.currentHealth;
@@ -36,7 +36,11 @@ public class EnemyHealthBar : MonoBehaviour
     }
     private void LateUpdate()
     {
-        canvas.transform.LookAt( new Vector3 (transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z));
+        if (FindObjectOfType<CameraController>())
+        {
+            canvas.transform.LookAt(new Vector3(transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z));
+        }
+
     }
     /*public GameObject GetLastParent(GameObject go)
     {

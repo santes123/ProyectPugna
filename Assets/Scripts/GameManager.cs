@@ -115,8 +115,16 @@ public class GameManager : MonoBehaviour
                 GeneralUIFunctions[] elementos = pauseMenuUI.GetComponentsInChildren<GeneralUIFunctions>(true);
                 elementos[0].gameObject.SetActive(false);
                 elementos[1].gameObject.SetActive(false);
+                elementos[1].gameObject.SetActive(false);
+                GameObject settingsPanel = FindObjectOfType<SettingsPanel>(true).gameObject;
+                settingsPanel.transform.Find("PanelMenuAudio").gameObject.SetActive(false);
                 pauseMenuUI.SetActive(false);
                 onPause = false;
+                //verificar si el mapa esta activado
+                if (FindObjectOfType<MapDisplay>().GetIsMapVisible())
+                {
+                    FindObjectOfType<MapDisplay>().ActiveDisableMapFromMenu();
+                }
             }
         }
 
