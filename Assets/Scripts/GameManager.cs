@@ -69,8 +69,8 @@ public class GameManager : MonoBehaviour
                 GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
                 SceneManager.LoadScene("GameOverMenu");
             }
-            //controlamos la tecla Escape para cuando el jugador quiere pausar
-            if (Input.GetKeyDown(KeyCode.Escape) && !onPause)
+            //controlamos la tecla Escape para cuando el jugador quiere pausar (menos cuando el menu tutorial esta abierto)
+            if (Input.GetKeyDown(KeyCode.Escape) && !onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
             {
                 Debug.Log("PAUSE ON");
                 Time.timeScale = 0f;
@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
                 }
                 //button.onClick.Invoke();
             }
-            else if (Input.GetKeyDown(KeyCode.Escape) && onPause)
+            else if (Input.GetKeyDown(KeyCode.Escape) && onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
             {
                 Debug.Log("PAUSE OFF");
 
@@ -170,6 +170,9 @@ public class GameManager : MonoBehaviour
             player.transform.position = LastPosition;
             enemiesKilled = playerData.enemiesEliminated;
             player.selectedMode = playerData.lastSelectedMode;
+            //cargamos el booleano para el tutorial y desactivamos el tutorial
+            GlobalVars.tutorialCompleted = playerData.tutorialCompleted;
+            GameObject.Find("TutorialItems").SetActive(false);
 
             //Debug.Log("enemies killed data -> " + playerData.enemiesEliminated);
             //Debug.Log("mana cargado = " + playerData.currentPlayerMana);
@@ -215,6 +218,7 @@ public class GameManager : MonoBehaviour
                 //buscamos todos los audiosource y les seteamos el volumen /mute
                 SetAudioSourcesVolume();
             }
+            yield return null;
         }
     }
     //funcion para mostrar texto en pantalla cuando no tienes mana para realizar una accion e intentas hacerla igualmente

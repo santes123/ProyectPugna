@@ -19,10 +19,7 @@ public class PlayerSpawner : MonoBehaviour
         Debug.Log("last position = " + GameData.Data.PlayerData.playerPositionY);
         Debug.Log("last position = " + GameData.Data.PlayerData.playerPositionZ);*/
         //verificamos si tiene una posicion de savepoint guardada, sino lo spawneamos en el spawnpoint
-        Debug.Log("posicion x jugador = " + GameData.Data.PlayerData.playerPositionX);
-        Debug.Log("posicion y jugador = " + GameData.Data.PlayerData.playerPositionY);
-        Debug.Log("posicion z jugador = " + GameData.Data.PlayerData.playerPositionZ);
-        Debug.Log("current health jugador = " + GameData.Data.PlayerData.currentPlayerHealth);
+        GameData.Init();
         if (GameData.Data.PlayerData.playerPositionX != 0)
         {
             Debug.Log("hay datos del jugador...");

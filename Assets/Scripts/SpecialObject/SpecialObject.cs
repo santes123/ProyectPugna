@@ -46,7 +46,7 @@ public class SpecialObject : MonoBehaviour, IDamager
     {
         //useSkil = GameObject.Find("Player").GetComponent<UseAttractThrowSkill>();
         useSkil = FindObjectOfType<UseAttractThrowSkill>();
-        player = FindObjectOfType<PlayerStats>().gameObject.transform;
+        //player = FindObjectOfType<PlayerStats>().gameObject.transform;
         rb = GetComponent<Rigidbody>();
         velocidadAtraccionOriginal = useSkil.velocidadAtraccion;
         enemiesHited = new List<string>();
@@ -56,6 +56,7 @@ public class SpecialObject : MonoBehaviour, IDamager
         //fuerzaLanzamiento = fuerzaBase;
 
         //boomerangReference = GameObject.Find("Boomer").GetComponent<BoomerangController>();
+        StartCoroutine(FindPlayer());
     }
 
     void Update()
@@ -71,22 +72,26 @@ public class SpecialObject : MonoBehaviour, IDamager
         {
             velocidadAtraccion += 2;
         */
-        if (onHand)
+        if (player != null)
         {
-            transform.position = handPlace.position;
-            //reiniciamos la velocidad de atraccion al valor base
-            useSkil.velocidadAtraccion = velocidadAtraccionOriginal;
-            // Obtener las rotaciones actuales en los tres ejes
-            Vector3 rotacionesActuales = transform.rotation.eulerAngles;
+            if (onHand)
+            {
+                transform.position = handPlace.position;
+                //reiniciamos la velocidad de atraccion al valor base
+                useSkil.velocidadAtraccion = velocidadAtraccionOriginal;
+                // Obtener las rotaciones actuales en los tres ejes
+                Vector3 rotacionesActuales = transform.rotation.eulerAngles;
 
-            // Agregar rotaciones adicionales en los ejes Y y Z
-            float rotacionY = rotacionesActuales.y + velocidadRotacion * Time.deltaTime;
-            float rotacionZ = rotacionesActuales.z + velocidadRotacion * Time.deltaTime;
+                // Agregar rotaciones adicionales en los ejes Y y Z
+                float rotacionY = rotacionesActuales.y + velocidadRotacion * Time.deltaTime;
+                float rotacionZ = rotacionesActuales.z + velocidadRotacion * Time.deltaTime;
 
-            // Actualizar las rotaciones del objeto
-            //transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
-            transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionesActuales.z);
-        }/*
+                // Actualizar las rotaciones del objeto
+                //transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
+                transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionesActuales.z);
+            }
+        }
+        /*
         //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
         if (Input.GetMouseButtonDown(1))
         {
@@ -101,40 +106,43 @@ public class SpecialObject : MonoBehaviour, IDamager
     void FixedUpdate()
     {
         //ATRACCION
-        
-        if (useSkil.estaSiendoAtraido && !useSkil.haSidoLanzado && estaSiendoAtraido/* && !boomerangReference.onHand*/)
+        if (player != null)
         {
-            if (Vector3.Distance(handPlace.position, transform.position) <= distanceToTakeOnHand)
+            if (useSkil.estaSiendoAtraido && !useSkil.haSidoLanzado && estaSiendoAtraido/* && !boomerangReference.onHand*/)
             {
-                //CALCULAR MANA POR SEGUNDO PULSADO Y HACER PARA QUE SI YA TIENES UNO EN LA MANO O ESTAS ATRAYENDO UNO, NO PODER ATRAER OTRO
-                print("on hand");
-                useSkil.estaSiendoAtraido = false;
-                //estaSiendoAtraido = false;
-                useSkil.onHand = true;
-                onHand = true;
-                GetComponent<BoxCollider>().enabled = false;
-                //GetComponent<MeshCollider>().enabled = false;
-                rb.useGravity = false;
-                //consumimos mana fijo por ahora
-                if (useSkil.finalManaCost > useSkil.maxManaCost)
+                if (Vector3.Distance(handPlace.position, transform.position) <= distanceToTakeOnHand)
                 {
-                    useSkil.finalManaCost = useSkil.manaCost;
+                    //CALCULAR MANA POR SEGUNDO PULSADO Y HACER PARA QUE SI YA TIENES UNO EN LA MANO O ESTAS ATRAYENDO UNO, NO PODER ATRAER OTRO
+                    print("on hand");
+                    useSkil.estaSiendoAtraido = false;
+                    //estaSiendoAtraido = false;
+                    useSkil.onHand = true;
+                    onHand = true;
+                    GetComponent<BoxCollider>().enabled = false;
+                    //GetComponent<MeshCollider>().enabled = false;
+                    rb.useGravity = false;
+                    //consumimos mana fijo por ahora
+                    if (useSkil.finalManaCost > useSkil.maxManaCost)
+                    {
+                        useSkil.finalManaCost = useSkil.manaCost;
+                    }
+                    player.GetComponent<PlayerStats>().UseSkill(useSkil.finalManaCost);
+                    useSkil.finalManaCost = 0f;
+                    useSkil.chargeBar.SetActive(false);
                 }
-                player.GetComponent<PlayerStats>().UseSkill(useSkil.finalManaCost);
-                useSkil.finalManaCost = 0f;
-                useSkil.chargeBar.SetActive(false);
+                else
+                {
+                    Vector3 posicionJugador = player.position;
+                    Vector3 direccion = (posicionJugador - transform.position).normalized;
+                    rb.MovePosition(transform.position + direccion * useSkil.velocidadAtraccion * Time.fixedDeltaTime);
+                }
             }
             else
             {
-                Vector3 posicionJugador = player.position;
-                Vector3 direccion = (posicionJugador - transform.position).normalized;
-                rb.MovePosition(transform.position + direccion * useSkil.velocidadAtraccion * Time.fixedDeltaTime);
+                //Debug.Log("No tienes suficiente mana para seguir!");
             }
         }
-        else
-        {
-            //Debug.Log("No tienes suficiente mana para seguir!");
-        }
+ 
         //LANZAMIENTO
         /*if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)
         {
@@ -297,5 +305,18 @@ public class SpecialObject : MonoBehaviour, IDamager
     }
 
     public void Attack() {
+    }
+    IEnumerator FindPlayer()
+    {
+        while (player == null)
+        {
+            if (FindObjectOfType<PlayerStats>())
+            {
+                player = FindObjectOfType<PlayerStats>().gameObject.transform;
+                if (player != null) yield return new WaitForSeconds(0.5f);
+            }
+ 
+            yield return null;
+        }
     }
 }

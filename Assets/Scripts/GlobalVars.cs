@@ -11,4 +11,7 @@ public static class GlobalVars
     //audio
     public static float generalVolume = 1f;
     public static bool muteOn = false;
+
+    //
+    public static bool tutorialCompleted = false;
 }

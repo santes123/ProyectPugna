@@ -88,6 +88,7 @@ public class CameraController : MonoBehaviour
                 //Debug.Log("targets count = " + targets.Count);
                 if (player != null) yield return null;
             }
+            yield return null;
         }
     }
 }

@@ -15,5 +15,6 @@ public class GameState
     public List<string> enemiesEliminated;
     public GameMode lastSelectedMode;
     public string lastScenePlayed;
+    public bool tutorialCompleted;
     //public List<string> collectedItems;
 }

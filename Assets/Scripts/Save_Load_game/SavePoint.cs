@@ -105,6 +105,9 @@ public class SavePoint : MonoBehaviour
         Debug.Log("mana guardado = " + GameData.Data.PlayerData.currentPlayerMana);
         Debug.Log("selected mode guardado = " + GameData.Data.PlayerData.lastSelectedMode);
 
+        //verificamos si el jugador ha completado el tutorial
+        GameData.Data.PlayerData.tutorialCompleted = GlobalVars.tutorialCompleted;
+
         GameData.Save();
 
     }
