@@ -7,7 +7,7 @@ public class FloatingText : MonoBehaviour
     public float fadeSpeed = 2f;
 
     private Text damageText;
-    private float lifeTime = 0.5f;
+    public float lifeTime = 0.5f;
     private float timer = 0f;
 
     void Start()

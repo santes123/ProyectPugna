@@ -130,6 +130,7 @@ public class TutorialController : MonoBehaviour
             CancelInvoke("VerifyIfTutorialIsCompleted");
             Debug.Log("TUTORIAL COMPLETED");
             GlobalVars.tutorialCompleted = true;
+            TutorialCompleted();
             return true;
         }
         else
@@ -137,6 +138,13 @@ public class TutorialController : MonoBehaviour
             return false;
         }
        
+    }
+    private void TutorialCompleted()
+    {
+        GameObject showMessageGO = FindObjectOfType<GameManager>().ShowMessageToPlayerTextGO;
+        showMessageGO.SetActive(true);
+        showMessageGO.GetComponent<ShowMessageToPlayerText>().SetText("Tutorial completado!", "Has compleato el tutorial satisfactoriamente. Si tienes cualquier duda, revisa la seccion controles" +
+            "dentro del menu de pausa o de menu principal. Diviertete!", Color.green);
     }
 }
 public enum TutorialSelection

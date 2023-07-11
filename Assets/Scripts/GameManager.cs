@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     //public Button button;
     public GameObject noManaTextGO;
 
+    //showtextmessagetoplayer
+    public GameObject ShowMessageToPlayerTextGO;
+
     //public GameObject buffBar;
     private void Awake()
     {
@@ -37,6 +40,8 @@ public class GameManager : MonoBehaviour
         //pointsText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
         noManaTextGO = FindObjectOfType<FloatingText>().gameObject;
         enemiesKilled = new List<string>();
+        ShowMessageToPlayerTextGO = FindAnyObjectByType<ShowMessageToPlayerText>().gameObject;
+        ShowMessageToPlayerTextGO.SetActive(false);
         //buffBar = FindObjectOfType<PowerupUIBar>().gameObject;
         //StartCoroutine(FindPlayer());
         //_LoadData();

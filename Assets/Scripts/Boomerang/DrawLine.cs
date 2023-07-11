@@ -70,6 +70,7 @@ public class DrawLine : MonoBehaviour
                     lineRenderer.enabled = false;
                     followScript.ClearWayPoints();
                     Debug.Log("NO TIENES SUFICIENTE MANA O NO SE PUEDE LANZAR");
+                    FindObjectOfType<GameManager>().ShowNoManaText();
                 }
                 
             }

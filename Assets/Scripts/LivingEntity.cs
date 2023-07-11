@@ -125,6 +125,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
         if (mana <= 0)
         {
             Debug.Log("NO TIENES SUFICIENTE MANA");
+            gameManager.ShowNoManaText();
         }
     }
     public virtual void RegenerateMana(float manaToRegenerate)
