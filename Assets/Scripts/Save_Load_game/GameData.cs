@@ -56,7 +56,7 @@ public static class GameData {
 			Data.StringData.Add (key, value);
 		} 
 		else {
-			Data.StringData [key] = value;
+			Data.StringData [key] += value;
 		}
 		Save ();
 	}

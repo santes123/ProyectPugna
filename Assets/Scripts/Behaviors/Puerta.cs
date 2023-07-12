@@ -8,6 +8,7 @@ public class Puerta : MonoBehaviour
     public InteractableState estado;
     public bool cerrada = true;
     Animator animator;
+    public bool doubleLock = false;
     private void Start() {
         animator = GetComponent<Animator>();
     }
@@ -46,6 +47,12 @@ public class Puerta : MonoBehaviour
     }
 
     public void UnlockPuerta() {
-        estado = InteractableState.Unlocked;
+        if(!doubleLock) {
+            estado = InteractableState.Unlocked;
+        }
+        
+        if(doubleLock) {
+            doubleLock = false;
+        }
     }
 }
