@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
         //pointsText = FindObjectOfType<HealthBar>().GetComponentInChildren<TextMeshProUGUI>();
         noManaTextGO = FindObjectOfType<FloatingText>().gameObject;
         enemiesKilled = new List<string>();
-        ShowMessageToPlayerTextGO = FindAnyObjectByType<ShowMessageToPlayerText>().gameObject;
-        ShowMessageToPlayerTextGO.SetActive(false);
+        //ShowMessageToPlayerTextGO = FindAnyObjectByType<ShowMessageToPlayerText>().gameObject;
+        //ShowMessageToPlayerTextGO.SetActive(false);
         //buffBar = FindObjectOfType<PowerupUIBar>().gameObject;
         //StartCoroutine(FindPlayer());
         //_LoadData();
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
                 SceneManager.LoadScene("GameOverMenu");
             }
             //controlamos la tecla Escape para cuando el jugador quiere pausar (menos cuando el menu tutorial esta abierto)
-            if (Input.GetKeyDown(KeyCode.Escape) && !onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
+            if (Input.GetKeyDown(KeyCode.Escape) && !onPause) //&& !FindObjectOfType<TutorialController>().tutorialMenuOpened)
             {
                 Debug.Log("PAUSE ON");
                 Time.timeScale = 0f;
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
                 }
                 //button.onClick.Invoke();
             }
-            else if (Input.GetKeyDown(KeyCode.Escape) && onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
+            else if (Input.GetKeyDown(KeyCode.Escape) && onPause) //&& !FindObjectOfType<TutorialController>().tutorialMenuOpened)
             {
                 Debug.Log("PAUSE OFF");
 
