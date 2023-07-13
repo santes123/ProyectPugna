@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/ExplosiveLLC/RPG Character Mecanim Animation Pack/Models/Characters/Blender/Blender-Bones.unitypackage.meta
 guid: c505388570cffd242bc3aae8e62700b6
+========
+guid: e72a0731a61d4dc47acd2667ab5f3a86
+folderAsset: yes
+>>>>>>>> main:Assets/Prefabs/Boss.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
