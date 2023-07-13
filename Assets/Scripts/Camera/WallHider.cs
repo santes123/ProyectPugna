@@ -84,7 +84,7 @@ public class WallHider : MonoBehaviour
     {
         Ray ray = new Ray(player.position, mainCamera.transform.position - player.position);
         RaycastHit[] hits = Physics.RaycastAll(ray, 10f, wallLayer);
-        Debug.Log("hits wall = " + hits.Length);
+        //Debug.Log("hits wall = " + hits.Length);
         if (hits.Length > 0)
         {
             // Itera a través de los resultados del raycast

@@ -15,6 +15,7 @@ TagManager:
   - SkillBar
   - Wall
   - TutorialItem
+  - BossDoor
   layers:
   - Default
   - TransparentFX

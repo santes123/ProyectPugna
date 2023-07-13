@@ -36,6 +36,7 @@ public class UseAttractThrowSkill : SkillParent
     //Rigidbody rb;
     public bool onHand = false;
     public LayerMask collisionMask;
+    public LayerMask collisionMaskEnemies;
 
     public float velocidadRotacion;
 
@@ -55,6 +56,9 @@ public class UseAttractThrowSkill : SkillParent
     public float maxManaCost;
     public float finalManaCost;
 
+    //
+    public float maxDistanceAttract = 20f;
+
     //progresivamente pasar la parte de controles del SpecialObject aqui, tiene mas sentido
     void Start()
     {
@@ -64,7 +68,8 @@ public class UseAttractThrowSkill : SkillParent
         //chargeBar = GameObject.FindGameObjectWithTag("ChargeBar");
         //Debug.Log("name = " + chargeBar.name);
         //chargeBar = GameObject.Find("ChargeBar");
-        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        //chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        chargeBar = FindObjectOfType<GameManager>().chargeBar;
         pointer = FindObjectOfType<Crosshairs>().GetComponent<Transform>();
     }
 
@@ -91,7 +96,7 @@ public class UseAttractThrowSkill : SkillParent
             Debug.Log("player.currentMana = " + player.currentMana);
             Debug.Log("manaCost = " + manaCost);*/
 
-            if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost)
+            if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost && !onHand)
             {
                 Debug.Log("ATRAYENDO...");
 
@@ -155,12 +160,16 @@ public class UseAttractThrowSkill : SkillParent
                 target.transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionZ);
             }*/
             //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
-            if (Input.GetMouseButtonDown(1) && target.GetComponent<SpecialObject>().onHand)
+            if (target != null)
             {
-                botonPresionado = true;
-                chargeBar.SetActive(true);
-                chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
+                if (Input.GetMouseButtonDown(1) && target.GetComponent<SpecialObject>().onHand)
+                {
+                    botonPresionado = true;
+                    chargeBar.SetActive(true);
+                    chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
+                }
             }
+
             if (botonPresionado)
             {
                 tiempoPulsado += Time.deltaTime;
@@ -177,7 +186,7 @@ public class UseAttractThrowSkill : SkillParent
     }
     private void FixedUpdate()
     {
-        if (player.selectedMode == GameMode.AttractThrow)
+        if (player.selectedMode == GameMode.AttractThrow && target != null)
         {
             //LANZAMIENTO
             if (Input.GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost)
@@ -188,6 +197,8 @@ public class UseAttractThrowSkill : SkillParent
                 onColdown = true;
                 current_coldown = coldown;
                 botonPresionado = false;
+                //desactivamos el isKinematic del enemigo/objeto para poder aplicarle fuerzas
+                selectedObjectScript.rb.isKinematic = false;
                 print(tiempoPulsado);
                 if (tiempoPulsado <= 0.5f)
                 {
@@ -267,12 +278,17 @@ public class UseAttractThrowSkill : SkillParent
     //FUNCIONES UTILIDAD
     private bool CheckIfRayHitObject()
     {
-        Ray ray = new Ray(transform.position, transform.forward);
+        Ray ray = new Ray(transform.position + new Vector3(0,0.5f,0)/* + Vector3.up*/, transform.forward);
         RaycastHit hit;
         //Debug.DrawRay(player.position, player.forward, Color.red, Mathf.Infinity);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, collisionMask, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(ray, out hit, maxDistanceAttract, collisionMask, QueryTriggerInteraction.Collide)/* || Physics.Raycast(ray, out hit, maxDistanceAttract, collisionMaskEnemies, QueryTriggerInteraction.Collide)*/) 
         {
-            target = hit.collider.gameObject;
+            Debug.DrawRay(ray.origin, ray.direction * 20f,Color.blue);
+            if (target != null && !onHand && !estaSiendoAtraido || target == null)
+            {
+                target = hit.collider.gameObject;
+            }
+            //target = hit.collider.gameObject;
             //if (target == null)
             if (target != null)
             {
@@ -286,6 +302,13 @@ public class UseAttractThrowSkill : SkillParent
                 Debug.DrawRay(transform.position, transform.forward * hit.distance, Color.green);
                 print("collision con un objeto atraible");
                 Debug.Log("target ==null  = " + target.gameObject.name);
+
+                //desactivamos el iskinematic si es un enemigo
+                if (target.GetComponent<EnemyBase>())
+                {
+                    target.GetComponent<Rigidbody>().isKinematic = false;
+                }
+
                 return true;
             }
             else
@@ -298,7 +321,7 @@ public class UseAttractThrowSkill : SkillParent
         }
         else
         {
-            Debug.DrawRay(transform.position, transform.forward * 20f, Color.red);
+            Debug.DrawRay(ray.origin, ray.direction * 20f, Color.red);
             return false;
         }
     }

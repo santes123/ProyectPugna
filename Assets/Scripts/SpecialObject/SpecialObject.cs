@@ -118,7 +118,17 @@ public class SpecialObject : MonoBehaviour, IDamager
                     //estaSiendoAtraido = false;
                     useSkil.onHand = true;
                     onHand = true;
-                    GetComponent<BoxCollider>().enabled = false;
+                    //ajustamos el isKinematic, por si en algun momento se ha desajustado
+                    rb.isKinematic = false;
+                    if (GetComponent<BoxCollider>())
+                    {
+                        GetComponent<BoxCollider>().enabled = false;
+                    }
+                    if (GetComponent<CapsuleCollider>())
+                    {
+                        GetComponent<CapsuleCollider>().enabled = false;
+                    }
+                    
                     //GetComponent<MeshCollider>().enabled = false;
                     rb.useGravity = false;
                     //consumimos mana fijo por ahora
@@ -266,17 +276,35 @@ public class SpecialObject : MonoBehaviour, IDamager
                 }
             }
         }
+        //cuando atraes enemigos
+        /*if (other.CompareTag("Ground"))
+        {
+            Invoke("ResetSkill", 1f);
+            Debug.Log("he chocado con el suelo");
+        }*/
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            Invoke("ResetSkill", 1f);
+            Invoke("ResetSkill", 0.5f);
+            Debug.Log("he chocado con el suelo");
         }
     }
+
     private void ResetSkill()
     {
         haSidoLanzado = false;
+        //activamos iskinematic para los enemigos cuando han sido lanzados
+        if (GetComponent<EnemyBase>())
+        {
+            Debug.Log("reseteando skill...activando iskinematic");
+            if (rb != null)
+            {
+                rb.isKinematic = true;
+            }
+
+        }
         enemiesHited.Clear();
     }
     void DealDamageToEnemy(float damage)

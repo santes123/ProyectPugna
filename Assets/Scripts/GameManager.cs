@@ -28,10 +28,13 @@ public class GameManager : MonoBehaviour
 
     //showtextmessagetoplayer
     public GameObject ShowMessageToPlayerTextGO;
+    public GameObject chargeBar;
 
     //public GameObject buffBar;
     private void Awake()
     {
+        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        chargeBar.SetActive(false);
         //asignacion de variables necesarias
         pauseMenuUI = FindObjectOfType<PauseMenu>().gameObject;
         pauseMenuUI.SetActive(false);

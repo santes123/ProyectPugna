@@ -6,7 +6,8 @@ using UnityEngine.AI;
 
 public class EnemyBase : LivingEntity
 {
-    PlayerStats player;
+    //PlayerStats player;
+    GameObject player;
     Animator behaviorTree;
     // Start is called before the first frame update
 
@@ -20,7 +21,7 @@ public class EnemyBase : LivingEntity
     {
         base.Start();
         behaviorTree = GetComponent<Animator>();
-        player = FindObjectOfType<PlayerStats>();
+        player = FindObjectOfType<PlayerStats>().gameObject;
         OnDeath += Death;
         //buscamos el icono de debuff en la UI del enemigo
         debuffColdown = FindChildObjectWithImageComponent(gameObject.transform, "Coldown");
@@ -36,6 +37,7 @@ public class EnemyBase : LivingEntity
     // Update is called once per frame
     void Update()
     {
+
         if (freeze)
         {
             freezeDuration -= Time.deltaTime;
@@ -54,9 +56,20 @@ public class EnemyBase : LivingEntity
         //{
             if (!(player != null) && GetComponent<NavMeshAgent>().isActiveAndEnabled)
             {
-                player = FindObjectOfType<PlayerStats>();
+                //player = FindObjectOfType<PlayerStats>();
+                player = FindObjectOfType<PlayerStats>().gameObject;
+
             }
-            UpdateBehaviorTree();
+            //verificamos si hay algun señuelo para actualizar el target del enemigo
+            if (FindObjectOfType<SenueloBehavior>())
+            {
+                player = FindObjectOfType<SenueloBehavior>().gameObject;
+            }//si no los hay, buscamos al jugador
+            else
+            {
+                player = FindObjectOfType<PlayerStats>().gameObject;
+            }
+        UpdateBehaviorTree();
         //}
 
     }

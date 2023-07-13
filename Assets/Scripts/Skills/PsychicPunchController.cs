@@ -32,7 +32,8 @@ public class PsychicPunchController : SkillParent
     {
         //playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
         playerStats = FindObjectOfType<PlayerStats>();
-        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        //chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        chargeBar = FindObjectOfType<GameManager>().chargeBar;
     }
 
     void Update()
@@ -131,7 +132,7 @@ public class PsychicPunchController : SkillParent
             }
             else
             {
-              Debug.Log("Skill on Coldown...");
+              //Debug.Log("Skill on Coldown...");
             }
         }
         else

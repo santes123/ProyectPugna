@@ -55,9 +55,13 @@ public class PauseMenu : MonoBehaviour
         FindObjectOfType<DashController>().enabled = true;
         FindObjectOfType<PushAwaySkill>().enabled = true;
         FindObjectOfType<ManaRegeneration>().enabled = true;
-        FindObjectOfType<BoomerangController>().enabled = true;
-        FindObjectOfType<DrawLine>().enabled = true;
-        FindObjectOfType<BoomerangUpgradeController>().enabled = true;
+        if (FindObjectOfType<BoomerangController>())
+        {
+            FindObjectOfType<BoomerangController>().enabled = true;
+            FindObjectOfType<DrawLine>().enabled = true;
+            FindObjectOfType<BoomerangUpgradeController>().enabled = true;
+        }
+
         gameObject.SetActive(false);
         Time.timeScale = 1f;
         gameManager.onPause = false;

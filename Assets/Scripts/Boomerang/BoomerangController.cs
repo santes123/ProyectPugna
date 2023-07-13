@@ -375,6 +375,36 @@ public class BoomerangController : MonoBehaviour, IDamager
             onHand = true;
             transform.SetParent(handPlace.transform);
         }
+        //colision con la puerta dle boss
+        if (other.CompareTag("BossDoor") && !onHand && isFlying)
+        {
+            if (Time.time - lastHitTime > coldownHit)
+            {
+                //regeneramos el mana al golpear al enemigo
+                if (playerStats.currentMana < playerStats.startingMana)
+                {
+                    FindObjectOfType<ManaRegeneration>().RegenerateManaOnHit();
+                }
+                lastHitTime = Time.time;
+                if (specialThrow)
+                {
+                    //MakeDamageToEnemyAndPush(other, damage);
+                    MakeDamageToEnemyAndPush(other, boomerangPlayer.damage);
+                }
+                else
+                {
+                    //MakeDamageToEnemyAndPush(other, damage);
+                    MakeDamageToEnemyAndPush(other, boomerangPlayer.damage);
+                    //en caso de que lo golpee con un rebote, ponemos a false bouncing
+                    if (bouncing)
+                    {
+                        bouncing = false;
+                    }
+                    //vuelve el boomerang
+                    Return();
+                }
+            }
+        }
     }
     public void MakeDamageToEnemyAndPush(Collider other, float damage)
     {
