@@ -55,4 +55,9 @@ public class Puerta : MonoBehaviour
             doubleLock = false;
         }
     }
+
+    public void CerrarPuertaYLock() {
+        InteraccionConPuerta();
+        estado = InteractableState.Locked;
+    }
 }

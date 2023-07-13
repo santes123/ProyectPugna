@@ -240,16 +240,16 @@ RectTransform:
   m_GameObject: {fileID: 6739314278082804332}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 5.771149, y: 0.625, z: 1}
+  m_LocalScale: {x: 1, y: 0.625, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6739314278068519489}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.75, y: 1}
+  m_SizeDelta: {x: 0, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6739314278082804329
 CanvasRenderer:
@@ -328,7 +328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1.300003}
+  m_AnchoredPosition: {x: 0, y: 1.2999878}
   m_SizeDelta: {x: 6, y: 1.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &6739314278403799213
@@ -444,6 +444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBar: {fileID: 6739314278082804334}
   healthText: {fileID: 6739314277636526648}
+  canvas: {fileID: 0}
 --- !u!1001 &2586284518327230144
 PrefabInstance:
   m_ObjectHideFlags: 0
