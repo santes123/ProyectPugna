@@ -37,7 +37,7 @@ public class DashController : SkillParent
     }
     private void Update()
     {
-        if (CanDash() && Input.GetKeyDown(dashKey))
+        if (CanDash() && GetKeyDown(dashKey))
         {
             StartDash();
         }

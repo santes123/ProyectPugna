@@ -126,7 +126,7 @@ public class PushAwaySkill : SkillParent, IDamager
         UpdateCooldown();
 
         // Verifica si se presion� la tecla R y si no est� en enfriamiento
-        if (Input.GetKeyDown(KeyCode.R) && !isCooldown)
+        if (GetKeyDown(KeyCode.R) && !isCooldown)
         {
             Debug.Log("use la habilidad");
             UseAbility();

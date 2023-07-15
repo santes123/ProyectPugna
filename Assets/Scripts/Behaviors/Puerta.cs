@@ -18,7 +18,7 @@ public class Puerta : MonoBehaviour
         switch(estado) {
             case InteractableState.Locked:
             Debug.Log("Estado es bloqueado.");
-            FindObjectOfType<ShowMessageToPlayerText>().SetText(""+name, "Necesitas la "+ nombreDeRequerimiento + " para abrir esta puerta.", Color.green);
+            FindObjectOfType<ShowMessageToPlayerText>().SetText(""+name, "Necesita "+ nombreDeRequerimiento + " para abrir esta puerta.", Color.green);
             //estado = InteractableState.Unlocked;
             break;
             case InteractableState.Unlocked:

@@ -140,7 +140,7 @@ public class UseBoomerang : SkillParent
         //Carga
         if (playerStats.selectedMode == GameMode.Boomerang)
         {
-            if (Input.GetMouseButton(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow 
+            if (GetMouseButton(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow 
                 && !boomerangController.isReturning && isButtonPressed)
             {
                 Debug.Log("BOOM = CLICK IZQUIERDO MANTENER PULSADO LR");
@@ -523,7 +523,7 @@ public class UseBoomerang : SkillParent
     private void PressLeftClick()
     {
         //MOVER TODO EL CODIGO DE UPDATE/LATE UPDATE Y DEMAS AQUI
-        if (Input.GetMouseButtonDown(0) && boomerangController.onHand && !boomerangController.isFlying && !boomerangController.specialThrow &&
+        if (GetMouseButtonDown(0) && boomerangController.onHand && !boomerangController.isFlying && !boomerangController.specialThrow &&
             !boomerangController.isReturning)
         {
             Debug.Log("BOOM = CLICK IZQUIERDO PULSADO");
@@ -559,7 +559,7 @@ public class UseBoomerang : SkillParent
 
         }
         //atraer boomerang con poder mental
-        if (Input.GetMouseButton(0) && !boomerangController.isFlying && !boomerangController.onHand && !boomerangController.attracting &&
+        if (GetMouseButton(0) && !boomerangController.isFlying && !boomerangController.onHand && !boomerangController.attracting &&
             playerStats.currentMana >= 5 && !boomerangController.isReturning && !boomerangController.specialThrow && !boomerangController.bouncing)
         {
             Debug.Log("BOOM = ATRAER BOOMERANG CON PODER MENTAL");
@@ -579,7 +579,7 @@ public class UseBoomerang : SkillParent
     private void isLeftClickUp()
     {
         // Lanzamiento
-        if (Input.GetMouseButtonUp(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow &&
+        if (GetMouseButtonUp(0) && !boomerangController.isFlying && boomerangController.onHand && !boomerangController.specialThrow &&
             !boomerangController.isReturning && isButtonPressed)
         {
             animator.SetTrigger("Attack");

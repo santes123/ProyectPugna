@@ -52,7 +52,7 @@ public class PsychicPunchController : SkillParent
         if (playerStats.selectedMode == GameMode.PyshicShot/* && playerStats.currentMana >= initialManaCost*/)
         {
 
-            if (!onColdown && Input.GetMouseButtonDown(0)/* && playerStats.currentMana >= initialManaCost*/)
+            if (!onColdown && GetMouseButtonDown(0)/* && playerStats.currentMana >= initialManaCost*/)
             {
                 if (playerStats.currentMana < initialManaCost)
                 {
@@ -73,7 +73,7 @@ public class PsychicPunchController : SkillParent
                 currentManaCost = initialManaCost;
                 currentImpulseForce = initialImpulseForce;
             }
-            else if (!onColdown && Input.GetMouseButton(0) && currentSphere != null)
+            else if (!onColdown && GetMouseButton(0) && currentSphere != null)
             {
                 // Incrementar la escala y la velocidad de la esfera mientras se mantiene pulsado el botón izquierdo del ratón
                 if (currentSphere != null)
@@ -88,7 +88,7 @@ public class PsychicPunchController : SkillParent
                     currentImpulseForce = Mathf.Lerp(initialImpulseForce, maxImpulseForce, currentScale / maxScale);
                 }
             }
-            else if (!onColdown && Input.GetMouseButtonUp(0) && currentSphere != null)
+            else if (!onColdown && GetMouseButtonUp(0) && currentSphere != null)
             {
                 if (playerStats.currentMana >= currentManaCost)
                 {

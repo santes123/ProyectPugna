@@ -12,6 +12,7 @@ public class TutorialController : MonoBehaviour
     public float intervalToCheckIfTutorialCompleted;
     public GameObject tutorialBlocker;
     public bool tutorialMenuOpened = false;
+    public Puerta puertaDeTutorial;
     void Start()
     {
         listOfTutorialItems = GameObject.FindGameObjectsWithTag("TutorialItem");
@@ -75,7 +76,7 @@ public class TutorialController : MonoBehaviour
     public void PauseGame()
     {
         Debug.Log("PAUSE ON");
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         Cursor.visible = true;
         //deshabilitamos los scripts que molestan
         FindObjectOfType<Crosshairs>().enabled = false;
@@ -95,7 +96,7 @@ public class TutorialController : MonoBehaviour
     public void UnpauseGame()
     {
         Debug.Log("PAUSE OFF");
-        Time.timeScale = 1f;
+        //Time.timeScale = 1f;
         Cursor.visible = false;
         //deshabilitamos los scripts que molestan
         FindObjectOfType<Crosshairs>().enabled = true;
@@ -148,6 +149,7 @@ public class TutorialController : MonoBehaviour
         FindObjectOfType<PlayerStats>().SetCurrentMana(FindObjectOfType<PlayerStats>().startingMana);
         FindObjectOfType<DashController>().currentCharges = FindObjectOfType<DashController>().maxCharges;
         FindObjectOfType<DashController>().currentCharges = FindObjectOfType<DashController>().maxCharges;
+        puertaDeTutorial.UnlockPuerta();
     }
 }
 public enum TutorialSelection

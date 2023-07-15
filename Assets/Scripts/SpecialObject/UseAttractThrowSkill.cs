@@ -73,6 +73,8 @@ public class UseAttractThrowSkill : SkillParent
         pointer = FindObjectOfType<Crosshairs>().GetComponent<Transform>();
     }
 
+
+
     void Update()
     {
         if (onColdown)
@@ -96,7 +98,7 @@ public class UseAttractThrowSkill : SkillParent
             Debug.Log("player.currentMana = " + player.currentMana);
             Debug.Log("manaCost = " + manaCost);*/
 
-            if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost && !onHand)
+            if (GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost && !onHand)
             {
                 Debug.Log("ATRAYENDO...");
 
@@ -109,7 +111,7 @@ public class UseAttractThrowSkill : SkillParent
                 chargeBar.GetComponent<ChargeBar>().ResetFilled(0f);
                 chargeBar.GetComponent<ChargeBar>().ChangeObjetive(maxDistanceFromTargetToPlayer);
             }
-            if (Input.GetMouseButton(0) && estaSiendoAtraido)
+            if (GetMouseButton(0) && estaSiendoAtraido)
             {
                 velocidadAtraccion += 2;
                 if (finalManaCost > player.currentMana || player.currentMana == 0)
@@ -162,7 +164,7 @@ public class UseAttractThrowSkill : SkillParent
             //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
             if (target != null)
             {
-                if (Input.GetMouseButtonDown(1) && target.GetComponent<SpecialObject>().onHand)
+                if (GetMouseButtonDown(1) && target.GetComponent<SpecialObject>().onHand)
                 {
                     botonPresionado = true;
                     chargeBar.SetActive(true);
@@ -189,7 +191,7 @@ public class UseAttractThrowSkill : SkillParent
         if (player.selectedMode == GameMode.AttractThrow && target != null)
         {
             //LANZAMIENTO
-            if (Input.GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost)
+            if (GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost)
             {
                 
                 //target.GetComponent<Rigidbody>().Sleep();
@@ -267,7 +269,7 @@ public class UseAttractThrowSkill : SkillParent
                 }
                 finalManaCost = 0f;
             }//no tienes el mana minimo
-            else if(Input.GetMouseButtonUp(1) && selectedObjectScript.estaSiendoAtraido == true && player.currentMana < manaCost)
+            else if(GetMouseButtonUp(1) && selectedObjectScript.estaSiendoAtraido == true && player.currentMana < manaCost)
             {
                 Debug.Log("no tienes suficiente mana2");
                 FindObjectOfType<GameManager>().ShowNoManaText();
