@@ -4357,6 +4357,8 @@ GameObject:
   - component: {fileID: 4856948748028598981}
   - component: {fileID: 4856948748028598980}
   - component: {fileID: 736466272743722025}
+  - component: {fileID: 5923782296438173932}
+  - component: {fileID: 5647774592892352231}
   m_Layer: 7
   m_Name: Enemy1
   m_TagString: Enemy
@@ -4418,6 +4420,7 @@ MonoBehaviour:
   startingMana: 0
   currentHealth: 0
   currentMana: 0
+  bounceOnEnemies: 0
   damageVFX: {fileID: 8031699067492803896, guid: 9c9b72b339e1fde4ea4f9b7a86ef7546,
     type: 3}
 --- !u!195 &4856948748028598989
@@ -4529,7 +4532,7 @@ CapsuleCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4856948748028598990}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.5
   m_Height: 2
@@ -4631,6 +4634,47 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &5923782296438173932
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4856948748028598990}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &5647774592892352231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4856948748028598990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1654267b31cb464e947698d8fbe2f68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  estaSiendoAtraido: 0
+  haSidoLanzado: 0
+  player: {fileID: 0}
+  handPlace: {fileID: 0}
+  rb: {fileID: 0}
+  onHand: 0
+  velocidadRotacion: 20
+  fuerzaRebote: 4
+  fuerzaAleatoria: 2
+  damage: 2
+  onColdown: 0
+  enemiesHited: []
+  floatingDamageTextPrefab: {fileID: 0}
 --- !u!1001 &5200429851549198549
 PrefabInstance:
   m_ObjectHideFlags: 0

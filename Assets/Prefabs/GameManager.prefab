@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3922728784967612603}
   - component: {fileID: 3922728784967612600}
   - component: {fileID: 3922728784967612602}
+  - component: {fileID: 2515056847610937585}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -51,6 +52,11 @@ MonoBehaviour:
   pauseMenuUI: {fileID: 0}
   saveFileName: savegame.bin
   onPause: 0
+  playerInstantiated: 0
+  playable: 0
+  noManaTextGO: {fileID: 0}
+  ShowMessageToPlayerTextGO: {fileID: 0}
+  chargeBar: {fileID: 0}
 --- !u!114 &3922728784967612602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,3 +69,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd158abedef25b7418ed9fd3cb177bb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2515056847610937585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3922728784967612601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9aa41e2f958f7e43849478784a11804, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelShow: {fileID: 0}
+  panelShowText: {fileID: 0}
+  listOfTextsToShowOnPanel: []
+  listOfTutorialItems: []
+  intervalToCheckIfTutorialCompleted: 0
+  tutorialBlocker: {fileID: 0}
+  tutorialMenuOpened: 0

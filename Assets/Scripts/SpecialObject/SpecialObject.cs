@@ -36,6 +36,7 @@ public class SpecialObject : MonoBehaviour, IDamager
 
     public List<string> enemiesHited;
     public GameObject floatingDamageTextPrefab;
+    public bool grounding = true;
 
     //BoomerangController boomerangReference;
     private void Awake()
@@ -118,6 +119,10 @@ public class SpecialObject : MonoBehaviour, IDamager
                     //estaSiendoAtraido = false;
                     useSkil.onHand = true;
                     onHand = true;
+                    //activamos el onHand del animator
+                    Animator animator = FindObjectOfType<PlayerStats>().gameObject.GetComponentInChildren<Animator>();
+                    animator.SetBool("OnHand", true);
+
                     //ajustamos el isKinematic, por si en algun momento se ha desajustado
                     rb.isKinematic = false;
                     if (GetComponent<BoxCollider>())
@@ -210,86 +215,11 @@ public class SpecialObject : MonoBehaviour, IDamager
     }*/
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
-        {
-            //añadimos el array a enemigos hiteados por este gameobject
-            enemiesHited.Add(other.gameObject.name);
-
-            //APLICAMOS FUERZA AL ENEMIGO
-            //other.gameObject.GetComponent<Rigidbody>().AddForce(rb.velocity, ForceMode.Impulse);
-            // Comprobar si el objeto colisionado no tiene un Rigidbody
-            if (!other.gameObject.GetComponent<Rigidbody>())
-            {
-                Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
-                temporalRb.useGravity = false;
-                //dividimos la fuerza entre 2 porque no usamos gravedad
-                temporalRb.AddForce(useSkil.direccionLanzamientoAnterior * useSkil.fuerzaLanzamientoAnterior / 2, ForceMode.Impulse);
-                Destroy(temporalRb, 0.5f);
-                DealDamageToEnemy(damage);
-            }
-
-            //HACEMOS REBOTAR EL OBJETO EN EL ENEMIGO Y RESETEAMOS LA SKILL
-            rb.Sleep();
-            Invoke("ResetSkill", 1f);
-            print("ENEMY");/*
-            //DIRECCION OPUESTA
-            // Obtener la normal de la colisión
-            Vector3 normal = other.transform.position - transform.position;
-
-            // Obtener la dirección opuesta a la normal de la colisión
-            Vector3 direccionRebote = Vector3.Reflect(transform.forward, normal).normalized;
-
-            // Aplicar una fuerza al objeto en la dirección opuesta
-            rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
-            */
-            rb.WakeUp();
-            //DIRECCION ALEATORIA
-            //direccion random x,y,z
-            Vector3 direccionAleatoria = Random.insideUnitSphere.normalized;
-            //direccion random x z
-            Vector3 direccion = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
-            rb.AddForce(direccion * fuerzaAleatoria, ForceMode.Impulse);
-            Vector3 normal = other.transform.position - transform.position;
-            Vector3 direccionRebote = Vector3.Reflect(direccion, normal).normalized;
-            rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
-            
-            
-
-            //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
-            IDamageable damageableObject = other.GetComponent<IDamageable>();
-            if (damageableObject != null)
-            {
-                print("collision con el enemigo");
-                Damage damageObj = new Damage();
-                damageObj.amount = (int)damage;
-                damageObj.source = UnitType.Player;
-                damageObj.targetType = TargetType.Single;
-
-                //llamamos a la interfaz IDamager
-                DoDamage(damageableObject, damageObj);
-                //damageableObject.ReceiveDamage(damageObj);
-                Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
-                // Cambiar el color del material del renderer
-                if (hitRenderer != null)
-                {
-                    hitRenderer.material.color = Color.blue;
-                }
-            }
-        }
-        //cuando atraes enemigos
-        /*if (other.CompareTag("Ground"))
-        {
-            Invoke("ResetSkill", 1f);
-            Debug.Log("he chocado con el suelo");
-        }*/
+        ApplyDamageToEnemyOnTriggerEnter(other);
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            Invoke("ResetSkill", 0.5f);
-            Debug.Log("he chocado con el suelo");
-        }
+        ApplyDamageToEnemyOnCollisionEnter(collision);
     }
 
     private void ResetSkill()
@@ -346,5 +276,161 @@ public class SpecialObject : MonoBehaviour, IDamager
  
             yield return null;
         }
+    }
+    private void ApplyDamageToEnemyOnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
+        {
+            //añadimos el array a enemigos hiteados por este gameobject
+            enemiesHited.Add(other.gameObject.name);
+
+            //APLICAMOS FUERZA AL ENEMIGO
+            //other.gameObject.GetComponent<Rigidbody>().AddForce(rb.velocity, ForceMode.Impulse);
+            // Comprobar si el objeto colisionado no tiene un Rigidbody
+            if (!other.gameObject.GetComponent<Rigidbody>())
+            {
+                Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
+                temporalRb.useGravity = false;
+                //dividimos la fuerza entre 2 porque no usamos gravedad
+                temporalRb.AddForce(useSkil.direccionLanzamientoAnterior * useSkil.fuerzaLanzamientoAnterior / 2, ForceMode.Impulse);
+                Destroy(temporalRb, 0.5f);
+                DealDamageToEnemy(damage);
+            }
+
+            //HACEMOS REBOTAR EL OBJETO EN EL ENEMIGO Y RESETEAMOS LA SKILL
+            rb.Sleep();
+            Invoke("ResetSkill", 1f);
+            print("ENEMY");/*
+            //DIRECCION OPUESTA
+            // Obtener la normal de la colisión
+            Vector3 normal = other.transform.position - transform.position;
+
+            // Obtener la dirección opuesta a la normal de la colisión
+            Vector3 direccionRebote = Vector3.Reflect(transform.forward, normal).normalized;
+
+            // Aplicar una fuerza al objeto en la dirección opuesta
+            rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
+            */
+            rb.WakeUp();
+            //DIRECCION ALEATORIA
+            //direccion random x,y,z
+            Vector3 direccionAleatoria = Random.insideUnitSphere.normalized;
+            //direccion random x z
+            Vector3 direccion = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+            rb.AddForce(direccion * fuerzaAleatoria, ForceMode.Impulse);
+            Vector3 normal = other.transform.position - transform.position;
+            Vector3 direccionRebote = Vector3.Reflect(direccion, normal).normalized;
+            rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
+
+
+
+            //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
+            IDamageable damageableObject = other.gameObject.GetComponent<IDamageable>();
+            if (damageableObject != null)
+            {
+                print("collision con el enemigo");
+                Damage damageObj = new Damage();
+                damageObj.amount = (int)damage;
+                damageObj.source = UnitType.Player;
+                damageObj.targetType = TargetType.Single;
+
+                //llamamos a la interfaz IDamager
+                DoDamage(damageableObject, damageObj);
+                //damageableObject.ReceiveDamage(damageObj);
+                Renderer hitRenderer = other.gameObject.GetComponentInChildren<Renderer>();
+                // Cambiar el color del material del renderer
+                if (hitRenderer != null)
+                {
+                    hitRenderer.material.color = Color.blue;
+                }
+            }
+        }
+        if (other.gameObject.CompareTag("Ground")/* && !grounding*/)
+        {
+            Invoke("ResetSkill", 0.5f);
+            Debug.Log("he chocado con el suelo");
+            //grounding = true;
+        }
+        //cuando atraes enemigos
+        /*if (other.CompareTag("Ground"))
+        {
+            Invoke("ResetSkill", 1f);
+            Debug.Log("he chocado con el suelo");
+        }*/
+    }
+    private void ApplyDamageToEnemyOnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
+        {
+            //añadimos el array a enemigos hiteados por este gameobject
+            enemiesHited.Add(other.gameObject.name);
+
+            //APLICAMOS FUERZA AL ENEMIGO
+            //other.gameObject.GetComponent<Rigidbody>().AddForce(rb.velocity, ForceMode.Impulse);
+            // Comprobar si el objeto colisionado no tiene un Rigidbody
+            if (!other.gameObject.GetComponent<Rigidbody>())
+            {
+                Rigidbody temporalRb = other.gameObject.AddComponent<Rigidbody>();
+                temporalRb.useGravity = false;
+                //dividimos la fuerza entre 2 porque no usamos gravedad
+                temporalRb.AddForce(useSkil.direccionLanzamientoAnterior * useSkil.fuerzaLanzamientoAnterior / 2, ForceMode.Impulse);
+                Destroy(temporalRb, 0.5f);
+                DealDamageToEnemy(damage);
+            }
+
+            //HACEMOS REBOTAR EL OBJETO EN EL ENEMIGO Y RESETEAMOS LA SKILL
+            rb.Sleep();
+            Invoke("ResetSkill", 1f);
+            print("ENEMY");/*
+            //DIRECCION OPUESTA
+            // Obtener la normal de la colisión
+            Vector3 normal = other.transform.position - transform.position;
+
+            // Obtener la dirección opuesta a la normal de la colisión
+            Vector3 direccionRebote = Vector3.Reflect(transform.forward, normal).normalized;
+
+            // Aplicar una fuerza al objeto en la dirección opuesta
+            rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
+            */
+            rb.WakeUp();
+            //DIRECCION ALEATORIA
+            //direccion random x,y,z
+            Vector3 direccionAleatoria = Random.insideUnitSphere.normalized;
+            //direccion random x z
+            Vector3 direccion = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+            rb.AddForce(direccion * fuerzaAleatoria, ForceMode.Impulse);
+            Vector3 normal = other.transform.position - transform.position;
+            Vector3 direccionRebote = Vector3.Reflect(direccion, normal).normalized;
+            rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
+
+
+
+            //HACEMOS DAÑO AL ENEMIGO MEDIANTE LA INTERFAZ
+            IDamageable damageableObject = other.GetComponent<IDamageable>();
+            if (damageableObject != null)
+            {
+                print("collision con el enemigo");
+                Damage damageObj = new Damage();
+                damageObj.amount = (int)damage;
+                damageObj.source = UnitType.Player;
+                damageObj.targetType = TargetType.Single;
+
+                //llamamos a la interfaz IDamager
+                DoDamage(damageableObject, damageObj);
+                //damageableObject.ReceiveDamage(damageObj);
+                Renderer hitRenderer = other.GetComponentInChildren<Renderer>();
+                // Cambiar el color del material del renderer
+                if (hitRenderer != null)
+                {
+                    hitRenderer.material.color = Color.blue;
+                }
+            }
+        }
+        //cuando atraes enemigos
+        /*if (other.CompareTag("Ground"))
+        {
+            Invoke("ResetSkill", 1f);
+            Debug.Log("he chocado con el suelo");
+        }*/
     }
 }

@@ -32,9 +32,9 @@ public abstract class EnemyBehavior : MonoBehaviour
             rb.useGravity = false;
 
             // Obtener la dirección opuesta a la normal de la colisión
-
-            rb.AddForce(damage.forceImpulse * 2.5f, ForceMode.Impulse);
-            Destroy(rb, 0.5f);
+            
+            rb.AddForce(damage.forceImpulse, ForceMode.Impulse);
+            //Destroy(rb, 0.5f);
         }
     }
 

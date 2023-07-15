@@ -233,6 +233,10 @@ public class UseAttractThrowSkill : SkillParent
                 estaSiendoAtraido = false;
                 selectedObjectScript.estaSiendoAtraido = false;
                 onHand = false;
+                //desactivamos el onHand del animator
+                Animator animator = GetComponentInChildren<Animator>();
+                animator.SetBool("OnHand", false);
+
                 selectedObjectScript.onHand = false;
                 //Vector3 direccionLanzamiento = (pointer.position - target.transform.position).normalized;
                 //FIXEAMOS LA DIRECCION DE LANZAMIENTO USANDO GETMOUSEWORLDPOSITION() -> METODO CREADO EN BOOMERANGCONTROLLER
@@ -288,6 +292,7 @@ public class UseAttractThrowSkill : SkillParent
             {
                 target = hit.collider.gameObject;
             }
+            Debug.Log("target selectd = " + target.name);
             //target = hit.collider.gameObject;
             //if (target == null)
             if (target != null)
@@ -304,7 +309,7 @@ public class UseAttractThrowSkill : SkillParent
                 Debug.Log("target ==null  = " + target.gameObject.name);
 
                 //desactivamos el iskinematic si es un enemigo
-                if (target.GetComponent<EnemyBase>())
+                if (target.GetComponent<EnemyBase>() && target.GetComponent<Rigidbody>())
                 {
                     target.GetComponent<Rigidbody>().isKinematic = false;
                 }
@@ -313,7 +318,7 @@ public class UseAttractThrowSkill : SkillParent
             }
             else
             {
-                Debug.Log("target != null = " + target.gameObject.name);
+                //Debug.Log("target != null = " + target.gameObject.name);
                 //return target;
                 return false;
             }
@@ -359,6 +364,9 @@ public class UseAttractThrowSkill : SkillParent
             target.GetComponent<SpecialObject>().rb.useGravity = true;
             target.GetComponent<BoxCollider>().enabled = true;
             onColdown = false;
+            //desactivamos el onHand del animator
+            Animator animator = GetComponentInChildren<Animator>();
+            animator.SetBool("OnHand", false);
         }
         if (onHand) onHand = false;
     }

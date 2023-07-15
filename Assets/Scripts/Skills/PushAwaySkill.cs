@@ -60,7 +60,14 @@ public class PushAwaySkill : SkillParent, IDamager
                 normal.y = 0;
                 normal.Normalize();
                 damageObj.forceImpulse = normal * impulseForceWhenHit;
+                if (damageable.gameObject.GetComponent<SpecialObject>() && damageable.gameObject.GetComponent<Rigidbody>())
+                {
+                    damageable.gameObject.GetComponent<SpecialObject>().grounding = false;
+                    damageable.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                }
                 DoDamage(iDamageable, damageObj);
+
+                //damageable.gameObject.GetComponent<SpecialObject>().grounding = false;
             }
         }
         //then we apply the damage on all the targets found.

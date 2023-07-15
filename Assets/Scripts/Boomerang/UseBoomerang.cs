@@ -79,7 +79,16 @@ public class UseBoomerang : SkillParent
         playerStats = gameObject.GetComponent<PlayerStats>();
         //boomerangController = GameObject.Find("Boomer").GetComponent<BoomerangController>();
         boomerangController = FindObjectOfType<BoomerangController>();
-        chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        //chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        if (FindObjectOfType<ChargeBar>())
+        {
+            chargeBar = FindObjectOfType<ChargeBar>().gameObject;
+        }
+        else
+        {
+            chargeBar = FindObjectOfType<GameManager>().chargeBar;
+        }
+        //chargeBar = FindObjectOfType<GameManager>().chargeBar;
         animator = GetComponentInChildren<Animator>();
         coldown = 1f;
         pointer = FindObjectOfType<Crosshairs>().gameObject.transform;
