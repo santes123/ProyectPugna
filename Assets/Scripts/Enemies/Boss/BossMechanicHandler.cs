@@ -5,15 +5,22 @@ using UnityEngine;
 public class BossMechanicHandler : BossMechanic
 {
     public BossMechanic[] bossMechanics;
+    public Transform hitPosition;
+    public Light light;
 
     [ContextMenu("Ejecutar")]
     public override void ExecuteMechanic() {
+        hitPosition.SetParent(null);
+        mechanicDone = false;
         StartCoroutine(Execution());
     }
 
     public override IEnumerator Execution() {
         Debug.Log("Start executing the mechanic");
         //Spawn trap.
+        hitPosition.position = target.transform.position;
+        light.enabled = true;
+
         bossMechanics[0].ExecuteMechanic();
         yield return new WaitUntil(bossMechanics[0].isDone);
         //empezo movimiento.
@@ -25,12 +32,14 @@ public class BossMechanicHandler : BossMechanic
         bossMechanics[3].ExecuteMechanic();
         yield return new WaitUntil(bossMechanics[3].isDone);
         //solto la trampa.
-        Debug.Log("End executing the mechanic");
-        yield return null;
-
+        yield return new WaitForSeconds(1f);
+        light.enabled = false;
         //ResetPositions
         Reset();
-        
+        yield return new WaitForSeconds(1f);
+        yield return new WaitUntil(bossMechanics[1].isDone);
+        yield return new WaitUntil(bossMechanics[2].isDone);
+        mechanicDone = true;
     }
 
     public override void Reset() {

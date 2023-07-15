@@ -4,50 +4,40 @@ using UnityEngine;
 
 public class TorretaAim : BossMechanic
 {
-    Quaternion startRotation;
-    public float accuracy = 5f;
-    public float rotationSpeed = 180f;
     Vector3 targetPosition;
+    public Transform hitPosition;
+
+    public float aimDuration = 2f;
+    float currentAimDuration;
+    Vector3 lastPosition;
+    Vector3 currentHitPosition;
 
     public void OnEnable() {
-        startRotation = transform.rotation;
+        lastPosition = transform.position + transform.forward;
+        currentHitPosition = lastPosition;
     }
 
     public override void ExecuteMechanic() {
-        sw = false;
+        mechanicDone = false;
+        currentAimDuration = 0;
         StartCoroutine(Execution());
     }
 
     public override IEnumerator Execution() {
-        sw = false;
-        targetPosition = target.transform.position;
-        SetSpeedDirection();
-        while(!ArrivedToPosition()) {
-            Rotate();
+        mechanicDone = false;
+        targetPosition = hitPosition.position;
+        while(currentAimDuration < aimDuration) {
+            currentAimDuration += (Time.deltaTime / aimDuration);
+            currentHitPosition = Vector3.Lerp(lastPosition, targetPosition, currentAimDuration);
+            transform.LookAt(currentHitPosition);
             yield return null;
         }
-        yield return null;
-        sw = true;
-    }
-
-    void SetSpeedDirection() {
-        float angle = Vector3.SignedAngle(transform.forward, targetPosition - transform.position, Vector3.up);
-        if(angle > 0) {
-            rotationSpeed = Mathf.Abs( rotationSpeed ) ;
-        } else {
-            rotationSpeed = Mathf.Abs( rotationSpeed ) * -1f;
-        }
-    }
-
-    public bool ArrivedToPosition() {
-        float angle = Vector3.Angle(transform.forward, targetPosition - transform.position);
-        return Mathf.Abs(angle) <= accuracy;
-    }
-    void Rotate() {
-        transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
+        lastPosition = currentHitPosition;
+        mechanicDone = true;
     }
 
     public override void Reset() {
-        transform.rotation = startRotation;
+    //    transform.rotation = startRotation;
     }
+    
 }

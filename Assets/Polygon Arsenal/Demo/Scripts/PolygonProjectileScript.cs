@@ -14,6 +14,8 @@ namespace PolygonArsenal
         [Range(0f, 1f)]
         public float collideOffset = 0.15f;
 
+        public event System.Action OnExploded;
+
         void Start()
         {
             projectileParticle = Instantiate(projectileParticle, transform.position, transform.rotation) as GameObject;
@@ -48,9 +50,8 @@ namespace PolygonArsenal
 
                 GameObject impactP = Instantiate(impactParticle, transform.position, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;
 
-                if (hit.transform.tag == "Destructible") // Projectile will destroy objects tagged as Destructible
-                {
-                    Destroy(hit.transform.gameObject);
+                if(OnExploded != null) {
+                    OnExploded();
                 }
 
                 foreach (GameObject trail in trailParticles)
@@ -61,8 +62,7 @@ namespace PolygonArsenal
                 }
                 Destroy(projectileParticle, 3f);
                 Destroy(impactP, 5.0f);
-                Destroy(gameObject);
-
+                
                 ParticleSystem[] trails = GetComponentsInChildren<ParticleSystem>();
                 //Component at [0] is that of the parent i.e. this object (if there is any)
                 for (int i = 1; i < trails.Length; i++)

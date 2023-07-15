@@ -7,7 +7,7 @@ public class ReleaseTrap : BossMechanic
     public GameObject visuals;
     public GameObject trapToRelease;
     public override void ExecuteMechanic() {
-        sw = false;
+        mechanicDone = false;
         StartCoroutine(Execution());
     }
 
@@ -18,11 +18,11 @@ public class ReleaseTrap : BossMechanic
         rb.useGravity = true;
         BossMechanic t = trapToRelease.GetComponent<BossMechanic>();
         t.ExecuteMechanic();
-        yield return null;
-        sw = true;
+        yield return new WaitForSeconds(2f);
+        mechanicDone = true;
     }
 
     public override void Reset() {
-        throw new System.NotImplementedException();
+        
     }
 }

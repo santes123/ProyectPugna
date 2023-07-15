@@ -17,6 +17,23 @@ public class BossLevel1 : BossMechanic
 
     public override IEnumerator Execution() {
         //Inicio y presentacion.
+        //yield return StartCoroutine(bossIntro());
+
+        //Combate
+        bool sw = true;
+        while(true) {
+            if(sw) {
+                LaunchMechanic(BossMechanics[0]);
+                
+            } else {
+                LaunchMechanic(BossMechanics[1]);
+            }
+            sw = !sw;
+            yield return new WaitForSeconds(3f);
+        }      
+    }
+
+    IEnumerator bossIntro() {
         door.CerrarPuertaYLock();
         BossTrigger.gameObject.SetActive(false);
         FindObjectOfType<PlayerController>().enabled = false;
@@ -25,22 +42,13 @@ public class BossLevel1 : BossMechanic
         yield return new WaitForSeconds(10f);
         bossCamera.gameObject.SetActive(false);
         FindObjectOfType<PlayerController>().enabled = true;
-
-        //Combate
-        bool sw = true;
-        while(true) {
-            if(sw) {
-                BossMechanics[0].ExecuteMechanic();
-            } else {
-                BossMechanics[1].ExecuteMechanic();
-            }
-            sw = !sw;
-            yield return new WaitForSeconds(3f);
-        }
-        yield return null;        
     }
 
-
+    void LaunchMechanic(BossMechanic mech) {
+        if(mech.isDone()) {
+            mech.ExecuteMechanic();
+        }
+    }
 
     public override void Reset() {
         

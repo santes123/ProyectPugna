@@ -12,7 +12,7 @@ public class Trap : BossMechanic, IDamager
     public GameObject explodeFX;
 
     public override void ExecuteMechanic() {
-        sw = false;
+        mechanicDone = false;
         countdownStarted = true;
         timeRemaining = timeToExplode;
     }
@@ -27,9 +27,9 @@ public class Trap : BossMechanic, IDamager
     }
 
     public override IEnumerator Execution() {
-        sw = false;
+        mechanicDone = false;
         yield return null;
-        sw = true;
+        mechanicDone = true;
     }
 
     public override void Reset() {

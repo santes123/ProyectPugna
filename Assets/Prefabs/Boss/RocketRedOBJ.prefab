@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 8325404468388882314}
   - component: {fileID: 8277439612219303370}
   - component: {fileID: 8357975332631098256}
+  - component: {fileID: -1411655595148515456}
+  - component: {fileID: -6871175452690716901}
   m_Layer: 0
   m_Name: RocketRedOBJ
   m_TagString: Untagged
@@ -84,3 +86,38 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.15
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-1411655595148515456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8221803754843990726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7a93de22107dfe459f1007ef18da95f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage:
+    source: 1
+    amount: 2
+    targetType: 1
+    point: {x: 0, y: 0, z: 0}
+    forceImpulse: {x: 0, y: 0, z: 0}
+--- !u!114 &-6871175452690716901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8221803754843990726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f12179290b7a87479488d9c338f317c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 2
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  shouldHitTriggers: 1

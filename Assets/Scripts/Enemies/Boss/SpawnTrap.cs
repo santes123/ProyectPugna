@@ -8,7 +8,7 @@ public class SpawnTrap : BossMechanic
     public Transform locationToSpawn;
     public GameObject currentTrap;
     public override void ExecuteMechanic() {
-        sw = false;
+        mechanicDone = false;
         StartCoroutine(Execution());
         
     }
@@ -17,7 +17,7 @@ public class SpawnTrap : BossMechanic
         currentTrap = Instantiate(trapToSpawn, locationToSpawn);
         currentTrap.transform.localPosition = Vector3.zero;
         yield return new WaitForSeconds(1f);
-        sw = true;
+        mechanicDone = true;
     }
 
     public override void Reset() {

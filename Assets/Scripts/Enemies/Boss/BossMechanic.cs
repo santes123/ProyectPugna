@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class BossMechanic : MonoBehaviour
 {
     public PlayerStats target;
-    protected bool sw = false;
+    protected bool mechanicDone = true;
     private void Start() {
         StartCoroutine(GetTarget());    
     }
@@ -17,7 +17,7 @@ public abstract class BossMechanic : MonoBehaviour
     }
 
     public bool isDone() {
-        return sw;
+        return mechanicDone;
     }
 
     public abstract void ExecuteMechanic();

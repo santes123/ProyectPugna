@@ -10,14 +10,15 @@ public class MoveToPlayerCoordinate : BossMechanic
     public float accuracy = 0.1f;
     public Coordinate coordinate;
     Vector3 targetPosition;
+    public Transform hitPosition;
 
     private void OnEnable() {
         startingPosition = transform.position;
     }
 
     public override void ExecuteMechanic() {
-        sw = false;
-        SetTarget(target.transform.position);
+        mechanicDone = false;
+        SetTarget(hitPosition.position);
         StartCoroutine(Execution());
     }
 
@@ -53,14 +54,14 @@ public class MoveToPlayerCoordinate : BossMechanic
     }
 
     public override IEnumerator Execution() {
-        sw = false;
+        mechanicDone = false;
         SetSpeedDirection();
         while(!ArrivedToPosition()) {
             Move();
             yield return null;
         }
         yield return null;
-        sw = true;
+        mechanicDone = true;
     }
 
     public bool ArrivedToPosition() {
