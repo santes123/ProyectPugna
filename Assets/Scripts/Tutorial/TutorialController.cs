@@ -141,9 +141,7 @@ public class TutorialController : MonoBehaviour
     }
     private void TutorialCompleted()
     {
-        GameObject showMessageGO = FindObjectOfType<GameManager>().ShowMessageToPlayerTextGO;
-        showMessageGO.SetActive(true);
-        showMessageGO.GetComponent<ShowMessageToPlayerText>().SetText("Tutorial completado!", "Has compleato el tutorial satisfactoriamente. Si tienes cualquier duda, revisa la seccion controles" +
+        FindObjectOfType<ShowMessageToPlayerText>().SetText("Tutorial completado!", "Has compleato el tutorial satisfactoriamente. Si tienes cualquier duda, revisa la seccion controles" +
             "dentro del menu de pausa o de menu principal. Diviertete!", Color.green);
         //ponemos al maximo todo lo que haya podido usar
         FindObjectOfType<PlayerStats>().SetCurrentHeath(FindObjectOfType<PlayerStats>().startingHealth);

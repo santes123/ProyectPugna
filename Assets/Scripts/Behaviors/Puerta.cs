@@ -9,6 +9,7 @@ public class Puerta : MonoBehaviour
     public bool cerrada = true;
     Animator animator;
     public bool doubleLock = false;
+    public string nombreDeRequerimiento;
     private void Start() {
         animator = GetComponent<Animator>();
     }
@@ -17,6 +18,7 @@ public class Puerta : MonoBehaviour
         switch(estado) {
             case InteractableState.Locked:
             Debug.Log("Estado es bloqueado.");
+            FindObjectOfType<ShowMessageToPlayerText>().SetText(""+name, "Necesitas la "+ nombreDeRequerimiento + " para abrir esta puerta.", Color.green);
             //estado = InteractableState.Unlocked;
             break;
             case InteractableState.Unlocked:

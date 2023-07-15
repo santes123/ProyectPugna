@@ -8,9 +8,14 @@ public class ObtainableItem : MonoBehaviour
     public UnityEvent onItemObtained;
     private void OnTriggerEnter(Collider other) {
         if(other.tag.Equals("Player")) {
+            ShowMessage();
             GameData.AddValue(name,"1");
             ItemObtained();
         }
+    }
+
+    void ShowMessage() {
+        FindObjectOfType<ShowMessageToPlayerText>().SetText("Item Obtenido", "Llave obtenida " + name, Color.white);
     }
 
     public void ItemObtained() {

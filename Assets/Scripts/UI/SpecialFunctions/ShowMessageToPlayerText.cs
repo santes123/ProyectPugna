@@ -51,6 +51,7 @@ public class ShowMessageToPlayerText : MonoBehaviour
     }
     public void SetText(string title, string text, Color color)
     {
+        mainObject.SetActive(true);
         timer = 0f;
         if (centralText != null)
         {
