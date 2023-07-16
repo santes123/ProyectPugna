@@ -37,6 +37,7 @@ public class BossLevel1 : BossMechanic
         door.CerrarPuertaYLock();
         BossTrigger.gameObject.SetActive(false);
         FindObjectOfType<PlayerController>().enabled = false;
+        FindObjectOfType<PlayerController>().Cinematic();
         bossCamera.gameObject.SetActive(true);
         bossCamera.GetComponent<Animator>().SetTrigger("Start");
         yield return new WaitForSeconds(5f);

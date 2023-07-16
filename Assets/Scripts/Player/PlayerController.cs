@@ -21,8 +21,7 @@ public class PlayerController : MonoBehaviour
     public bool invincible = false;
     private GameManager gameManager;
     private Animator animator;
-    void Awake() 
-    {
+    void Awake() {
         player = GetComponent<CharacterController>();
         gameManager = FindObjectOfType<GameManager>();
         crosshairs = FindObjectOfType<Crosshairs>();
@@ -32,8 +31,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
     }
 
-    private void Start()
-    {
+    private void Start() {
         move = FindObjectOfType<InputManager>().GetKeyBind("move");
         look = FindObjectOfType<InputManager>().GetKeyBind("look");
         fire = FindObjectOfType<InputManager>().GetKeyBind("fire");
@@ -41,10 +39,8 @@ public class PlayerController : MonoBehaviour
         switchGun2 = FindObjectOfType<InputManager>().GetKeyBind("switchGun2");
     }
 
-    void Update()
-    {
-        if (!gameManager.onPause)
-        {
+    void Update() {
+        if(!gameManager.onPause) {
             Move(move.GetVector3());
             Point(look.GetVector2());
             Shoot(fire.GetFloat());
@@ -58,41 +54,37 @@ public class PlayerController : MonoBehaviour
         Plane groundPlane = new Plane(Vector3.up, Vector3.up * boomerangController.BoomerangHeight());
         float rayDistance;
 
-        if (groundPlane.Raycast(ray, out rayDistance))
-        {
+        if(groundPlane.Raycast(ray, out rayDistance)) {
             Vector3 point = ray.GetPoint(rayDistance);
             //Debug.DrawLine(ray.origin,point,Color.red);
             //controller.LookAt(point);
             crosshairs.transform.position = point;
             crosshairs.DetectTargets(ray);
         }
-        if (invincible)
-        {
+        if(invincible) {
             player.detectCollisions = false;
-        }
-        else
-        {
+        } else {
             player.detectCollisions = true;
         }
     }
 
-    void GunSwitcher(float switchGun, float switchGun2)
-    {
-        if (switchGun == 1)
-        {
+    void GunSwitcher(float switchGun, float switchGun2) {
+        if(switchGun == 1) {
             //gunController.SwitchGun(0);
-        }else if (switchGun2 == 1)
-        {
+        } else if(switchGun2 == 1) {
             //gunController.SwitchGun(1);
         }
     }
 
-    void Shoot(float fire)
-    {
-        if (fire == 1)
-        {
+    void Shoot(float fire) {
+        if(fire == 1) {
             //gunController.Shoot();
         }
+    }
+
+    public void Cinematic() {
+        animator.SetFloat("Vertical", 0f);
+        animator.SetFloat("Horizontal", 0f);
     }
 
     void Move(Vector3 movement)
