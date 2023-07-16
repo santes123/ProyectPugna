@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     //showtextmessagetoplayer
     public GameObject ShowMessageToPlayerTextGO;
     public GameObject chargeBar;
+    public int timeToWaitAfterDie = 2;
 
     //public GameObject buffBar;
     private void Awake()
@@ -72,10 +73,8 @@ public class GameManager : MonoBehaviour
         {
             if (player.currentHealth <= 0)
             {
-                print("YOU ARE DEAD");
-                Cursor.visible = true;
-                GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
-                SceneManager.LoadScene("GameOverMenu");
+                Invoke("PlayerDie", timeToWaitAfterDie);
+
             }
             //controlamos la tecla Escape para cuando el jugador quiere pausar (menos cuando el menu tutorial esta abierto)
             if (Input.GetKeyDown(KeyCode.Escape) && !onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
@@ -262,5 +261,11 @@ public class GameManager : MonoBehaviour
 
         }
     }
-
+    public void PlayerDie()
+    {
+        print("YOU ARE DEAD");
+        Cursor.visible = true;
+        GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("GameOverMenu");
+    }
 }
