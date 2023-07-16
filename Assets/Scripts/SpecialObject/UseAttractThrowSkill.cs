@@ -225,7 +225,11 @@ public class UseAttractThrowSkill : SkillParent
                 Debug.Log("fuerza pre lanzamiento = " + fuerzaLanzamiento);
                 target.transform.LookAt(pointer);
 
-                target.GetComponent<Collider>().enabled = true;
+                
+                Collider[] colliders = target.GetComponents<Collider>();
+                foreach(Collider c in colliders) {
+                    c.enabled = true;
+                }
 
                 //rb.useGravity = true;
                 target.GetComponent<Rigidbody>().useGravity = true;

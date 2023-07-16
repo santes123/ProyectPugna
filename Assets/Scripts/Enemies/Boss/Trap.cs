@@ -54,6 +54,9 @@ public class Trap : BossMechanic, IDamager
         target.ReceiveDamage(damage);
     }
     public void OnTriggerEnter(Collider other) {
+        if(GetComponent<SpecialObject>().estaSiendoAtraido || GetComponent<SpecialObject>().haSidoLanzado) {
+            return;
+        }
         if(other.gameObject.CompareTag("Player")) {
             Attack();
         }

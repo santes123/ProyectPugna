@@ -22,40 +22,12 @@ public class MoveToPlayerCoordinate : BossMechanic
         StartCoroutine(Execution());
     }
 
-    void SetSpeedDirection() {
-        switch(coordinate) {
-            case Coordinate.x:
-            if(targetPosition.x < transform.position.x) {
-                speed = Mathf.Abs(speed) * -1f;
-            } else {
-                speed = Mathf.Abs(speed);
-            }
-            
-            break;
-            case Coordinate.y:
-            if(targetPosition.y < transform.position.y) {
-                speed = Mathf.Abs(speed) * -1f;
-            } else {
-                speed = Mathf.Abs(speed);
-            }
-            break;
-            case Coordinate.z:
-            if(targetPosition.z < transform.position.z) {
-                speed = Mathf.Abs(speed) * -1f;
-            } else {
-                speed = Mathf.Abs(speed);
-            }
-            break;
-        }
-    }
-
     void SetTarget(Vector3 position) {
         targetPosition = position;
     }
 
     public override IEnumerator Execution() {
         mechanicDone = false;
-        SetSpeedDirection();
         while(!ArrivedToPosition()) {
             Move();
             yield return null;
@@ -87,13 +59,26 @@ public class MoveToPlayerCoordinate : BossMechanic
     void Move() {
         switch(coordinate) {
             case Coordinate.x:
-            transform.Translate(Vector3.right * speed * Time.deltaTime);
+            if(transform.position.x < targetPosition.x) {
+                transform.Translate(Vector3.right * speed * Time.deltaTime);
+            } else {
+                transform.Translate(Vector3.right * -speed * Time.deltaTime);
+            }
+            
             break;
             case Coordinate.y:
-            transform.Translate(Vector3.up * speed * Time.deltaTime);
+            if(transform.position.y < targetPosition.y) {
+                transform.Translate(Vector3.up * speed * Time.deltaTime);
+            } else {
+                transform.Translate(Vector3.up * -speed * Time.deltaTime);
+            }
             break;
             case Coordinate.z:
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            if(transform.position.z < targetPosition.z) {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            } else {
+                transform.Translate(Vector3.forward * -speed * Time.deltaTime);
+            }
             break;
         }
     }

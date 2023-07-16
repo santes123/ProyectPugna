@@ -61,18 +61,7 @@ public class SpecialObject : MonoBehaviour, IDamager
     }
 
     void Update()
-    {/*
-        //Debug.DrawRay(player.position, player.forward, Color.red, Mathf.Infinity);
-        if (Input.GetMouseButtonDown(0) && CheckIfRayHitObject() && !useSkil.onColdown)
-        {
-            estaSiendoAtraido = true;
-            onColdown = true;
-            useSkil.onColdown = true;
-        }
-        if (Input.GetMouseButton(0))
-        {
-            velocidadAtraccion += 2;
-        */
+    {
         if (player != null)
         {
             if (onHand)
@@ -92,16 +81,6 @@ public class SpecialObject : MonoBehaviour, IDamager
                 transform.rotation = Quaternion.Euler(rotacionesActuales.x, rotacionY, rotacionesActuales.z);
             }
         }
-        /*
-        //Control del tiempo pulsado al lanzar, para luego calcular la fuerza
-        if (Input.GetMouseButtonDown(1))
-        {
-            botonPresionado = true;
-        }
-        if (botonPresionado)
-        {
-            tiempoPulsado += Time.deltaTime;
-        }*/
         
     }
     void FixedUpdate()
@@ -125,13 +104,10 @@ public class SpecialObject : MonoBehaviour, IDamager
 
                     //ajustamos el isKinematic, por si en algun momento se ha desajustado
                     rb.isKinematic = false;
-                    if (GetComponent<BoxCollider>())
-                    {
-                        GetComponent<BoxCollider>().enabled = false;
-                    }
-                    if (GetComponent<CapsuleCollider>())
-                    {
-                        GetComponent<CapsuleCollider>().enabled = false;
+
+                    Collider[] colliders = GetComponents<Collider>();
+                    foreach(Collider c in colliders) {
+                        c.enabled = false;
                     }
                     
                     //GetComponent<MeshCollider>().enabled = false;
@@ -152,67 +128,10 @@ public class SpecialObject : MonoBehaviour, IDamager
                     rb.MovePosition(transform.position + direccion * useSkil.velocidadAtraccion * Time.fixedDeltaTime);
                 }
             }
-            else
-            {
-                //Debug.Log("No tienes suficiente mana para seguir!");
-            }
         }
- 
-        //LANZAMIENTO
-        /*if (Input.GetMouseButtonUp(1) && estaSiendoAtraido)
-        {
-            onColdown = false;
-            useSkil.onColdown = false;
-            botonPresionado = false;
-            print(tiempoPulsado);
-            if (tiempoPulsado <= 0.5f)
-            {
-                fuerzaLanzamiento = fuerzaBase;
-            }
-            else
-            {
-                fuerzaLanzamiento = fuerzaLanzamiento + tiempoPulsado * incrementoDeFuerzaPorSegundo;
-                Debug.Log("fuerza lanzamiento calculada = " + fuerzaLanzamiento);
-                if (fuerzaLanzamiento >= fuerzaMaxima)
-                {
-                    fuerzaLanzamiento = fuerzaMaxima;
-                }
-            }
-            Debug.Log("fuerza pre lanzamiento = " + fuerzaLanzamiento);
-            transform.LookAt(pointer);
 
-            GetComponent<Collider>().enabled = true;
-            rb.useGravity = true;
-            haSidoLanzado = true;
-            estaSiendoAtraido = false;
-            onHand = false;
-            Vector3 direccionLanzamiento = (pointer.position - transform.position).normalized;
-            rb.AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
-            direccionLanzamientoAnterior = direccionLanzamiento;
-            fuerzaLanzamientoAnterior = fuerzaLanzamiento;
-            fuerzaLanzamiento = fuerzaBase;
-            Debug.Log("fuerza post lanzamiento = " + fuerzaLanzamiento);
-            tiempoPulsado = 0f;
-        }*/
     }
-    /*private bool CheckIfRayHitObject()
-    {
-        Ray ray = new Ray(player.position, player.forward);
-        RaycastHit hit;
-        //Debug.DrawRay(player.position, player.forward, Color.red, Mathf.Infinity);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, collisionMask, QueryTriggerInteraction.Collide))
-        {
-            
-            Debug.DrawRay(player.position, player.forward * hit.distance, Color.green);
-            print("collision con un objeto atraible");
-            return true;
-        }
-        else
-        {
-            Debug.DrawRay(player.position, player.forward * 20f, Color.red);
-            return false;
-        }
-    }*/
+   
     private void OnTriggerEnter(Collider other)
     {
         ApplyDamageToEnemyOnTriggerEnter(other);

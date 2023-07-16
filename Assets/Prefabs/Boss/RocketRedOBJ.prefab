@@ -98,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a93de22107dfe459f1007ef18da95f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bossMechanic: {fileID: 0}
   damage:
     source: 1
     amount: 2
@@ -116,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f12179290b7a87479488d9c338f317c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 2
+  radius: 1
   layerMask:
     serializedVersion: 2
     m_Bits: 2048

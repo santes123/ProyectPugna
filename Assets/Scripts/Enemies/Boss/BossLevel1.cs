@@ -18,19 +18,22 @@ public class BossLevel1 : BossMechanic
     public override IEnumerator Execution() {
         //Inicio y presentacion.
         yield return StartCoroutine(bossIntro());
-
-        //Combate
-        bool sw = true;
+        
+        StartCoroutine(Mecanica(BossMechanics[0], 10f));//Bomba
+        StartCoroutine(Mecanica(BossMechanics[1], 2f));//Missil 1
+        StartCoroutine(Mecanica(BossMechanics[2], 3f));//Missil 2
+        StartCoroutine(Mecanica(BossMechanics[3], 5f));//Missil 3
+        StartCoroutine(Mecanica(BossMechanics[4], 6f));//Missil 4
+    }
+   
+    IEnumerator Mecanica(BossMechanic bossMechanic, float timeBetweenAttacks) {
+        yield return new WaitForSeconds(timeBetweenAttacks);
         while(true) {
-            if(sw) {
-                LaunchMechanic(BossMechanics[0]);
-                
-            } else {
-                LaunchMechanic(BossMechanics[1]);
+            if(LaunchMechanic(bossMechanic)) {
+                yield return new WaitForSeconds(timeBetweenAttacks);
             }
-            sw = !sw;
-            yield return new WaitForSeconds(3f);
-        }      
+            yield return null;
+        }
     }
 
     IEnumerator bossIntro() {
@@ -47,10 +50,12 @@ public class BossLevel1 : BossMechanic
         FindObjectOfType<PlayerController>().enabled = true;
     }
 
-    void LaunchMechanic(BossMechanic mech) {
+    bool LaunchMechanic(BossMechanic mech) {
         if(mech.isDone()) {
             mech.ExecuteMechanic();
+            return true;
         }
+        return false;
     }
 
     public override void Reset() {

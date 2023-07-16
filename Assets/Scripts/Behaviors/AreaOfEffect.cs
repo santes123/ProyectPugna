@@ -13,6 +13,7 @@ public class AreaOfEffect : MonoBehaviour
     public virtual List<T> GetTargets<T>() {
         List<T> targetsFound = new List<T>();
         Collider[] hits = Physics.OverlapSphere(transform.position, radius, layerMask, (shouldHitTriggers ? QueryTriggerInteraction.Collide : QueryTriggerInteraction.Ignore));
+        
         foreach(Collider hit in hits) {
             T comp = hit.GetComponent<T>();
             if(comp != null) {
@@ -21,4 +22,5 @@ public class AreaOfEffect : MonoBehaviour
         }
         return targetsFound;
     }
+
 }
