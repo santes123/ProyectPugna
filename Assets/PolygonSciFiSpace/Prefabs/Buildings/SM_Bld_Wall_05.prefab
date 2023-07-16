@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 64520751172608734}
   - component: {fileID: 64742754323852238}
   - component: {fileID: 64853329528378234}
-  m_Layer: 14
+  - component: {fileID: 3761259134369347172}
+  m_Layer: 10
   m_Name: SM_Bld_Wall_05
-  m_TagString: Wall
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -150,3 +151,16 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43834068460073876, guid: fff7a9361ddcbd1479bbd252b0f9f278, type: 2}
+--- !u!65 &3761259134369347172
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559522738338180}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.000004, y: 4.9954405, z: 0.8599212}
+  m_Center: {x: -2.499999, y: 1.5022796, z: 0.4299606}
