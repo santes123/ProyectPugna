@@ -232,7 +232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2131987575506220858
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1054,7 +1054,6 @@ GameObject:
   - component: {fileID: 2071226509555790864}
   - component: {fileID: 8928938636972946430}
   - component: {fileID: 1230942331114657985}
-  - component: {fileID: 383846835921130219}
   m_Layer: 0
   m_Name: CanvasPlayer
   m_TagString: Untagged
@@ -1197,20 +1196,6 @@ MonoBehaviour:
   barPrefab: {fileID: 8384819534793241605, guid: e6eef3ecf94aeda41bf0e2367103065e,
     type: 3}
   contenedor: {fileID: 4004272710952261036}
---- !u!114 &383846835921130219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6200244701642324229}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d892b3612f694264a8af7eb07bf4b62f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fadeDuration: 2
-  fadeImage: {fileID: 1596438524132877432}
 --- !u!1 &7129609172205832505
 GameObject:
   m_ObjectHideFlags: 0
