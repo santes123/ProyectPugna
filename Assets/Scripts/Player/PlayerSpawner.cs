@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class PlayerSpawner : MonoBehaviour
 {
     public GameObject playerPrefab;
@@ -10,6 +11,10 @@ public class PlayerSpawner : MonoBehaviour
     public GameManager gameManager;
     private void Awake()
     {
+        /*if (FindObjectOfType<FadeOutController>())
+        {
+            FindObjectOfType<FadeOutController>().StartFadeout();
+        }*/
         /*camera = FindObjectOfType<CameraController>();
         camera.enabled = false;
         gameManager = FindObjectOfType<GameManager>();

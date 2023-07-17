@@ -7,6 +7,7 @@ using System.IO;
 using System.Collections;
 using UnityEngine.UI;
 
+
 public class GameManager : MonoBehaviour
 {
     
@@ -34,6 +35,7 @@ public class GameManager : MonoBehaviour
     //public GameObject buffBar;
     private void Awake()
     {
+
         chargeBar = FindObjectOfType<ChargeBar>().gameObject;
         chargeBar.SetActive(false);
         //asignacion de variables necesarias
@@ -65,6 +67,7 @@ public class GameManager : MonoBehaviour
         //GetComponent<GameManager>().enabled = true;
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
         StartCoroutine(FindPlayer());
+
     }
 
     void Update()
