@@ -32,6 +32,10 @@ public class GameManager : MonoBehaviour
     public GameObject chargeBar;
     public int timeToWaitAfterDie = 2;
 
+    public string backgroundMusicName = "Magnetic Lullaby - Amulets";
+    public string dieText = "Has muerto, cargando el menu de gameover...";
+    public string dieTextTitle = "¡HAS MUERTO!";
+
     //public GameObject buffBar;
     private void Awake()
     {
@@ -76,11 +80,14 @@ public class GameManager : MonoBehaviour
         {
             if (player.currentHealth <= 0)
             {
+                //Time.timeScale = 0f;
+                DisablePlayerScripts();
+                FindObjectOfType<ShowMessageToPlayerText>().SetText(dieTextTitle, dieText, Color.red);
                 Invoke("PlayerDie", timeToWaitAfterDie);
 
             }
             //controlamos la tecla Escape para cuando el jugador quiere pausar (menos cuando el menu tutorial esta abierto)
-            if (Input.GetKeyDown(KeyCode.Escape) && !onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
+            if (Input.GetKeyDown(KeyCode.Escape) && !onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened && !FindObjectOfType<WinController>().gameFreezed)
             {
                 Debug.Log("PAUSE ON");
                 Time.timeScale = 0f;
@@ -103,7 +110,7 @@ public class GameManager : MonoBehaviour
                 }
                 //button.onClick.Invoke();
             }
-            else if (Input.GetKeyDown(KeyCode.Escape) && onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened)
+            else if (Input.GetKeyDown(KeyCode.Escape) && onPause && !FindObjectOfType<TutorialController>().tutorialMenuOpened && !FindObjectOfType<WinController>().gameFreezed)
             {
                 Debug.Log("PAUSE OFF");
 
@@ -259,16 +266,57 @@ public class GameManager : MonoBehaviour
         {
             // Hacer algo con cada AudioSource encontrado
             Debug.Log("AudioSource encontrado: " + audioSource.gameObject.name);
-            audioSource.volume = GlobalVars.generalVolume;
-            audioSource.mute = GlobalVars.muteOn;
+            if (audioSource.isPlaying)
+            {
+                if (audioSource.clip.name == backgroundMusicName)
+                {
+                    audioSource.volume = GlobalVars.generalVolume / 2;
+                    audioSource.mute = GlobalVars.muteOn;
+                }
+                else
+                {
+                    audioSource.volume = GlobalVars.generalVolume;
+                    audioSource.mute = GlobalVars.muteOn;
+                }
+            }
+            else
+            {
+                audioSource.volume = GlobalVars.generalVolume;
+                audioSource.mute = GlobalVars.muteOn;
+            }
+
+            //audioSource.volume = GlobalVars.generalVolume;
+            //audioSource.mute = GlobalVars.muteOn;
 
         }
     }
     public void PlayerDie()
     {
+        //INSERTAR ANIMACION DE MUERTE
+        //Time.timeScale = 1f;
         print("YOU ARE DEAD");
         Cursor.visible = true;
         GlobalVars.lastSceneBeforeDeadOrSave = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene("GameOverMenu");
+    }
+    private void DisablePlayerScripts()
+    {
+        //deshabilitamos los scripts que molestan
+        FindObjectOfType<Crosshairs>().enabled = false;
+        FindObjectOfType<PlayerController>().enabled = false;
+        FindObjectOfType<PlayerStats>().enabled = false;
+        FindObjectOfType<UseBoomerang>().enabled = false;
+        FindObjectOfType<DashController>().enabled = false;
+        FindObjectOfType<PushAwaySkill>().enabled = false;
+        FindObjectOfType<ManaRegeneration>().enabled = false;
+        if (FindObjectOfType<BoomerangController>())
+        {
+            FindObjectOfType<BoomerangController>().enabled = false;
+            FindObjectOfType<DrawLine>().enabled = false;
+            FindObjectOfType<BoomerangUpgradeController>().enabled = false;
+        }
+
+        //extra desactivamos el characterController
+        FindObjectOfType<PlayerStats>().gameObject.GetComponent<CharacterController>().enabled = false;
     }
 }

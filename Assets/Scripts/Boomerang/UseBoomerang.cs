@@ -74,6 +74,10 @@ public class UseBoomerang : SkillParent
     Transform pointer;
     Quaternion originalRotation;
     public LayerMask wallLayer;
+
+    //audioSources boomerang
+    public AudioSource boomerangThrowAS;
+    public AudioSource boomerangHitAS;
     private void Awake()
     {
         playerStats = gameObject.GetComponent<PlayerStats>();
@@ -583,6 +587,8 @@ public class UseBoomerang : SkillParent
             !boomerangController.isReturning && isButtonPressed)
         {
             animator.SetTrigger("Attack");
+            boomerangThrowAS.Play();
+            boomerangThrowAS.loop = true;
             Debug.Log("BOOM = CLICK IZQUIERDO SOLTADO");
             //update del damage del boomerangController, por si pillamos un Powerup
             boomerangController.damageBoomerang = damage;

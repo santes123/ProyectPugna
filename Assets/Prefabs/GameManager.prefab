@@ -57,6 +57,10 @@ MonoBehaviour:
   noManaTextGO: {fileID: 0}
   ShowMessageToPlayerTextGO: {fileID: 0}
   chargeBar: {fileID: 0}
+  timeToWaitAfterDie: 2
+  backgroundMusicName: Magnetic Lullaby - Amulets
+  dieText: Has muerto, cargando el menu de gameover...
+  dieTextTitle: "\xA1HAS MUERTO!"
 --- !u!114 &3922728784967612602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -83,8 +87,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   panelShow: {fileID: 0}
   panelShowText: {fileID: 0}
-  listOfTextsToShowOnPanel: []
+  listOfTextsToShowOnPanel:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
   listOfTutorialItems: []
-  intervalToCheckIfTutorialCompleted: 0
+  intervalToCheckIfTutorialCompleted: 1.5
   tutorialBlocker: {fileID: 0}
   tutorialMenuOpened: 0
+  puertaDeTutorial: {fileID: 0}

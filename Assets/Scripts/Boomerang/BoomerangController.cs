@@ -67,6 +67,9 @@ public class BoomerangController : MonoBehaviour, IDamager
     [HideInInspector]
     public bool updatedTiming = false;
 
+    //audioSources
+    public AudioSource boomerangHitAS;
+    public AudioSource boomerangThrowAS;
     // Inicialización
     private void Awake()
     {
@@ -176,6 +179,8 @@ public class BoomerangController : MonoBehaviour, IDamager
                 GetComponent<Collider>().isTrigger = true;
                 transform.SetParent(handPlace.transform);
                 onHand = true;
+                boomerangThrowAS.Stop();
+                boomerangThrowAS.loop = false;
             }
             if (isReturning)
             {
@@ -208,6 +213,8 @@ public class BoomerangController : MonoBehaviour, IDamager
                         attracting = false;
                     }
                     //rb.isKinematic = false;
+                    boomerangThrowAS.Stop();
+                    boomerangThrowAS.loop = false;
                 }
                 //SE QUEDA EN EL SUELO EN LA POSICION INICIAL DE LANZAMIENTO
                 /*if (Vector3.Distance(transform.position, returnPosition) <= minDistance)
@@ -280,6 +287,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             || other.CompareTag("Enemy") && !onHand && bouncing && !boomerangUpgradeController.areaDamageMode ||
             other.CompareTag("Enemy") && !onHand && specialThrow)
         {
+            boomerangHitAS.Play();
             //damageBoomerang = boomerangPlayer.damage;
             if (Time.time - lastHitTime > coldownHit)
             {

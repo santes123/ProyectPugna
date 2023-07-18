@@ -8,6 +8,8 @@ public class BossStatsController : LivingEntity, IDamageable
     private MeshRenderer meshRenderer;
     private Material originalMaterial;
     private bool isHit = false;
+    public string msgBossSkilled = "Has destruido la puerta, ¡Escapa!";
+    public string msgBossSkilledTitle = "¡Boss derrotado!";
     protected override void Start()
     {
         base.Start();
@@ -39,6 +41,7 @@ public class BossStatsController : LivingEntity, IDamageable
         base.ReceiveDamage(damage);
         if (currentHealth <= 0)
         {
+            FindObjectOfType<ShowMessageToPlayerText>().SetText(msgBossSkilledTitle,msgBossSkilled,Color.red);
             OnDead();
         }
     }

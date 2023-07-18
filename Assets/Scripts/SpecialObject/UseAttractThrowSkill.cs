@@ -191,7 +191,8 @@ public class UseAttractThrowSkill : SkillParent
         if (player.selectedMode == GameMode.AttractThrow && target != null)
         {
             //LANZAMIENTO
-            if (GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost)
+            if (GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost && onHand 
+                && selectedObjectScript.onHand)
             {
                 
                 //target.GetComponent<Rigidbody>().Sleep();
@@ -261,6 +262,7 @@ public class UseAttractThrowSkill : SkillParent
                     Debug.Log("tienes suficiente mana");
                     player.UseSkill(finalManaCost);
                     target.GetComponent<Rigidbody>().AddForce(direccionLanzamiento * fuerzaLanzamiento, ForceMode.Impulse);
+                    target = null;
                 }//tienes el mana minimo pero no el necesario para lanzarlo actualmente
                 else
                 {

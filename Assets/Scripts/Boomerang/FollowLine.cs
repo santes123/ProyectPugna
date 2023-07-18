@@ -31,6 +31,7 @@ public class FollowLine : MonoBehaviour
             BoomerangScript.specialThrow = false;
             BoomerangScript.isReturning = true;
             hasCompletedLine = false;
+
             /*
             // Moverse al transform de destino progresivamente
             Vector3 targetPosition = destination.transform.position;

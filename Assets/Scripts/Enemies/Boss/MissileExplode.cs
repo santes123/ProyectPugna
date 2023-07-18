@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissileExplode : MonoBehaviour, IDamager
+public class MissileExplode : LivingEntity, IDamager, IDamageable
 {
     PolygonArsenal.PolygonProjectileScript projectile;
     public BossMechanicHandler2 bossMechanic;
@@ -35,5 +35,12 @@ public class MissileExplode : MonoBehaviour, IDamager
 
     public void DoDamage(IDamageable target, Damage damage) {
         target.ReceiveDamage(damage);
+    }
+
+    public override void ReceiveDamage(Damage damage)
+    {
+        Debug.Log("destruyendo misil...");
+        bossMechanic.MissileExploded();
+        Destroy(gameObject);
     }
 }

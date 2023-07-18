@@ -43,7 +43,7 @@ public class PushAwaySkill : SkillParent, IDamager
         Debug.Log("lenght list = " + damageablesFound.Count);
         for (int i = 0; i < damageablesFound.Count; i++)
         {
-            Debug.Log(damageablesFound[i]);
+            Debug.Log("objeto golpeado = " + damageablesFound[i]);
         }
         foreach (LivingEntity damageable in damageablesFound)
         {

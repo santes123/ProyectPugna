@@ -43,8 +43,14 @@ public class BossLevel1 : BossMechanic
         FindObjectOfType<PlayerController>().Cinematic();
         bossCamera.gameObject.SetActive(true);
         bossCamera.GetComponent<Animator>().SetTrigger("Start");
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
+
+        StartCoroutine(FindObjectOfType<FillBarController>().FillBar());
+        //yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
+
         FindObjectOfType<ShowMessageToPlayerText>().SetText("LUZZIANO", "<INSERTE MENSAJE DE BOSS AQUI.>", Color.red);
+
         yield return new WaitForSeconds(5f);
         bossCamera.gameObject.SetActive(false);
         FindObjectOfType<PlayerController>().enabled = true;

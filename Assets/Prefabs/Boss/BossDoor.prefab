@@ -117,6 +117,8 @@ MonoBehaviour:
   currentHealth: 0
   currentMana: 0
   hitMaterial: {fileID: 2100000, guid: 9285c1afb0925004e8ee5c029c4ba39f, type: 2}
+  msgBossSkilled: "Has destruido la puerta, \xA1Escapa!"
+  msgBossSkilledTitle: "\xA1Boss derrotado!"
 --- !u!1 &5023528445905129969
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,6 +209,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1827507486248535173}
     m_Modifications:
+    - target: {fileID: 7593702550388707229, guid: 9db1dee9674eda44ca6db5ba2dc248eb,
+        type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7593702550739324258, guid: 9db1dee9674eda44ca6db5ba2dc248eb,
         type: 3}
       propertyPath: m_Name
@@ -324,12 +331,45 @@ PrefabInstance:
       objectReference: {fileID: 4961355736124990570}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9db1dee9674eda44ca6db5ba2dc248eb, type: 3}
+--- !u!1 &4961355735072209038 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7593702552140315439, guid: 9db1dee9674eda44ca6db5ba2dc248eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 3294390814861394849}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1830193509736448677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4961355735072209038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e74dc16899f9a4fb63df48ec4ae499, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fillImage: {fileID: 4961355735770991676}
+  hpText: {fileID: 4961355736124990570}
+  fillDuration: 4
 --- !u!224 &4961355735416180418 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7593702550739324259, guid: 9db1dee9674eda44ca6db5ba2dc248eb,
     type: 3}
   m_PrefabInstance: {fileID: 3294390814861394849}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4961355735770991676 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7593702550388707229, guid: 9db1dee9674eda44ca6db5ba2dc248eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 3294390814861394849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4961355736124990570 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7593702551079102411, guid: 9db1dee9674eda44ca6db5ba2dc248eb,

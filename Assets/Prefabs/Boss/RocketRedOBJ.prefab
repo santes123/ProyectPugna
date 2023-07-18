@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 8357975332631098256}
   - component: {fileID: -1411655595148515456}
   - component: {fileID: -6871175452690716901}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: RocketRedOBJ
-  m_TagString: Untagged
+  m_TagString: Rocket
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,6 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a93de22107dfe459f1007ef18da95f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingHealth: 0
+  startingMana: 0
+  currentHealth: 0
+  currentMana: 0
   bossMechanic: {fileID: 0}
   damage:
     source: 1

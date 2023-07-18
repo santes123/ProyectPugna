@@ -299,6 +299,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barril19
       objectReference: {fileID: 0}
+    - target: {fileID: 7025264362241998796, guid: 52dfda6890400dd40b1a1d3d3a73449d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7025264362241998797, guid: 52dfda6890400dd40b1a1d3d3a73449d,
         type: 3}
       propertyPath: m_RootOrder
@@ -367,6 +372,11 @@ PrefabInstance:
     - target: {fileID: 7025264362241998797, guid: 52dfda6890400dd40b1a1d3d3a73449d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7025264362717560252, guid: 52dfda6890400dd40b1a1d3d3a73449d,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

@@ -63,6 +63,8 @@ public class DrawLine : MonoBehaviour
                     player.UseSkill(manaCost);
                     BoomerangScript.onColdown = true;
                     BoomerangScript.updatedTiming = false;
+                    BoomerangScript.boomerangThrowAS.Play();
+                    BoomerangScript.boomerangThrowAS.loop = true;
                     //BoomerangScript.isFlying = true;                
                 }
                 else

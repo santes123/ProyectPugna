@@ -89,6 +89,7 @@ MonoBehaviour:
   onColdown: 0
   enemiesHited: []
   floatingDamageTextPrefab: {fileID: 0}
+  grounding: 1
 --- !u!1 &7025264362717560253
 GameObject:
   m_ObjectHideFlags: 0
