@@ -22,8 +22,6 @@ public class BossLevel1 : BossMechanic
         StartCoroutine(Mecanica(BossMechanics[0], 10f));//Bomba
         StartCoroutine(Mecanica(BossMechanics[1], 2f));//Missil 1
         StartCoroutine(Mecanica(BossMechanics[2], 3f));//Missil 2
-        StartCoroutine(Mecanica(BossMechanics[3], 5f));//Missil 3
-        StartCoroutine(Mecanica(BossMechanics[4], 6f));//Missil 4
     }
    
     IEnumerator Mecanica(BossMechanic bossMechanic, float timeBetweenAttacks) {
