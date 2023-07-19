@@ -61,6 +61,7 @@ MonoBehaviour:
   backgroundMusicName: Magnetic Lullaby - Amulets
   dieText: Has muerto, cargando el menu de gameover...
   dieTextTitle: "\xA1HAS MUERTO!"
+  bossMusicClip: {fileID: 8300000, guid: 03839cded5dabfe4f869a7ca5a6433ab, type: 3}
 --- !u!114 &3922728784967612602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,8 +89,31 @@ MonoBehaviour:
   panelShow: {fileID: 0}
   panelShowText: {fileID: 0}
   listOfTextsToShowOnPanel:
-  - 1
-  - 2
+  - "El boomerang es tu arma principal y tienes acceso a \xE9l haciendo click en
+    la tecla \u201C1\u201D. El boomerang tiene 2 modalidades:\\n-<b>Ataque normal:<b>Pulsando
+    el click izquierdo lanzaras el boomerang en l\xEDnea recta hacia el puntero.
+    Si mantienes pulsado, podr\xE1s alargar la distancia hasta un m\xE1ximo.\\n<b>-Ataque
+    especial:<b>Si mantienes pulsado el click derecho y mueves el puntero, podr\xE1s
+    dibujar una l\xEDnea en el suelo y cuando sueltes el click, el boomerang seguir\xE1
+    esa l\xEDnea y luego volver\xE1 a ti. \\n Adem\xE1s, en las teclas<b>Q y Z<b>
+    tendr\xE1s las 2 mejoras del boomerang. La primera, al activarla y golpear a
+    un enemigo, har\xE1 mas da\xF1o y tambi\xE9n golpear\xE1 a todos los enemigos
+    en un \xE1rea concreta. La segunda har\xE1 m\xE1s da\xF1o y tambi\xE9n congelar\xE1
+    a ese enemigo y a los enemigos cercanos durante 2 segundos. "
+  - "Aqu\xED te mostraremos c\xF3mo funciona la habilidad \u201CAtraer y lanzar\u201D
+    y \u201CGolpe Ps\xEDquico\u201D. \\n -<b> Atraer y lanzar: <b>   pulsando la
+    tecla \u201C2\u201D activaras este modo, y podr\xE1s atraer objetos y luego lanzarlos
+    (los ver\xE1s marcados con un borde azul para diferenciarlos). Primero deber\xE1s
+    posicionar el puntero sobre el objeto y entonces hacer click izquierdo o mantenerlo
+    (variar\xE1 el coste de mana y tambi\xE9n la velocidad de atracci\xF3n) y el
+    objeto vendr\xE1 hacia ti. Cuando lo tengas en la mano, usando el click derecho
+    o manteni\xE9ndolo (igual que antes) podr\xE1s lanzar el objeto hacia la posici\xF3n
+    del puntero. Adem\xE1s, estos objetos har\xE1n da\xF1o a los enemigos la golpearlos.
+    \\n -<b> Golpe Psiquico: <b>   Pulsando la tecla \u201C3\u201D activaras este
+    modo, y pulsando o manteniendo el click izquierdo podr\xE1s cargar un ataque
+    ps\xEDquico. Al soltar el click, este ataque se lanzar\xE1 en la direcci\xF3n
+    el puntero y har\xE1 da\xF1o dependiendo de cuando lo hayas cargado, y tambi\xE9n
+    aumentar\xE1 su coste de mana. "
   - 3
   - 4
   - 5

@@ -1246,7 +1246,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Mauricio
+  m_Text: Mauricio Movilla Obregon
 --- !u!222 &1276679938
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1342,7 +1342,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Carlos Zubiate
+  m_Text: "Carlos Zubiate Galv\xE1n"
 --- !u!222 &1576612279
 CanvasRenderer:
   m_ObjectHideFlags: 0

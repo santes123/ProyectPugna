@@ -384,7 +384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageBoomerang: 0
   lastHitTime: 0
-  coldownHit: 0.1
+  coldownHit: 0.3
   manaCostOfAttractingBoomerang: 5
   returnPosition: {x: 0, y: 0, z: 0}
   isFlying: 0
@@ -402,6 +402,8 @@ MonoBehaviour:
   rotationSpeed: 360
   maxBouncingCounter: 2
   updatedTiming: 0
+  boomerangHitAS: {fileID: 4318576357807248501}
+  boomerangThrowAS: {fileID: 3901459928883198377}
 --- !u!114 &1729194766076772026
 MonoBehaviour:
   m_ObjectHideFlags: 0

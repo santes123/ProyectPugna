@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public string backgroundMusicName = "Magnetic Lullaby - Amulets";
     public string dieText = "Has muerto, cargando el menu de gameover...";
     public string dieTextTitle = "¡HAS MUERTO!";
+    public AudioClip bossMusicClip;
 
     //public GameObject buffBar;
     private void Awake()
@@ -287,6 +288,28 @@ public class GameManager : MonoBehaviour
 
             //audioSource.volume = GlobalVars.generalVolume;
             //audioSource.mute = GlobalVars.muteOn;
+
+        }
+    }
+    public void SetBossBackgroundMusic()
+    {
+        // Obtener todos los componentes AudioSource en la escena
+        AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
+
+        // Iterar sobre cada componente AudioSource encontrado
+        foreach (AudioSource audioSource in audioSources)
+        {
+            // Hacer algo con cada AudioSource encontrado
+            Debug.Log("AudioSource encontrado: " + audioSource.gameObject.name);
+            if (audioSource.isPlaying)
+            {
+                if (audioSource.clip.name == backgroundMusicName)
+                {
+                    audioSource.clip = bossMusicClip;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
+            }
 
         }
     }

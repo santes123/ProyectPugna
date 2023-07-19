@@ -50,8 +50,13 @@ public class BossLevel1 : BossMechanic
         FindObjectOfType<ShowMessageToPlayerText>().SetText("LUZZIANO", "<INSERTE MENSAJE DE BOSS AQUI.>", Color.red);
 
         yield return new WaitForSeconds(5f);
+        //activamos la musica del boss
+        FindObjectOfType<GameManager>().SetBossBackgroundMusic();
         bossCamera.gameObject.SetActive(false);
         FindObjectOfType<PlayerController>().enabled = true;
+        //activamos la animacion del boss
+        StartCoroutine(FindObjectOfType<AnimationControllerScript>().CicloAnimacionBoss());
+        
     }
 
     bool LaunchMechanic(BossMechanic mech) {

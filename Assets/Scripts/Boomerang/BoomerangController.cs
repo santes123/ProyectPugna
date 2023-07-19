@@ -152,6 +152,8 @@ public class BoomerangController : MonoBehaviour, IDamager
                     rotation = false;
                     rb.isKinematic = false;
                     GetComponent<Collider>().isTrigger = false;
+                    //detenemos el sonido de lanzamiento del boomerang
+                    boomerangThrowAS.Stop();
                 }
             }
             if (specialThrow & !updatedTiming)
@@ -332,7 +334,8 @@ public class BoomerangController : MonoBehaviour, IDamager
                 //lo dejamos en el suelo
                 Debug.Log("colision obstaculo y queda en el suelo");
                 GetComponent<Rigidbody>().useGravity = true;
-
+                //detenemos el sonido de lanzamiento del boomerang
+                boomerangThrowAS.Stop();
             }
             //Debug.Log("Obstacle");
             isFlying = false;
@@ -373,6 +376,8 @@ public class BoomerangController : MonoBehaviour, IDamager
                 rb.isKinematic = false;
                 GetComponent<Collider>().isTrigger = false;
                 onColdown = false;
+                //detenemos el sonido de lanzamiento del boomerang
+                boomerangThrowAS.Stop();
             }
         }
         //collision con el player
@@ -384,7 +389,7 @@ public class BoomerangController : MonoBehaviour, IDamager
             transform.SetParent(handPlace.transform);
         }
         //colision con la puerta dle boss
-        if (other.CompareTag("BossDoor") && !onHand && isFlying)
+        /*if (other.CompareTag("BossDoor") && !onHand && isFlying)
         {
             if (Time.time - lastHitTime > coldownHit)
             {
@@ -412,7 +417,29 @@ public class BoomerangController : MonoBehaviour, IDamager
                     Return();
                 }
             }
+        }*/
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Enemy") && !onHand && isFlying && !boomerangUpgradeController.areaDamageMode
+            || other.CompareTag("Enemy") && !onHand && bouncing && !boomerangUpgradeController.areaDamageMode ||
+             other.CompareTag("Enemy") && !onHand && specialThrow)
+        {
+            //boomerangHitAS.Play();
+            if (Time.time - lastHitTime > coldownHit)
+            {
+                lastHitTime = Time.time;
+                if (specialThrow)
+                {
+                    //MakeDamageToEnemyAndPush(other, damage);
+                    MakeDamageToEnemyAndPush(other, boomerangPlayer.damage);
+                }
+            }
         }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        
     }
     public void MakeDamageToEnemyAndPush(Collider other, float damage)
     {

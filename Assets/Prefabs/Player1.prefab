@@ -684,7 +684,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db9458cee5b6f1429f8acc4f9d6e6c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingHealth: 10
+  startingHealth: 50
   startingMana: 100
   currentHealth: 0
   currentMana: 0
@@ -4247,26 +4247,6 @@ PrefabInstance:
       propertyPath: handPlace
       value: 
       objectReference: {fileID: 6373747219582029140}
-    - target: {fileID: 5836317661756079275, guid: 018d9428bc90dce40a2c5148032799a2,
-        type: 3}
-      propertyPath: coldownHit
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5836317661756079275, guid: 018d9428bc90dce40a2c5148032799a2,
-        type: 3}
-      propertyPath: rotationSpeed
-      value: 360
-      objectReference: {fileID: 0}
-    - target: {fileID: 5836317661756079275, guid: 018d9428bc90dce40a2c5148032799a2,
-        type: 3}
-      propertyPath: boomerangHitAS
-      value: 
-      objectReference: {fileID: 253606655433438973}
-    - target: {fileID: 5836317661756079275, guid: 018d9428bc90dce40a2c5148032799a2,
-        type: 3}
-      propertyPath: boomerangThrowAS
-      value: 
-      objectReference: {fileID: 1030922562114706209}
     - target: {fileID: 6320788967034406400, guid: 018d9428bc90dce40a2c5148032799a2,
         type: 3}
       propertyPath: m_RootOrder
