@@ -77,11 +77,22 @@ public class EnemyBase : LivingEntity
     int distanceToPlayer = Animator.StringToHash("DistanceToPlayer");
     int isDead = Animator.StringToHash("IsDead");
     void UpdateBehaviorTree() {
-        if(player != null) {
+        if(player != null && CheckLOSWithPlayer()) {
             behaviorTree.SetFloat(distanceToPlayer, Vector3.Distance(transform.position, player.transform.position));
         } else {
             behaviorTree.SetFloat(distanceToPlayer, 1000f);
         }
+    }
+
+    public LayerMask lineOfSightLayer;
+    bool CheckLOSWithPlayer() {
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 100f,lineOfSightLayer)) {
+            if(hit.collider.CompareTag("Player")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public override void ReceiveDamage(Damage damage) {

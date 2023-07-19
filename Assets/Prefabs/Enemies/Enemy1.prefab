@@ -4423,6 +4423,9 @@ MonoBehaviour:
   bounceOnEnemies: 0
   damageVFX: {fileID: 8031699067492803896, guid: 9c9b72b339e1fde4ea4f9b7a86ef7546,
     type: 3}
+  lineOfSightLayer:
+    serializedVersion: 2
+    m_Bits: 19456
 --- !u!195 &4856948748028598989
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -4675,6 +4678,7 @@ MonoBehaviour:
   onColdown: 0
   enemiesHited: []
   floatingDamageTextPrefab: {fileID: 0}
+  grounding: 1
 --- !u!1001 &5200429851549198549
 PrefabInstance:
   m_ObjectHideFlags: 0
