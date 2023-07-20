@@ -4807,8 +4807,30 @@ PrefabInstance:
       propertyPath: canvas
       value: 
       objectReference: {fileID: 1562038531257569400}
+    - target: {fileID: 6739314278731255518, guid: cf63171e1042f15458756df3ddfc49ea,
+        type: 3}
+      propertyPath: speedRed
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6739314278731255518, guid: cf63171e1042f15458756df3ddfc49ea,
+        type: 3}
+      propertyPath: healthBarRed
+      value: 
+      objectReference: {fileID: 1082945291195477617}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf63171e1042f15458756df3ddfc49ea, type: 3}
+--- !u!114 &1082945291195477617 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5128692211353781924, guid: cf63171e1042f15458756df3ddfc49ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 5200429851549198549}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1562038531257569349 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6739314278403799184, guid: cf63171e1042f15458756df3ddfc49ea,

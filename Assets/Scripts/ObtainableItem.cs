@@ -9,7 +9,7 @@ public class ObtainableItem : MonoBehaviour
     private void OnTriggerEnter(Collider other) {
         if(other.tag.Equals("Player")) {
             //lanzamos el sonido
-            GetComponent<AudioSource>().Play();
+            GetComponentInParent<AudioSource>().Play();
             ShowMessage();
             GameData.AddValue(name,"1");
             ItemObtained();

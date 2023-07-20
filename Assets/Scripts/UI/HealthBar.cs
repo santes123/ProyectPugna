@@ -10,7 +10,8 @@ public class HealthBar : MonoBehaviour
     private float currentHealth;
     private float maxHealth;
     private PlayerStats player;
-
+    public Image healthBarRed;
+    public float speedRed;
     private void Start()
     {
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
@@ -22,5 +23,14 @@ public class HealthBar : MonoBehaviour
     {
         currentHealth = player.currentHealth;
         healthBar.fillAmount = currentHealth / maxHealth;
+        if (healthBar.fillAmount < healthBarRed.fillAmount)
+        {
+            healthBarRed.fillAmount += -speedRed * Time.deltaTime;
+        }
+        else
+        {
+            healthBarRed.fillAmount = healthBar.fillAmount;
+        }
+
     }
 }

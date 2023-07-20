@@ -12,7 +12,8 @@ public class DoorHealthBar : MonoBehaviour
     private float currentHealth;
     private float maxHealth;
     private BossStatsController boss;
-
+    public Image healthBarRed;
+    public float speedRed;
     private void Start()
     {
         //player = GameObject.Find("Player").GetComponent<PlayerStats>();
@@ -27,6 +28,14 @@ public class DoorHealthBar : MonoBehaviour
             healthText.text = boss.currentHealth.ToString();
             currentHealth = boss.currentHealth;
             healthBar.fillAmount = currentHealth / maxHealth;
+            if (healthBar.fillAmount < healthBarRed.fillAmount)
+            {
+                healthBarRed.fillAmount += -speedRed * Time.deltaTime;
+            }
+            else
+            {
+                healthBarRed.fillAmount = healthBar.fillAmount;
+            }
         }
 
     }

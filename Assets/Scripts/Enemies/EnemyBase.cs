@@ -87,7 +87,7 @@ public class EnemyBase : LivingEntity
     public LayerMask lineOfSightLayer;
     bool CheckLOSWithPlayer() {
         RaycastHit hit;
-        if(Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 100f,lineOfSightLayer)) {
+        if(Physics.Raycast(transform.position + Vector3.up, player.transform.position - transform.position, out hit, 100f,lineOfSightLayer)) {
             if(hit.collider.CompareTag("Player")) {
                 return true;
             }

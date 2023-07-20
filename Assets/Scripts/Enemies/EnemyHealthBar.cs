@@ -14,6 +14,8 @@ public class EnemyHealthBar : MonoBehaviour
     //private Enemy enemy;
     private EnemyBase enemy;
     public Canvas canvas;
+    public Image healthBarRed;
+    public float speedRed;
     private void Start()
     {
         //enemy = GameObject.Find("Player").GetComponent<PlayerStats>();
@@ -32,6 +34,15 @@ public class EnemyHealthBar : MonoBehaviour
             healthText.text = enemy.currentHealth.ToString();
             currentHealth = enemy.currentHealth;
             healthBar.fillAmount = currentHealth / maxHealth;
+            if (healthBar.fillAmount < healthBarRed.fillAmount)
+            {
+                //healthBarRed.fillAmount += -speedRed * Time.deltaTime;
+                healthBarRed.fillAmount = Mathf.Lerp(healthBarRed.fillAmount, healthBar.fillAmount, speedRed / Time.deltaTime);
+            }
+            else
+            {
+                healthBarRed.fillAmount = healthBar.fillAmount;
+            }
         }
     }
     private void LateUpdate()
