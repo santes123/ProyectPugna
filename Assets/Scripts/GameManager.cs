@@ -271,7 +271,7 @@ public class GameManager : MonoBehaviour
             {
                 if (audioSource.clip.name == backgroundMusicName)
                 {
-                    audioSource.volume = GlobalVars.generalVolume / 2;
+                    audioSource.volume = GlobalVars.generalVolume * 0.1f;
                     audioSource.mute = GlobalVars.muteOn;
                 }
                 else

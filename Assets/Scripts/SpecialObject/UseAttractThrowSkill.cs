@@ -184,17 +184,31 @@ public class UseAttractThrowSkill : SkillParent
 
             }
         }
-
+        if(onHand) {
+            if(!selectedObjectScript) {
+                onHand = false;
+                GetComponentInChildren<Animator>().SetBool("OnHand", onHand);
+            }
+        }
     }
     private void FixedUpdate()
     {
         if (player.selectedMode == GameMode.AttractThrow && target != null)
         {
+            
             //LANZAMIENTO
-            if (GetMouseButtonUp(1)/* && estaSiendoAtraido */&& selectedObjectScript.estaSiendoAtraido == true && player.currentMana >= manaCost && onHand 
-                && selectedObjectScript.onHand)
+            if (GetMouseButtonUp(1)/* && estaSiendoAtraido */)
             {
-                
+                if(player.currentMana <= manaCost) {
+                    return;
+                }
+
+                if(!onHand) {
+                    return;
+                }
+                if(!selectedObjectScript.onHand) {
+                    return;
+                }
                 //target.GetComponent<Rigidbody>().Sleep();
                 chargeBar.SetActive(false);
                 onColdown = true;
@@ -298,9 +312,11 @@ public class UseAttractThrowSkill : SkillParent
             Debug.DrawRay(ray.origin, ray.direction * 20f,Color.blue);
             if (target != null && !onHand && !estaSiendoAtraido || target == null)
             {
-                target = hit.collider.gameObject;
+                if(hit.collider.gameObject.GetComponent<SpecialObject>() != null) {
+                    target = hit.collider.gameObject;     
+                }
             }
-            Debug.Log("target selectd = " + target.name);
+            //Debug.Log("target selectd = " + target.name);
             //target = hit.collider.gameObject;
             //if (target == null)
             if (target != null)
@@ -370,7 +386,7 @@ public class UseAttractThrowSkill : SkillParent
             estaSiendoAtraido = false;
             target.GetComponent<SpecialObject>().estaSiendoAtraido = false;
             target.GetComponent<SpecialObject>().rb.useGravity = true;
-            target.GetComponent<BoxCollider>().enabled = true;
+            target.GetComponent<Collider>().enabled = true;
             onColdown = false;
             //desactivamos el onHand del animator
             Animator animator = GetComponentInChildren<Animator>();
