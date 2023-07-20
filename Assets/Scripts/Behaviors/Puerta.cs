@@ -10,8 +10,10 @@ public class Puerta : MonoBehaviour
     Animator animator;
     public bool doubleLock = false;
     public string nombreDeRequerimiento;
+    public AudioSource audioSource;
     private void Start() {
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
     
     public void InteraccionConPuerta() {
@@ -46,6 +48,7 @@ public class Puerta : MonoBehaviour
             animator.SetTrigger("Cerrar");
         }
         cerrada = !cerrada;
+        audioSource.Play();
     }
 
     public void UnlockPuerta() {

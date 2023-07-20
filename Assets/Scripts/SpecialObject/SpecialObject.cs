@@ -37,11 +37,13 @@ public class SpecialObject : MonoBehaviour, IDamager
     public List<string> enemiesHited;
     public GameObject floatingDamageTextPrefab;
     public bool grounding = true;
+    public AudioSource audioSource;
 
     //BoomerangController boomerangReference;
     private void Awake()
     {
         floatingDamageTextPrefab = FindObjectOfType<FloatingDamageText>().gameObject;
+        audioSource = GetComponent<AudioSource>();
     }
     void Start()
     {
@@ -200,6 +202,7 @@ public class SpecialObject : MonoBehaviour, IDamager
     {
         if (other.gameObject.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
         {
+            audioSource.Play();
             //añadimos el array a enemigos hiteados por este gameobject
             enemiesHited.Add(other.gameObject.name);
 
@@ -281,6 +284,7 @@ public class SpecialObject : MonoBehaviour, IDamager
     {
         if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
         {
+            audioSource.Play();
             //añadimos el array a enemigos hiteados por este gameobject
             enemiesHited.Add(other.gameObject.name);
 

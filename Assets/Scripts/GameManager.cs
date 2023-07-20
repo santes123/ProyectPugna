@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour
     public string dieText = "Has muerto, cargando el menu de gameover...";
     public string dieTextTitle = "¡HAS MUERTO!";
     public AudioClip bossMusicClip;
-
+    public AudioSource playerAudioSource;
+    public AudioClip noManaSound;
     //public GameObject buffBar;
     private void Awake()
     {
@@ -247,6 +248,8 @@ public class GameManager : MonoBehaviour
             if (!noManaTextGO.GetComponent<Text>().isActiveAndEnabled)
             {
                 noManaTextGO.GetComponent<Text>().enabled = true;
+                playerAudioSource.clip = noManaSound;
+                playerAudioSource.Play();
             }
             FloatingText floatingDamageText = noManaTextGO.GetComponent<FloatingText>();
 

@@ -62,6 +62,8 @@ MonoBehaviour:
   dieText: Has muerto, cargando el menu de gameover...
   dieTextTitle: "\xA1HAS MUERTO!"
   bossMusicClip: {fileID: 8300000, guid: 03839cded5dabfe4f869a7ca5a6433ab, type: 3}
+  playerAudioSource: {fileID: 0}
+  noManaSound: {fileID: 8300000, guid: ad9147a84bc304f4b894215a27a8fcf7, type: 3}
 --- !u!114 &3922728784967612602
 MonoBehaviour:
   m_ObjectHideFlags: 0
