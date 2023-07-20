@@ -220,7 +220,7 @@ public class SpecialObject : MonoBehaviour, IDamager
             }
 
             //HACEMOS REBOTAR EL OBJETO EN EL ENEMIGO Y RESETEAMOS LA SKILL
-            rb.Sleep();
+            //rb.Sleep();
             Invoke("ResetSkill", 1f);
             print("ENEMY");/*
             //DIRECCION OPUESTA
@@ -233,7 +233,10 @@ public class SpecialObject : MonoBehaviour, IDamager
             // Aplicar una fuerza al objeto en la dirección opuesta
             rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
             */
-            rb.WakeUp();
+            //rb.WakeUp();
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.ResetInertiaTensor();
             //DIRECCION ALEATORIA
             //direccion random x,y,z
             Vector3 direccionAleatoria = Random.insideUnitSphere.normalized;
@@ -300,11 +303,13 @@ public class SpecialObject : MonoBehaviour, IDamager
                 Destroy(temporalRb, 0.5f);
                 DealDamageToEnemy(damage);
             }
-
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            rb.ResetInertiaTensor();
             //HACEMOS REBOTAR EL OBJETO EN EL ENEMIGO Y RESETEAMOS LA SKILL
-            rb.Sleep();
             Invoke("ResetSkill", 1f);
             print("ENEMY");/*
+                            * 
             //DIRECCION OPUESTA
             // Obtener la normal de la colisión
             Vector3 normal = other.transform.position - transform.position;
@@ -315,7 +320,6 @@ public class SpecialObject : MonoBehaviour, IDamager
             // Aplicar una fuerza al objeto en la dirección opuesta
             rb.AddForce(direccionRebote * fuerzaRebote, ForceMode.Impulse);
             */
-            rb.WakeUp();
             //DIRECCION ALEATORIA
             //direccion random x,y,z
             Vector3 direccionAleatoria = Random.insideUnitSphere.normalized;
