@@ -20,6 +20,7 @@ public class ChaseBehavior : EnemyBehavior
     int speed = Animator.StringToHash("Speed");
     public override void StartBehavior() {
         target = FindObjectOfType<PlayerStats>();
+        Debug.Log("target enemigo = " + target.gameObject.name);
         agent.speed = 2.2f;
     }
     public override void ExecuteBehavior() {

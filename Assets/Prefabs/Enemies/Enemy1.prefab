@@ -4679,6 +4679,7 @@ MonoBehaviour:
   enemiesHited: []
   floatingDamageTextPrefab: {fileID: 0}
   grounding: 1
+  audioSource: {fileID: 0}
 --- !u!1001 &5200429851549198549
 PrefabInstance:
   m_ObjectHideFlags: 0
