@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     public string dieTextTitle = "¡HAS MUERTO!";
     public AudioClip bossMusicClip;
     public AudioSource playerAudioSource;
+    public string playerAudioSourceName = "poly_shoot_grenade";
     public AudioClip noManaSound;
     //public GameObject buffBar;
     private void Awake()
@@ -305,7 +306,7 @@ public class GameManager : MonoBehaviour
         {
             // Hacer algo con cada AudioSource encontrado
             Debug.Log("AudioSource encontrado: " + audioSource.gameObject.name);
-                if (audioSource.clip.name == backgroundMusicName)
+                if (audioSource.clip.name == playerAudioSourceName)
                 {
                 playerAudioSource = audioSource;
                 }

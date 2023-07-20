@@ -191,6 +191,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 1012749854}
+  healthBarRed: {fileID: 0}
+  speedRed: 0
 --- !u!1 &66654539697141656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1172,7 +1174,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: f22704b61b38f33459ad766aad915328, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 21cc5ebb35b190d4487e6d9b9d039520, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
