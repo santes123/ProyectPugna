@@ -196,7 +196,11 @@ public class BoomerangUpgradeController : SkillParent
                 {
                     Debug.Log("enemy" + damageable.gameObject.name + "freezed");
                     //damageable.gameObject.GetComponent<Enemy>().Freeze(freezeDuration);
-                    damageable.gameObject.GetComponent<EnemyBase>().Freeze(freezeDuration);
+                    if (damageable.gameObject.GetComponent<EnemyBase>())
+                    {
+                        damageable.gameObject.GetComponent<EnemyBase>().Freeze(freezeDuration);
+                    }
+                    
                     //preguntarle a mauricio como hacer para detener el chasing del enemigo temporalmente
                     //damageable.gameObject.GetComponent<NavMeshAgent>().enabled = false;
 

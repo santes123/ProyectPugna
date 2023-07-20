@@ -236,6 +236,7 @@ public class GameManager : MonoBehaviour
                 playable = true;
                 //buscamos todos los audiosource y les seteamos el volumen /mute
                 SetAudioSourcesVolume();
+                SetAudioSourcePlayer();
             }
             yield return null;
         }
@@ -288,6 +289,26 @@ public class GameManager : MonoBehaviour
                 audioSource.volume = GlobalVars.generalVolume;
                 audioSource.mute = GlobalVars.muteOn;
             }
+
+            //audioSource.volume = GlobalVars.generalVolume;
+            //audioSource.mute = GlobalVars.muteOn;
+
+        }
+    }
+    public void SetAudioSourcePlayer()
+    {
+        // Obtener todos los componentes AudioSource en la escena
+        AudioSource[] audioSources = FindObjectsOfType<AudioSource>();
+
+        // Iterar sobre cada componente AudioSource encontrado
+        foreach (AudioSource audioSource in audioSources)
+        {
+            // Hacer algo con cada AudioSource encontrado
+            Debug.Log("AudioSource encontrado: " + audioSource.gameObject.name);
+                if (audioSource.clip.name == backgroundMusicName)
+                {
+                playerAudioSource = audioSource;
+                }
 
             //audioSource.volume = GlobalVars.generalVolume;
             //audioSource.mute = GlobalVars.muteOn;

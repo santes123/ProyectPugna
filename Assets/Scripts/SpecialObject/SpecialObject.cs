@@ -274,7 +274,15 @@ public class SpecialObject : MonoBehaviour, IDamager
         {
             Invoke("ResetSkill", 0.5f);
             Debug.Log("he chocado con el suelo");
+
             //grounding = true;
+        }
+        if (other.gameObject.CompareTag("Obstacle"))
+        {
+            /*if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }*/
         }
         //cuando atraes enemigos
         /*if (other.CompareTag("Ground"))
@@ -287,7 +295,11 @@ public class SpecialObject : MonoBehaviour, IDamager
     {
         if (other.CompareTag("Enemy") && !enemiesHited.Contains(other.gameObject.name) && haSidoLanzado)
         {
-            audioSource.Play();
+            if (audioSource)
+            {
+                audioSource.Play();
+            }
+
             //añadimos el array a enemigos hiteados por este gameobject
             enemiesHited.Add(other.gameObject.name);
 

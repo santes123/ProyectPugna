@@ -27,6 +27,9 @@ public class PsychicPunchController : SkillParent
     public bool onHand = false;
 
     public GameObject chargeBar;
+    public AudioSource audioSource;
+    public AudioClip chargeClip;
+    public AudioClip launchClip;
 
     private void Start()
     {
@@ -54,6 +57,10 @@ public class PsychicPunchController : SkillParent
 
             if (!onColdown && GetMouseButtonDown(0)/* && playerStats.currentMana >= initialManaCost*/)
             {
+                //asignamos el sonido y lo reproducimos
+                audioSource.clip = chargeClip;
+                audioSource.Play();
+
                 if (playerStats.currentMana < initialManaCost)
                 {
                     FindObjectOfType<GameManager>().ShowNoManaText();
@@ -107,6 +114,9 @@ public class PsychicPunchController : SkillParent
                     PsychicBall ballScript = currentSphere.GetComponent<PsychicBall>();
                     if (ballScript != null)
                     {
+                        //asignamos el sonido y lo reproducimos
+                        audioSource.clip = launchClip;
+                        audioSource.Play();
                         int damageInt = Mathf.RoundToInt(currentDamage);
                         ballScript.damage = damageInt;
                         ballScript.velocity = currentSpeed;

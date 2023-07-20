@@ -14,6 +14,9 @@ public class PushAwaySkill : SkillParent, IDamager
     public GameObject prefabAreaExplosion;
     private GameObject areaInstantiated;
 
+    public AudioSource audioSource;
+    public AudioClip pushClip;
+
     // Actualiza el estado de la habilidad
     private void Awake()
     {
@@ -37,6 +40,10 @@ public class PushAwaySkill : SkillParent, IDamager
     // Busca enemigos en el radio y les inflige da�o y empuje hacia atr�s
     private void UseAbility()
     {
+        //asignamos el sonido y lo reproducimos
+        audioSource.clip = pushClip;
+        audioSource.Play();
+
         areaInstantiated = Instantiate(prefabAreaExplosion, transform.position + Vector3.up, Quaternion.identity);
         //Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
         List<LivingEntity> damageablesFound = aoe.GetTargets<LivingEntity>();

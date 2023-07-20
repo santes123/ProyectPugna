@@ -25,6 +25,8 @@ public class DashController : SkillParent
     private List<float> cooldownTimers = new List<float>();
     bool dashCanceled = false;
     public event System.Action OnCurrentChargesUpdate;
+    public AudioSource audioSource;
+    public AudioClip dashClip;
     private void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -55,6 +57,9 @@ public class DashController : SkillParent
     }   
     private void StartDash()
     {
+        //asignamos el sonido y lo reproducimos
+        audioSource.clip = dashClip;
+        audioSource.Play();
         /*Debug.Log("Dashing...");
         //isDashing = true;
         dashStartPosition = transform.position;

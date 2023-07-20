@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class WinController : MonoBehaviour
 {
     public GameObject victoryMenu;
+    public GameObject fade;
 
     public bool gameFreezed = false;
 
@@ -19,6 +20,7 @@ public class WinController : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             ShowVictoryMenu();
+            fade.SetActive(true);
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -26,6 +28,7 @@ public class WinController : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             ShowVictoryMenu();
+            fade.SetActive(true);
         }
     }
 }

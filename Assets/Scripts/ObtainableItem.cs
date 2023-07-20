@@ -8,6 +8,8 @@ public class ObtainableItem : MonoBehaviour
     public UnityEvent onItemObtained;
     private void OnTriggerEnter(Collider other) {
         if(other.tag.Equals("Player")) {
+            //lanzamos el sonido
+            GetComponent<AudioSource>().Play();
             ShowMessage();
             GameData.AddValue(name,"1");
             ItemObtained();

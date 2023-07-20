@@ -58,6 +58,9 @@ public class UseAttractThrowSkill : SkillParent
 
     //
     public float maxDistanceAttract = 20f;
+    public AudioSource audioSourceAttractAndThrow;
+    public AudioClip attractObject;
+    public AudioClip throwObject;
 
     //progresivamente pasar la parte de controles del SpecialObject aqui, tiene mas sentido
     void Start()
@@ -101,6 +104,12 @@ public class UseAttractThrowSkill : SkillParent
             if (GetMouseButtonDown(0) && CheckIfRayHitObject() && !onColdown && player.currentMana >= manaCost && !onHand)
             {
                 Debug.Log("ATRAYENDO...");
+                //asignamos el clip de atraer y lo reproducimos
+                if (!audioSourceAttractAndThrow.isPlaying)
+                {
+                    audioSourceAttractAndThrow.clip = attractObject;
+                    audioSourceAttractAndThrow.Play();
+                }
 
                 estaSiendoAtraido = true;
                 //asi solo atraemos al objetivo que acabamos de marcar
@@ -209,6 +218,12 @@ public class UseAttractThrowSkill : SkillParent
                 if(!selectedObjectScript.onHand) {
                     return;
                 }
+                //asignamos el clip de atraer y lo reproducimos
+                if (!audioSourceAttractAndThrow.isPlaying) {
+                    audioSourceAttractAndThrow.clip = throwObject;
+                    audioSourceAttractAndThrow.Play();
+                }
+
                 //target.GetComponent<Rigidbody>().Sleep();
                 chargeBar.SetActive(false);
                 onColdown = true;

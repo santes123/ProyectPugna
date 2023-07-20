@@ -23,8 +23,10 @@ public class Powerup : MonoBehaviour
     public GameObject particlesPrefab;
     private ParticleSystem particlesSystem;
     private GameObject particlesObject;
+    private AudioSource audioSource;
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         powerupTimer = FindObjectOfType<PowerupUIBar>(true);
         //instanciamos lel prafab de particles
         particlesObject = Instantiate(particlesPrefab, transform.position, particlesPrefab.transform.rotation);
@@ -58,6 +60,9 @@ public class Powerup : MonoBehaviour
             Renderer render = GetComponentInChildren<Renderer>();
             ParticleSystem[] particles = GetComponentsInChildren<ParticleSystem>();
             //Destroy(gameObject);
+            //reproducimos el sonido
+            audioSource.Play();
+
             Destroy(collider);
             Destroy(render);
             Destroy(particles[0]);

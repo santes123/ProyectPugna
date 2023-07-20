@@ -16,6 +16,8 @@ public class PsychicBall : MonoBehaviour, IDamager
     private float lifeTime;
     public GameObject floatingDamageTextPrefab;
     public GameObject enemyHitedReference;
+
+    public AudioSource audioSource;
     private void Awake()
     {
         floatingDamageTextPrefab = FindObjectOfType<FloatingDamageText>().gameObject;
@@ -34,6 +36,10 @@ public class PsychicBall : MonoBehaviour, IDamager
     {
         if (other.CompareTag("Enemy"))
         {
+            if (audioSource)
+            {
+                audioSource.Play();
+            }
             Debug.Log("Enemy name = " + other.gameObject.name);
             for (int i = 0; i < enemiesHited.Count; i++)
             {
@@ -57,6 +63,11 @@ public class PsychicBall : MonoBehaviour, IDamager
         }
         if (other.CompareTag("Obstacle"))
         {
+            if (audioSource)
+            {
+                audioSource.Play();
+            }
+
             Debug.Log("object name = " + other.gameObject.name);
             Destroy(this.gameObject);
         }
@@ -92,7 +103,11 @@ public class PsychicBall : MonoBehaviour, IDamager
             //destruimos la bola despues de golpear al enemigo
             //Destroy(gameObject);
             //dejamos que rebote con otros enemigos
-            other.GetComponent<EnemyBase>().bounceOnEnemies = true;
+            if (other.GetComponent<EnemyBase>())
+            {
+                other.GetComponent<EnemyBase>().bounceOnEnemies = true;
+            }
+            
             enemyHitedReference = other.gameObject;
             StartCoroutine(EnemyPushEnemy());
             //damageableObject.ReceiveDamage(damageObj);
